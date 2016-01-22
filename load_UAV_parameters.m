@@ -37,12 +37,21 @@ LF_V = 8; %load factor at V
 %   These variables are hard coded UAV parameters. 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 W_A    = 48.5; %initial weight guess of a/c (lbs)
 e_H    = 0.8;
 C_Lmax = 1.2; %lift coefficient inital guess
 
 
 % Wing --------------------------------------------------------------------
+
+%   Temporal note on how to use matlab structure
+%         WING.b = 10;              % wing span(ft)
+%         WING.c = WING.b/13;       % average wing chord length(ft)
+%         WING.mtr = 0.12;          % maximum thickness ratio
+%         WING.t = WING.c*WING.mtr; % thickness of wing (ft)
+%         WING.t_WW = 0;            % thickness of winglet (ft)
+%         ....
 
 b_W = 10; %wing span(ft)
 c_W = b_W/13; %average wing chord length(ft)

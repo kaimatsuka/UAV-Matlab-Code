@@ -1,20 +1,18 @@
-%MAE 154A
-%Nadia, Eugene, Anny, Kai
+% test_drag.m
+%
+%   Stand alone test code that will plot drag and power required as a 
+%   fucnction of velocity.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%NADIA: This is currently what I have for the weight estimates, I will be
-%making funcQ_tions for these soon. I checked that all my values were the
-%same here and on the excel spreadsheet! (01/15/2016) Functions should be
-%completed by the end of the weekend, if not sooner. 
+clc; clear all; close all;
 
-clc, clear all; close all;
+load_UAV_parameters;
+load_unit_conversion;
 
-% Conversion Constants
-
-%% Load Files
-load_unit_conversion
-load_UAV_parameters
-
-%% AIRCRAFT LAYOUT
+%% Input Parameter
+V = [50:10:200];      % specify velocity range for plotting
+S_total = S_W + S_H;
 
 %WING----------------------------------------------------------------------
 
@@ -57,68 +55,49 @@ C_fV = C_f(Re_Vavg,M); %skin friction coefficient for vertical tail
 W_ENG = 3.5; %bare engine weight
 N_E = 1; %number of engines
 
-%ELECTRONICS/AVIONICS------------------------------------------------------ 
-w_EOIR = 10; %EO/IR weight(lbs)
-w_SAR = 2; %Synthetic Apperature Radar weight(lbs)
-w_LiDAR = 1; %LiDAR weight(lbs)
-w_ANT = 0.15; %UHF/VHF antenna weight (lbs)
-w_WR = 0.25; %WaveRelay weight (lbs)
-W_AU = w_EOIR+w_SAR+w_LiDAR+w_ANT+w_WR; %bare avionics equipment weight (uninstalled)
 
-%FUEL SYSTEM---------------------------------------------------------------
-F_G = 5; %total fuel in gallons
-int = 23; %percent of fuel tanks that are integral 
-N_T = 1; %number of separate fuel tanks
 
 %% Drag Estimation Equations
-
-V_drag  = V_cruise;
-S_total = S_W + S_H;
 
 %MISC DRAG TERMS:
 C_Dmisc = 0.001;
 C_DLP   = 0.001;
 
 % Component drag parameters
-K = [K_wing,K_fuse,K_H,K_V,K_winglet]; %form factor vector
-Q = [Q_wing, Q_fuse,Q_H,Q_V,Q_winglet]; %interference factor vector
-C_f = [C_fW,C_fF,C_fH,C_fV,C_fWW]; %skin friction vector
+K     = [K_wing,K_fuse,K_H,K_V,K_winglet]; %form factor vector
+Q     = [Q_wing, Q_fuse,Q_H,Q_V,Q_winglet]; %interference factor vector
+C_f   = [C_fW,C_fF,C_fH,C_fV,C_fWW]; %skin friction vector
 S_wet = [S_Wwet,S_Fwet,S_Hwet,S_Vwet,S_WWwet]; %wet area vector
 
 % Compute parasite Drag
 C_Dp = C_Dpi(K,Q,C_f,S_wet,S_W,C_Dmisc,C_DLP); %parasite dragcoefficient equation
 
 % Compute induced drag
-C_l = W_A./(0.5*rho_low*V_drag.^2*S_total);
+C_l = W_A./(0.5*rho_low*V.^2*S_total);
 C_Di = K_i*C_l.^2; %induced drag coefficient equation
 
-Drag_parasite = C_Dp*0.5*rho_low*V_drag.^2*S_total;
-Drag_induced  = C_Di*0.5*rho_low.*V_drag.^2*S_total;
+Drag_parasite = C_Dp*0.5*rho_low*V.^2*S_total;
+Drag_induced  = C_Di*0.5*rho_low.*V.^2*S_total;
 Drag_total = Drag_parasite+Drag_induced;
 
-%% Power Requirements
+%% Power Required
+Power_req_parasite = Drag_parasite.*V*lbfts2hp;
+Power_req_induced  = Drag_induced.*V*lbfts2hp;
+Power_req_total    = Drag_total.*V*lbfts2hp;
 
-P_reqd = Drag_total*V_stall/550; %power required (HP) 
+%% Plot Drag
+figure()
+plot(V,Drag_parasite, 'b'); hold on; grid on;
+plot(V,Drag_induced, 'r');
+plot(V,Drag_total, 'color', [0 0.5 0]);
+xlabel('Velocity(ft/s)'),ylabel('Drag(lb)');
+legend('Parasite','Induced','Total Drag');
+title('Drag vs. Velcoity');
 
-%% Nicolai Estimate Weight Equations
-
-wing = W_w(lam, S_W, W_TO, N, A, lam_q, mtr, V_e); %wing 
-
-fuselage = W_f(W_TO,N,L,W,D,V_e); %fuselage
-
-horizontal_tail = W_ht(W_TO,N,l_T,S_H,b_H,t_HR); %horizontal tail
-
-vertical_tail = W_vt(W_TO,N,S_V,b_V,t_VR); %vertical tail
-
-propulsion = W_p(W_ENG,N_E); %propulsion
-
-avionics = W_TRON(W_AU); %electronics/avionics
-
-fuel_system = W_FS(F_G,int,N_T, N_E); %fuel system
-
-surface_controls = 1.08*(W_TO^0.7); %surface controls(powered)
-
-electrical_system = W_ES(fuel_system,avionics); %electrical system
-
-% T = table(weight, fuselage, horizontal_tail, vertical_tail, propulsion,...
-%     avionics, fuel_system, surface_controls, electrical_system, 'RowNames',Value)
+figure()
+plot(V,Power_req_parasite, 'b'); hold on; grid on;
+plot(V,Power_req_induced, 'r'); 
+plot(V,Power_req_total, 'color', [0 0.5 0]); 
+xlabel('Velocity(ft/s)'),ylabel('Power(HP)');
+legend('Parasite','Induced','Total Power Req');
+title('Power Required vs. Velcoity');
