@@ -67,7 +67,7 @@ S_wet_vec = [wing.S_wet; fuse.S_wet; htail.S_wet; vtail.S_wet; winglet.S_wet]; %
 % Compute drag coefficients
 DRAG.C_L  = W_TO./(0.5*rho*v_drag.^2*S_total);
 DRAG.C_Dp = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %parasite dragcoefficient equation
-DRAG.C_Di = K_i*DRAG.C_L.^2; %induced drag coefficient equation
+DRAG.C_Di = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
 DRAG.C_Dt = DRAG.C_Dp + DRAG.C_Di;
 
 DRAG.D_p = DRAG.C_Dp*0.5*rho.*v_drag.^2*S_total;
