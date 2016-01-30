@@ -15,30 +15,9 @@ clc, clear all; close all;
 
 %% Load Files
 load_unit_conversion
+load_requirements
 uav_params
 load_enviro_parameters
-
-%% Mission Derived Parameters
-%
-%  These variables are derived directly from mission requirements
-%
-
-%  primary requirements
-V_stall  = 45*mph2fps; % stall speed(ft/s)
-V_loiter = 50*mph2fps; % loiter speed(ft/s)
-V_cruise = 90*mph2fps; % cruise speed(ft/s)
-V_max    = 95*mph2fps; % max speed(ft/s)
-Ran      = 100;    % range (ft) TODO: fix this number
-E_max    = 1*3600; % endurance at 7500 ft(seconds) TODO: fix this number
-E_min    = 2*3600; % endurance at 1000 ft(seconds) TODO: fix this number
-LF_V = 8; % load factor at V
-N = 6;    % ultimate load factor
-
-% derived requirements
-E_T = E_max+E_min; % total endurance(seconds)
-V_e = V_max; % equivalent max airspeed at SL(ft/s)
-
-
 
 %% Initial guess of take-off weight 
 W_TO = 48.5; %initial weight guess of a/c (lbs)
@@ -55,9 +34,15 @@ calc_drag % calculate drag
 
 %% Power Calculation
 
-% calc_engn % calculate how big engine 
+% calc_engn
+engn.HP = 5.2;     %engine horse power (selected from engine)
 
-%% WEight Calculation
+%% Propeller Sizing
+
+calc_propeller
+P_avail = engn.HP*prop.eta_p; % Power available
+
+%% Weight Calculation
 
 % Engine(s) ---------------------------------------------------------------
 
@@ -89,16 +74,18 @@ WEIGHT.engn  = W_p(engn.W_bare,engn.N_E); %propulsion
 WEIGHT.avion = W_TRON(W_AU); %electronics/avionics
 WEIGHT.fsys  = W_FS(F_G,int,N_T, engn.N_E); %fuel system
 WEIGHT.sc    = W_SC(W_TO); %surface controls(powered)
-WEIGHT.esys  = W_ES(WEIGHT.fsys,WEIGHT.avion); %electrical system
+% WEIGHT.esys  = W_ES(WEIGHT.fsys,WEIGHT.avion); %electrical system
+
+%TODO: WEIGHT.fuel
 
 weight_vec = [WEIGHT.wing  WEIGHT.fuse   WEIGHT.htail  WEIGHT.vtail ...
-              WEIGHT.engn  WEIGHT.avion  WEIGHT.fsys   WEIGHT.sc ...
-              WEIGHT.esys];
+              WEIGHT.engn  WEIGHT.avion  WEIGHT.fsys   WEIGHT.sc];
 weight_labels = {'wing',   'fuse',     'htail',       'vtail', ...
-                'engine', 'avionics', 'fuel system', 'surface controls' ...
-                'electrical system'};
+                'engine', 'avionics', 'fuel system', 'surface controls'};
+WEIGHT.total = sum(weight_vec);
+
 figure()
-pie(weight_vec, weight_labels);
+pie(weight_vec, weight_labels); hold on;
 
 %TODO:
 % WEIGHT.fuel = fuel carried by UAV 

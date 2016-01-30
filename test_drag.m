@@ -1,18 +1,24 @@
 % test_drag.m
 %
-%   Stand alone test code that will plot drag and power required as a 
-%   fucnction of velocity.
+%   Stand alone test code that will plot drag, power required, and power 
+%   available as a fucnction of velocity.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clc; clear all; close all;
 
+% load files
 load_unit_conversion
+load_requirements
 uav_params
 load_enviro_parameters
 
+
+%% Initial guess of take-off weight 
+W_TO = 48.5; %initial weight guess of a/c (lbs)
+
 %% Input Parameter
-v_drag = [50:10:200];      % specify velocity range for plotting
+v_drag = [60:10:150];      % specify velocity range for plotting
 S_total = wing.S + htail.S;
 
 % M = 0.0595760168; %Mach number
@@ -26,6 +32,14 @@ for ii = 1:length(rho_vec)
     plot_drag(ii) = DRAG;
 end
 
+%% Propeller 
+
+% INPUTS: 
+engn.HP = 5.2;
+
+calc_propeller
+P_avail = engn.HP*prop.eta_p*ones(1,length(v_drag)); % Power available
+
 %% Plot 
 
 color_set = [0 0   1;  % blue
@@ -36,8 +50,10 @@ figure('Name','Drag vs. velocity at 7500 ft')
 plot(v_drag,plot_drag(end).D_p(end,:), 'b');  hold on; grid on;
 plot(v_drag,plot_drag(end).D_i(end,:), 'r');
 plot(v_drag,plot_drag(end).D_t(end,:), 'color', [0 0.5 0]);
+line([V_stall V_stall],[0 max(plot_drag(end).D_t(end,:))],'color','k');
+line([V_max   V_max  ],[0 max(plot_drag(end).D_t(end,:))],'color','k');
 xlabel('Velocity(ft/s)'),ylabel('Drag(lb)');
-legend('Parasite','Induced','Total Drag');
+legend('Parasite','Induced','Total Drag','V_{stall}','V_{max}','location','best');
 title('Drag vs. Velcoity');
 
 
@@ -46,14 +62,18 @@ for ii = 1:length(rho_vec)
     plot(v_drag,plot_drag(ii).D_t, 'color', color_set(ii,:));
     hold on; grid on;
 end
+line([V_stall V_stall],[0 max(plot_drag(end).D_t(end,:))],'color','k');
+line([V_max   V_max  ],[0 max(plot_drag(end).D_t(end,:))],'color','k');
 xlabel('Velocity(ft/s)'),ylabel('Drag(lb)');
-legend('@1000ft','@4150ft','@7500ft');
+legend('@1000ft','@4150ft','@7500ft','V_{stall}','V_{max}','location','best');
 title('Total drag vs. velocity at different altitude');
 
 figure('Name','Power required vs. velocity at 7500 ft')
-plot(v_drag,plot_drag(end).D_p(end,:), 'b'); hold on; grid on;
-plot(v_drag,plot_drag(end).D_i(end,:), 'r'); 
-plot(v_drag,plot_drag(end).D_t(end,:), 'color', [0 0.5 0]); 
+plot(v_drag,plot_drag(end).P_p(end,:), 'b'); hold on; grid on;
+plot(v_drag,plot_drag(end).P_i(end,:), 'r'); 
+plot(v_drag,plot_drag(end).P_t(end,:), 'color', [0 0.5 0]); 
+line([V_stall V_stall],[0 max(plot_drag(end).P_t(end,:))],'color','k');
+line([V_max   V_max  ],[0 max(plot_drag(end).P_t(end,:))],'color','k');
 xlabel('Velocity(ft/s)'),ylabel('Power(HP)');
 legend('Parasite','Induced','Total Power Req');
 title('Power Required vs. Velcoity');
@@ -64,12 +84,17 @@ for ii = 1:length(rho_vec)
     plot(v_drag,plot_drag(ii).P_t, 'color', color_set(ii,:));
     hold on; grid on;
 end
+plot(v_drag,P_avail, 'c') % power available
+line([V_stall V_stall],[0 max(plot_drag(end).P_t(end,:))],'color','k');
+line([V_max   V_max  ],[0 max(plot_drag(end).P_t(end,:))],'color','k');
 xlabel('Velocity(ft/s)'),ylabel('Power(HP)');
-legend('@1000ft','@4150ft','@7500ft');
+legend('@1000ft','@4150ft','@7500ft', 'power available');
 title('Power required vs. velocity at different altitude');
 
 
 figure('Name','Drag Polar')
 plot(plot_drag(2).C_Dt,plot_drag(2).C_L); hold on; grid on;
+plot(plot_drag(2).C_Dt,afoil.CL_max*ones(size(plot_drag(2).C_Dt)),'r');
 xlabel('C_{D}'),ylabel('C_{L}')
 title('Drag Polar')
+legend('drag polar','max CL')
