@@ -15,11 +15,11 @@ load_enviro_parameters
 
 
 %% Initial guess of take-off weight 
-W_TO = 48.5; %initial weight guess of a/c (lbs)
+W_TO = 46.6; %initial weight guess of a/c (lbs)
 
 %% Input Parameter
 v_drag = [60:10:150];      % specify velocity range for plotting
-S_total = wing.S + htail.S;
+S_ref = wing.S;
 
 % M = 0.0595760168; %Mach number
 M = v_drag/a_s; %Mach number
@@ -84,9 +84,9 @@ for ii = 1:length(rho_vec)
     plot(v_drag,plot_drag(ii).P_t, 'color', color_set(ii,:));
     hold on; grid on;
 end
-plot(v_drag,P_avail, 'c') % power available
-line([V_stall V_stall],[0 max(plot_drag(end).P_t(end,:))],'color','k');
-line([V_max   V_max  ],[0 max(plot_drag(end).P_t(end,:))],'color','k');
+plot(v_drag,P_avail, 'm') % power available
+line([V_stall V_stall],[0 P_avail(1)],'color','k');
+line([V_max   V_max  ],[0 P_avail(1)],'color','k');
 xlabel('Velocity(ft/s)'),ylabel('Power(HP)');
 legend('@1000ft','@4150ft','@7500ft', 'power available');
 title('Power required vs. velocity at different altitude');
@@ -98,3 +98,12 @@ plot(plot_drag(2).C_Dt,afoil.CL_max*ones(size(plot_drag(2).C_Dt)),'r');
 xlabel('C_{D}'),ylabel('C_{L}')
 title('Drag Polar')
 legend('drag polar','max CL')
+
+figure('Name','Cl_p vs. V')
+for ii = 1:length(rho_vec)
+    plot(v_drag,plot_drag(ii).C_Dp, 'color', color_set(ii,:));
+    hold on; grid on;
+end
+xlabel('Velocity(ft/s)'),ylabel('Parasite Drag Coefficient');
+legend('@1000ft','@4150ft','@7500ft');
+title('Parasite Drag Coefficient vs. velocity at different altitude');
