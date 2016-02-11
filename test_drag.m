@@ -10,7 +10,8 @@ clc; clear all; close all;
 % load files
 load_unit_conversion
 load_requirements
-uav_params
+% uav_params
+load_UAV_parameters
 load_enviro_parameters
 
 

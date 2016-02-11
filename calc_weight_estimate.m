@@ -12,21 +12,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
-%% Drag Calculation
-%{
-% INPUT PARAMETERS for cacl_drag.m
-M       = 0.0595760168;   %Mach number
-v_drag  = V_cruise;
-S_ref   = wing.S;
-rho     = rho_avg;
-
-calc_drag % calculate drag
-%}
-
 %% Engine sizing calculation
 
 % calc_engn
+
+engn.W_bare = 3.5; % bare engine weight
+engn.N_E = 1;      % number of engines
 engn.HP = 5.2;     %engine horse power (selected from engine)
 
 %% Propeller sizing calcuation
@@ -47,13 +38,26 @@ fuel.V = fuel.V*gallon2ft3; %[ft^3] volume of fuel
 fsys.int = 0.00; %percent of fuel tanks that are integral TODO: find out how much is integral
 fsys.N_T = 1;    %number of separate fuel tanks
 
+%% Payload 
+
+payld.w_EOIR  = 12.57; % EO/IR weight(lbs)
+payld.w_SAR   = 2;     % Synthetic Apperature Radar weight(lbs)
+payld.w_LiDAR = 1;     % LiDAR weight(lbs)
+payld.w_ANT   = 0.15;  % UHF/VHF antenna weight (lbs)
+payld.w_WR    = 0.25;  % WaveRelay weight (lbs)
+payld.w_IMU   = 0.11;  % Ellipse E mini (lbs)
+
+% Pyaload/Avionics total weight
+payld.w_total = payld.w_EOIR + payld.w_SAR + payld.w_LiDAR + payld.w_ANT ...
+                + payld.w_WR + payld.w_IMU;
+
 %% Weight Estimation
 
 % Nicoli Weight Estimat Equation
 WEIGHT.wing  = W_w(wing.lam, wing.S, W_TO, N, wing.A, wing.lam_q, wing.mtr, V_e); %wing 
 WEIGHT.fuse  = W_f(W_TO,N,fuse.L,fuse.W,fuse.D,V_e); %fuselage
-WEIGHT.htail = W_ht(W_TO,N,htail.l_T, htail.S, htail.b, htail.t); %horizontal tail
-WEIGHT.vtail = W_vt(W_TO,N,vtail.S,vtail.b,vtail.t); %vertical tail
+WEIGHT.htail = W_ht(W_TO,N,htail.l_T, htail.S, htail.b, htail.t_r); %horizontal tail
+WEIGHT.vtail = W_vt(W_TO,N,vtail.S,vtail.b,vtail.t_r); %vertical tail
 WEIGHT.fsys  = W_FS(fuel.V,fsys.int,fsys.N_T, engn.N_E); %fuel system %TODO: update with actual fuel tank 
 % WEIGHT.engn  = W_p(engn.W_bare,engn.N_E); %propulsion
 % WEIGHT.avion = W_TRON(W_AU); %electronics/avionics
@@ -69,12 +73,13 @@ WEIGHT.prop  = 0.75; %TODO: incorporate equation
 
 % Detailed weight list
 w_detail_vec = [WEIGHT.wing ...
-                WEIGHT.fsys ...
+                WEIGHT.fuse ...
                 WEIGHT.htail ...
                 WEIGHT.vtail ...
                 WEIGHT.engn ...
                 WEIGHT.fsys ...
                 WEIGHT.prop ... 
+                WEIGHT.fuel ...
                 payld.w_EOIR ...
                 payld.w_SAR ...
                 payld.w_LiDAR ...

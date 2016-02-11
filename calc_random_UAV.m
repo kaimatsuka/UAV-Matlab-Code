@@ -1,39 +1,22 @@
-% load_UAV_params.m
+% calc_random_UAV.m
 %
 % DESCRIPTION:
-%    Hard coded UAV parameters and their derived parameters
+%   Using the base UAV parameters, first randomly vary the adjustable 
+%   parameters. Then, compute derived geometeries. 
 %
 % REVISION HISTORY:
-%   01/29: moved W_TO to main_script, fix typo for K_i equation. 
-%   02/09: chordwise location of the airofil max thickness loactions are 
-%          defined for wing, vtail, htail
-%   02/10: separated adjustable variables from derived variables
+%   02/10: First file is created.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%% Standard deviation/variation range of variation
-%
-% These are assigned to parameters that designer can vary.
-%
-% 
-% wing.sd_A     = 0;
-% wing.sd_S     = 0;
-% wing.sd_lam   = 0;
-% wing.sd_lam_q = 0;
-% wing.sd_mtr   = 0;
-% wing.x        = 0;
-
-%% Adjustable Variables
-
 % Wing --------------------------------------------------------------------
 
-wing.A = 13;      % aspect ratio      
-wing.S = 100/13;  % wing area (ft^2) 
-wing.lam = 0.5;   % taper ratio (must be between 0 < 1)
-wing.lam_q = 0;   % wing quarter chord sweep
-% wing.lam_max = 0.49; % sweep of maximum thicknes line 
-wing.x = 1.286;   % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
+wing.S     = baseUAV.wing.S     + randn*wing.sd_S;  % wing area (ft^2) 
+wing.A     = baseUAV.wing.A     + randn*wing.sd_A;     % aspect ratio      
+wing.lam   = baseUAV.wing.lam   + randn*wing.sd_lam;   % taper ratio (must be between 0 < 1)
+wing.lam_q = baseUAV.wing.lam_q + randn*wing.sd_lam_q; % wing quarter chord sweep
+wing.h     = baseUAV.wing.h     + randn*wing.sd_h;     % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
 wing.Q = 1;       % wing interference factor 
 wing.e = 0.8;     % Oswald's efficiency factor 
 %wing.gamma = 2;   % wing dihedral (deg)  GLOBAL HAWK
@@ -45,6 +28,8 @@ wing.mtl = 0.3;  % chordwise lcoation of the airfoil max thickness location (ran
 wing.S_wet = 2.003*wing.S;  % wet area for wing (ft^2)
 
 % Fuselage ----------------------------------------------------------------
+
+% TODO: ass
 
 fuse.Q = 1.25;    % fuselage interference factor TODO: cite source
 fuse.L = 4.2857;  % fuselage max length 
@@ -59,7 +44,7 @@ htail.S = 2.3077; % area (ft^2)
 htail.lam = 0.49; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
 htail.lam_q = 0;  % horizontal tail sweep angle
 % htail.lam_max = 0.49; % sweep of maximum thicknes line 
-htail.x = 3.8571; % dist from head to 1/4 chord of horizontal tail (ft)
+htail.h = 3.8571; % dist from head to 1/4 chord of horizontal tail (ft)
 htail.Q   = 1.08; % horizontal tail interference factor 
 
 % airfoil properties
@@ -77,7 +62,7 @@ vtail.lam = 0.6;  % taper ratio
 vtail.lam_q = 0;  % quarter chord sweep angle
 % vtail.lam_max = 0.49; % sweep of maximum thicknes line 
 vtail.Q = 1.08;   % interference factor 
-vtail.x = 3.8571; % dist from head to 1/4 chord of vertical tail (ft)
+vtail.h = 3.8571; % dist from head to 1/4 chord of vertical tail (ft)
 
 % airfoil properties
 %   TODO: update this once we have airfoil for vertical tail
@@ -91,7 +76,7 @@ vtail.S_wet = 2.003*vtail.S;     % wet area for vertical tail (ft^2)
 
 % Egnine ------------------------------------------------------------------
 
-%   no items here
+%   no teims here
 
 % Fuel System -------------------------------------------------------------
 
@@ -109,7 +94,8 @@ vtail.S_wet = 2.003*vtail.S;     % wet area for vertical tail (ft^2)
 
 %   no items here
 
-%% Derived geometries/variables
+
+%% Calculate derived geometries/variables
 
 % Wing --------------------------------------------------------------------
 
@@ -119,7 +105,7 @@ wing.c_r = 2*wing.c/(1+wing.lam); % wing root chord length (ft)
 wing.c_t = wing.c_r*wing.lam;     % wing tip chord length (ft)
 wing.t = wing.c*wing.mtr;         % average thickness of wing (ft) TODO: change name to wing.t_ave
 wing.K_i = 1/(pi*wing.A*wing.e);  % Drag coefficient
-wing.x_cg = wing.x;               % Wing CG location wrt nose (ft) TODO: is this correct?
+wing.x_cg = wing.h;               % Wing CG location wrt nose (ft) TODO: is this correct?
 
 % Fuselage ----------------------------------------------------------------
 
@@ -137,8 +123,8 @@ htail.c_r = 2*htail.c/(1+htail.lam); % horizontal tail root chord length (ft)
 htail.c_t = htail.c_r*htail.lam;     % wing tip chord length (ft)
 % htail.t   = htail.c*htail.mtr;     % max thickness (average) (ft) TODO: change name to htail.t_ave
 htail.t_r = htail.c_r*htail.mtr;   % max thickness at root (ft)
-htail.l_T = htail.x-wing.x;      % distance from wing 1/4 MAC to tail 1/4 MAC (ft)
-htail.x_cg = htail.x;            % tail CG location (ft) TODO: is this correct?
+htail.l_T = htail.h-wing.h;      % distance from wing 1/4 MAC to tail 1/4 MAC (ft)
+htail.x_cg = htail.h;            % tail CG location (ft) TODO: is this correct?
 
 % Vertical Tail -----------------------------------------------------------
 
@@ -148,7 +134,7 @@ vtail.c_r = 2*vtail.c/(1+vtail.lam); % horizontal tail root chord length (ft)
 vtail.c_t = vtail.c_r*vtail.lam;     % wing tip chord length (ft)
 vtail.t = vtail.c*vtail.mtr;     % max root thickness average(ft)
 vtail.t_r =vtail.c_r*vtail.mtr;  % max root thickness at root (ft)
-vtail.x_cg = vtail.x;            % vertical tail CG location (ft) TODO: is this correct?
+vtail.x_cg = vtail.h;            % vertical tail CG location (ft) TODO: is this correct?
 
 % Airfoil -----------------------------------------------------------------
 

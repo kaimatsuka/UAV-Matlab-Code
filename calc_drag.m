@@ -41,11 +41,22 @@ vtail.Re  = Re(rho,v_drag,vtail.c,mu); %average Reynolds number for vtail
 
 %FROM FACTOR--------------------------------------------------------------- 
 
-wing.K    = K(wing.x,wing.c,wing.t,M,wing.lam_q); %form factor for wing
+% TODO:
+%   use sweep angle of max thickness line instead of quarter chord
+%   use appropriate value for chordwise location of airfoil max thickness ratio (x/c)
+%
+
+wing.K    = K(wing.mtl,wing.mtr,M,wing.lam_q); %form factor for wing
 % winglet.K = K(winglet.x,winglet.c,winglet.t,M,winglet.lam_q); %form factor for winglet
 fuse.K    = ones(size(wing.K))*(1+60/fuse.L^3-fuse.L/400) ; %form factor for fuselage
-htail.K   = K(htail.x,htail.c,htail.t,M,htail.lam_q); %form factor for horizontal tail  
-vtail.K   = K(vtail.x,vtail.c,vtail.t,M,vtail.lam_q); %form factor for vertical wing
+htail.K   = K(htail.mtl,htail.mtr,M,htail.lam_q); %form factor for horizontal tail  
+vtail.K   = K(vtail.mtl,vtail.mtr,M,vtail.lam_q); %form factor for vertical wing
+
+wing.K    = K(wing.mtl,wing.mtr,M,wing.lam_q); %form factor for wing
+% winglet.K = K(winglet.x,winglet.c,winglet.t,M,winglet.lam_q); %form factor for winglet
+fuse.K    = ones(size(wing.K))*(1+60/fuse.L^3-fuse.L/400) ; %form factor for fuselage
+htail.K   = K(htail.mtl,htail.mtr,M,htail.lam_q); %form factor for horizontal tail  
+vtail.K   = K(vtail.mtl,vtail.mtr,M,vtail.lam_q); %form factor for vertical wing
 
 %FRICTION COEFFICIENT------------------------------------------------------
 
