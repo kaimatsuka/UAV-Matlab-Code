@@ -37,3 +37,22 @@ wing.sd_h     = 0;
 % Vertical Tail -----------------------------------------------------------
 
 % TODO: populate variation 
+
+% CG locations ------------------------------------------------------------
+
+wing.sd_x_cg = 0;  % (ft)
+fuse.sd_x_cg = 0;  % (ft)
+htail.sd_x_cg = 0; % (ft)
+vtail.sd_x_cg = 0; % (ft)
+engn.sd_x_cg = 0;  % (ft)
+fsys.sd_x_cg = 0;  % (ft)
+prop.sd_x_cg = 0;  % (ft)
+payld.sd_x_cg_EOIR = 0;  % (ft)
+payld.sd_x_cg_SAR = 0;   % (ft)
+payld.sd_x_cg_LiDAR = 0; % (ft)
+payld.sd_x_cg_ANT = 0;   % (ft)
+payld.sd_x_cg_WR  = 0;   % (ft)
+payld.sd_x_cg_IMU = 0;   % (ft)
+sfcl.sd_x_cg_wing  = 0;  % (ft)
+sfcl.sd_x_cg_htail = 0;  % (ft)
+sfcl.sd_x_cg_vtail = 0;  % (ft)

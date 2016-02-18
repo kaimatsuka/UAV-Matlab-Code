@@ -80,12 +80,13 @@ for jj = 1:1
     % TODO:
     %     Calculate lift
     %     Calculate drag
-    %     Calculate engine/prop
-    %     Calculate stability (CG Calculation)
+    %     Calculate engine/prop  NADIA
+    %     Calculate stability (CG Calculation) EUGENE
     %     Calculate trim drag(?)
     %     Calculate stability derivatives
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    calc_CG
 
     %%% Check performance
     %

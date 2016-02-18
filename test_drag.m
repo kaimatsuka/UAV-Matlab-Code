@@ -17,7 +17,7 @@ load_enviro_parameters
 
 %% Initial guess of take-off weight 
 W_TO = 46.6; %initial weight guess of a/c (lbs)
-
+afoil.CL_max = 1.2;
 %% Input Parameter
 v_drag = [60:10:150];      % specify velocity range for plotting
 S_ref = wing.S;

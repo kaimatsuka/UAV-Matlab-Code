@@ -47,7 +47,7 @@ htail.Q   = 1.08; % horizontal tail interference factor
 
 % airfoil properties
 %   TODO: update this once we have airfoil for horizontal tail
-htail.mtr = 0.24; % maximum thickness ratio
+htail.mtr = 0.12; % maximum thickness ratio
 htail.mtl = 0.3;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
 htail.S_wet = 2.003*htail.S; % wet area for horizontal tail (ft^2)
 
@@ -64,10 +64,43 @@ vtail.h = 3.8571; % dist from head to 1/4 chord of vertical tail (ft)
 
 % airfoil properties
 %   TODO: update this once we have airfoil for vertical tail
-vtail.mtr = 0.96; % maximum thickness ratio
+vtail.mtr = 0.12; % maximum thickness ratio
 vtail.mtl = 0.3;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
 vtail.S_wet = 2.003*vtail.S;     % wet area for vertical tail (ft^2)
 
+% Ailron ------------------------------------------------------------------
+
+ail.S = 0.051*wing.S; % area (ft^2) multiplication factor ranges btwn 0 to 0.051
+
+% Rudder ------------------------------------------------------------------
+
+rudd.S = 0.4*wing.S; % area (ft^2) multiplication factor ranges btwn 0.3 to 0.5
+
+% Elevator ----------------------------------------------------------------
+
+elev.S = 0.325*wing.S; % area (ft^2) multiplication factor rangers btwn 0.3 to 0.35
+
+% CG locations ------------------------------------------------------------
+
+wing.x_cg  = wing.h;   % (ft)
+fuse.x_cg  = fuse.L/2; % (ft)
+htail.x_cg = htail.h;  % (ft)
+vtail.x_cg = vtail.h;  % (ft)
+engn.x_cg = 0.95*fuse.L;  % (ft)
+fsys.x_cg = 0.65*fuse.L;  % (ft)
+prop.x_cg = 1.025*fuse.L; % (ft)
+payld.x_cg_EOIR  = 0.025*fuse.L; % (ft)
+payld.x_cg_SAR   = 0.05*fuse.L;  % (ft)
+payld.x_cg_LiDAR = 0.075*fuse.L; % (ft)
+payld.x_cg_ANT   = 0.05*fuse.L;  % (ft)
+payld.x_cg_WR    = 0.05*fuse.L;  % (ft)
+payld.x_cg_IMU   = 0.05*fuse.L; % (ft)
+
+% Surface control CG is dervied from geometries of wing surface and 
+% control surfaces. Calculated in calc_random_UAV
+% sfcl.x_cg_wing  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
+% sfcl.x_cg_htail = htail.x_cg+htail.c*(0.85-0.25); % assume 85% of average htail chord
+% sfcl.x_cg_vtail = vtail.x_cg+htail.c*(0.85-0.25); % assume 85% of average htail chord
 
 % Create baseUAV structure ------------------------------------------------
 
@@ -75,4 +108,10 @@ baseUAV.wing  = wing;
 baseUAV.fuse  = fuse;
 baseUAV.htail = htail;
 baseUAV.vtail = vtail;
+baseUAV.fuse  = fuse;
+baseUAV.engn  = engn;
+baseUAV.fsys  = fsys;
+baseUAV.prop  = prop;
+baseUAV.payld = payld;
+% loadUAV.sfcl  = sfcl; % not used here
 
