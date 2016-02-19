@@ -16,47 +16,47 @@ bw   =  16.90;    % [ft]        Bray pg 31
 
 
 % aero data - linear stability coefficients
-CL0     =    0.385;              % []          Bray pg 33
-CL_a    =    4.78;               % [/rad]      Bray pg 33
-CL_adot =    2.42;               % [/rad]      Bray pg 33
-CL_q    =    8.05;               % [/rad]      Bray pg 33
-CL_de   =    0.401;              % [/rad]      Bray pg 33
+CL0     =    SDERIV.CL0;         % []          Bray pg 33
+CL_a    =    SDERIV.CL_a;        % [/rad]      Bray pg 33
+CL_adot =    SDREIV.CL_adot;     % [/rad]      Bray pg 33
+CL_q    =    SDERIV.CL_q;        % [/rad]      Bray pg 33
+CL_de   =    SDERIV.CL_de;       % [/rad]      Bray pg 33
 %CLfa CLfa.dat 0 1               %             Bray pg 50, Table 4.7
 %CLfade CLfade.dat 0 1 1         %             Bray pg 41, Table 4.4
 
-CD0     =    0.060;              % []          Bray pg 33
-CD_a    =    0.430;              % [/rad]      Bray pg 33
-CD_de   =    0.0180;             % [/rad]      Bray pg 33
+CD0     =    SDERIV.CD0;         % []          Bray pg 33
+CD_a    =    SDERIV.CD_a;        % [/rad]      Bray pg 33
+CD_de   =    SDERIV.CD_de;       % [/rad]      Bray pg 33
 %CDfa Cdfa.dat 0 1               %             Bray pg 50, Table 4.7
 %CDfade CDfade.dat 0 1 1         %             Bray pg 45, Table 4.6
 
-Cm0     =   0.194;              % []          Bray pg 33
-Cm_a    =   -2.12;               % [/rad]      Bray pg 33
-Cm_adot =  -11.0;                % [/rad]      Bray pg 33
-Cm_q    =  -36.6;                % [/rad]      Bray pg 33
-Cm_de   =   -1.76;               % [/rad]      Bray pg 33
+Cm0     =   SDERIV.Cm0;          % []          Bray pg 33
+Cm_a    =   SDERIV.Cm_a;         % [/rad]      Bray pg 33
+Cm_adot =   SDERIV.Cm_adot;      % [/rad]      Bray pg 33
+Cm_q    =   SDERIV.Cm_q;         % [/rad]      Bray pg 33
+Cm_de   =   SDERIV.Cm_de;        % [/rad]      Bray pg 33
 %Cmfade Cmfade.dat 0 1 1         %             Bray pg 34, Figure 4.2
 
-CY_beta =   -0.819;              % [/rad]      Bray pg 33
+CY_beta =   SDERIV.CY_beta;      % [/rad]      Bray pg 33
 %CY_p      <CY_p>                % [/rad]      no data
 %CY_r      <CY_r>                % [/rad]      no data
 %CY_da     <CY_da>               % [/rad]      no data
-CY_dr   =    0.191;              % [/rad]      Bray pg 33
+CY_dr   =   SDERIV.CY_dr;        % [/rad]      Bray pg 33
 %CYfada <CYfada.dat>             % []          no data
 %CYfbetadr CYfbetadr.dat 0 1 1   % []          Bray pg 62, Figure 4.19
 
-Cl_beta =   -0.023;              % [/rad]      Bray pg 33
-Cl_p    =   -0.450;              % [/rad]      Bray pg 33
-Cl_r    =    0.265;              % [/rad]      Bray pg 33
-Cl_da   =   -0.161;              % [/rad]      Bray pg 33 (sign reversed)
-Cl_dr   =   -0.00229;            % [/rad]      Bray pg 33
+Cl_beta =   SDERIV.Cl_beta;      % [/rad]      Bray pg 33
+Cl_p    =   SDERIV.Cl_p;         % [/rad]      Bray pg 33
+Cl_r    =   SDERIV.Cl_r;         % [/rad]      Bray pg 33
+Cl_da   =   SDERIV.Cl_da;        % [/rad]      Bray pg 33 (sign reversed)
+Cl_dr   =   SDERIV.Cl_dr;        % [/rad]      Bray pg 33
 %Clfada Clfada.dat 0 1 1         %             Bray pg 58, Table 4.8
 
-Cn_beta =    0.109;              % [/rad]      Bray pg 33
-Cn_p    =   -0.110;              % [/rad]      Bray pg 33
-Cn_r    =   -0.200;              % [/rad]      Bray pg 33
-Cn_da   =    0.0200;             % [/rad]      Bray pg 33 (sign reversed)
-Cn_dr   =   -0.0917;             % [/rad]      Bray pg 33
+Cn_beta =   SDERIV.Cn_beta;      % [/rad]      Bray pg 33
+Cn_p    =   SDERIV.Cn_p;         % [/rad]      Bray pg 33
+Cn_r    =   SDERIV.Cn_r;         % [/rad]      Bray pg 33
+Cn_da   =   SDERIV.Cn_da;        % [/rad]      Bray pg 33 (sign reversed)
+Cn_dr   =   SDERIV.Cn_dr;        % [/rad]      Bray pg 33
 %Cnfada Cnfada.dat 0 1 1         %             Bray pg 61, Table 4.9
 %Cnfbetadr Cnfbetadr.dat 0 1 1   %             Bray pg 63, Figure 4.20
 
