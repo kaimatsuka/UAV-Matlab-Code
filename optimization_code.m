@@ -20,12 +20,13 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-clc, clear all; close all;
+clear all; close all;
 
 %% Load Files
 load_unit_conversion
 load_enviro_parameters
 load_requirements
+load_airfoils
 load_base_UAV  
 load_variation_parameters
 
@@ -87,6 +88,11 @@ for jj = 1:1
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     calc_CG
+    
+%     % Trim Drag (high altitude scan)
+%     V = 
+%     [rho, T, a] = calc_atmos(7500);
+    
 
     %%% Check performance
     %

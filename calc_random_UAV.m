@@ -12,7 +12,7 @@
 
 % Wing --------------------------------------------------------------------
 
-wing.S     = baseUAV.wing.S     + randn*wing.sd_S;  % wing area (ft^2) 
+wing.S     = baseUAV.wing.S     + randn*wing.sd_S;     % wing area (ft^2) 
 wing.A     = baseUAV.wing.A     + randn*wing.sd_A;     % aspect ratio      
 wing.lam   = baseUAV.wing.lam   + randn*wing.sd_lam;   % taper ratio (must be between 0 < 1)
 wing.lam_q = baseUAV.wing.lam_q + randn*wing.sd_lam_q; % wing quarter chord sweep
@@ -69,11 +69,17 @@ wing.h     = baseUAV.wing.h     + randn*wing.sd_h;     % dist from head to wing 
 % vtail.mtr = 0.96; % maximum thickness ratio
 % vtail.mtl = 0.3;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
 % vtail.S_wet = 2.003*vtail.S;     % wet area for vertical tail (ft^2)
-% 
-% % Airfoil -----------------------------------------------------------------
-% 
-% %   no teims here
-% 
+
+% Airfoil -----------------------------------------------------------------
+
+% randomly select an airfoil
+af_idx = randi(length(airfoil_options));
+
+afoil.name  = strcat('naca',airfoil_options(af_idx));
+% afoil.alpha0 = airfoils(ii).alpha0;
+afoil.Cla_rad = airfoils(af_idx).Cl_alpha_rad; % (rad) 2D lift-curve slope of airfoil 
+afoil.CLa_rad = afoil.Cla_rad/(1+(afoil.Cla_rad/(pi*wing.A*wing.e))); % (rad) 2D lift-curve slope of airfoil 
+
 % % Egnine ------------------------------------------------------------------
 % 
 % %   no teims here

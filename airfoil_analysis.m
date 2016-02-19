@@ -25,6 +25,7 @@ clrstr = cellstr(['-m';'-c';'-r';'-g';'-b';'-k';...
 % Text file is formatted in columns:
 % Alpha (deg) CL CD CDp CM Top_Xtr Bot_Xtr
 for ii = 1:length(airfoil_data)
+% for ii = 1:1
     raw = dlmread(char(airfoil_data(ii)));
     
     airfoil(ii).name  = strcat('naca',airfoil_txt(ii));
@@ -86,10 +87,11 @@ title('C_l/C_d vs. \alpha of Select Airfoils')
 %% calculate Cl_alpha & CL_alpha
 load_UAV_parameters
 for ii = 1:length(airfoil_data)
+% for ii = 1:1
     % Determine indices where AoA is -5 and 5 degrees; where all airfoil
     % have straight line data
     start_ind = find(airfoil(ii).alpha == -5);
-    end_ind = find(airfoil(ii).alpha == 5.1);
+    end_ind   = find(airfoil(ii).alpha == 5.1);
     
     % Calculate the slope both /deg and /rad --> Cl_alpha
     airfoil(ii).Cl_alpha_deg = (airfoil(ii).Cl(end_ind)-airfoil(ii).Cl(start_ind))/...
