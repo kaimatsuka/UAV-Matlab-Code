@@ -11,12 +11,12 @@
 
 % Wing --------------------------------------------------------------------
 
-wing.S     = baseUAV.wing.S     + (rand-0.5)*wing.sd_S;  % wing area (ft^2) 
-wing.A     = baseUAV.wing.A     + (rand-0.5)*wing.sd_A;     % aspect ratio      
-wing.lam   = baseUAV.wing.lam   + (rand-0.5)*wing.sd_lam;   % taper ratio (must be between 0 < 1)
+wing.S     = baseUAV.wing.S     + (rand-0.5)*wing.sd_S; % wing area (ft^2) 
+wing.A     = baseUAV.wing.A     + (rand-0.5)*wing.sd_A; % aspect ratio      
+wing.lam   = baseUAV.wing.lam   + (rand-0.5)*wing.sd_lam; % taper ratio (must be between 0 < 1)
 wing.lam_q = baseUAV.wing.lam_q + (rand-0.5)*wing.sd_lam_q; % wing quarter chord sweep
-wing.h     = baseUAV.wing.h     + (rand-0.5)*wing.sd_h;     % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
-wing.Q = 1;       % wing interference factor 
+wing.h     = baseUAV.wing.h     + (rand-0.5)*wing.sd_h; % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
+wing.Q     = baseUAV.wing.Q     + (rand-0.5)*wing.sd_Q; % wing interference factor 
 wing.e = 0.8;     % Oswald's efficiency factor 
 %wing.gamma = 2;   % wing dihedral (deg)  GLOBAL HAWK
 
@@ -36,13 +36,13 @@ fuse.D = baseUAV.fuse.D  + (rand-0.5)*fuse.sd_D;  % fuselage max depth
 % Horizontal Tail ---------------------------------------------------------
 
 % primary
-htail.A = baseUAV.htail.A  + (rand-0.5)*htail.sd_A;    % aspect ratio
-htail.S = baseUAV.htail.S  + (rand-0.5)*htail.sd_S; % area (ft^2)
-htail.lam = baseUAV.htail.lam  + (rand-0.5)*htail.sd_lam; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
-htail.lam_q = baseUAV.htail.lam_q  + (rand-0.5)*htail.sd_lam_q;  % horizontal tail sweep angle
-htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thicknes line 
-htail.h = baseUAV.htail.h  + (rand-0.5)*htail.sd_h; % dist from head to 1/4 chord of horizontal tail (ft)
-htail.Q   = baseUAV.htail.Q  + (rand-0.5)*htail.sd_Q; % horizontal tail interference factor 
+htail.A = baseUAV.htail.A              + (rand-0.5)*htail.sd_A;    % aspect ratio
+htail.S = baseUAV.htail.S              + (rand-0.5)*htail.sd_S; % area (ft^2)
+htail.lam = baseUAV.htail.lam          + (rand-0.5)*htail.sd_lam; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
+htail.lam_q = baseUAV.htail.lam_q      + (rand-0.5)*htail.sd_lam_q;  % horizontal tail sweep angle
+htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thickness line 
+htail.h = baseUAV.htail.h              + (rand-0.5)*htail.sd_h; % dist from head to 1/4 chord of horizontal tail (ft)
+htail.Q   = baseUAV.htail.Q            + (rand-0.5)*htail.sd_Q; % horizontal tail interference factor 
 
 % airfoil properties
 %   TODO: update this once we have airfoil for horizontal tail
@@ -53,13 +53,13 @@ htail.S_wet = 2.003*htail.S; % wet area for horizontal tail (ft^2)
 % Vertical Tail -----------------------------------------------------------
 
 % primay
-vtail.S =  baseUAV.vtail.S  + (rand-0.5)*vtail.sd_S; % area (ft^2)
-vtail.A = baseUAV.vtail.A  + (rand-0.5)*vtail.sd_A;   % aspect ratio (defined as b^2/S) 
-vtail.lam = baseUAV.vtail.lam  + (rand-0.5)*vtail.sd_lam;  % taper ratio 
+vtail.S =  baseUAV.vtail.S         + (rand-0.5)*vtail.sd_S; % area (ft^2)
+vtail.A = baseUAV.vtail.A          + (rand-0.5)*vtail.sd_A;   % aspect ratio (defined as b^2/S) 
+vtail.lam = baseUAV.vtail.lam      + (rand-0.5)*vtail.sd_lam;  % taper ratio 
 vtail.lam_q = baseUAV.vtail.lam_q  + (rand-0.5)*vtail.sd_lam_q;  % quarter chord sweep angle
-% vtail.lam_max = 0.49; % sweep of maximum thicknes line 
-vtail.Q = baseUAV.vtail.Q  + (rand-0.5)*vtail.sd_Q;   % interference factor 
-vtail.h = baseUAV.vtail.h  + (rand-0.5)*vtail.sd_h; % dist from head to 1/4 chord of vertical tail (ft)
+vtail.lam_max = baseUAV.vtail.lam_max  + (rand-0.5)*vtail.sd_lam_max; % sweep of maximum thicknes line 
+vtail.Q = baseUAV.vtail.Q          + (rand-0.5)*vtail.sd_Q;   % interference factor 
+vtail.h = baseUAV.vtail.h          + (rand-0.5)*vtail.sd_h; % dist from head to 1/4 chord of vertical tail (ft)
 
 % airfoil properties
 %   TODO: update this once we have airfoil for vertical tail
@@ -71,7 +71,7 @@ vtail.S_wet = 2.003*vtail.S;     % wet area for vertical tail (ft^2)
 
 %   no teims here
 
-% Egnine ------------------------------------------------------------------
+% Engine ------------------------------------------------------------------
 
 %   no teims here
 
