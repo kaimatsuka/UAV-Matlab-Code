@@ -1,16 +1,32 @@
 % load_airfoils.m
 %
 % DESCRIPTION:
-%    This file load libraries of airfoil data
+%   This file load libraries of airfoil data
 %
 % INPUT:
+%   none
 %
 % OUTPUT:
+%   airfoils(ii).name
+%               .alpha
+%               .Cl
+%               .Cd
+%               .Cdp
+%               .CM
+%               .ClCd
+%               .maxClCd
+%               .Cl_alpha_deg
+%               .Cl_alpha_rad
+%               .alpha0
 %
 % REVISION HISTORY:
 %   02/18: File created
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%TODO: add library of maximum thickness ratio, chordwise location of the
+%airfoil max thickness location, and chord-circumference ratio
 
 airfoil_options = cellstr(['0008'; '0024'; '1408'; '1410'; '1412'; ...
                            '2412'; '2415'; '2418'; '4412'; '4415'; ...

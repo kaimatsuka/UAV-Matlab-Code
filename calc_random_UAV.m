@@ -94,15 +94,23 @@ vtail.S_wet = 2.003*vtail.S;     % wet area for vertical tail (ft^2)
 
 %% Calculate derived geometries/variables
 
+
 % Wing --------------------------------------------------------------------
 
 wing.b = sqrt(wing.A*wing.S);     % wing span (ft)
 wing.c = wing.S/wing.b;           % average wing cord (ft)   TODO: change name to wing.c_ave
 wing.c_r = 2*wing.c/(1+wing.lam); % wing root chord length (ft)
 wing.c_t = wing.c_r*wing.lam;     % wing tip chord length (ft)
+wing.t_r = wing.c_r*wing.mtr;     % max thickness at root (ft)
+wing.t_t = wing.c_t*wing.mtr;     % max thickness at tip (ft)
 wing.t = wing.c*wing.mtr;         % average thickness of wing (ft) TODO: change name to wing.t_ave
 wing.K_i = 1/(pi*wing.A*wing.e);  % Drag coefficient
 wing.x_cg = wing.h;               % Wing CG location wrt nose (ft) TODO: is this correct?
+
+wing.h_q_t = wing.h+tand(wing.lam_q)*wing.b/2;  % wing c/4 tip location (ft)
+wing.h_l_r = wing.h-wing.c_r/4;                 % wing leading edge root location (ft)
+wing.h_l_t = wing.h_q_t-wing.c_t/4;             % wing leading edge tip location (ft)
+wing.lam_l = atand((wing.h_l_t-wing.h_l_r)/(wing.b/2)); % wing leading edge sweep location (deg)
 
 % Fuselage ----------------------------------------------------------------
 
@@ -120,8 +128,14 @@ htail.c_r = 2*htail.c/(1+htail.lam); % horizontal tail root chord length (ft)
 htail.c_t = htail.c_r*htail.lam;     % wing tip chord length (ft)
 % htail.t   = htail.c*htail.mtr;     % max thickness (average) (ft) TODO: change name to htail.t_ave
 htail.t_r = htail.c_r*htail.mtr;   % max thickness at root (ft)
+htail.t_t = htail.c_t*htail.mtr;   % max thickness ratio (ft)s
 htail.l_T = htail.h-wing.h;      % distance from wing 1/4 MAC to tail 1/4 MAC (ft)
 htail.x_cg = htail.h;            % tail CG location (ft) TODO: is this correct?
+
+htail.h_q_t = htail.h+tand(htail.lam_q)*htail.b/2;
+htail.h_l_r = htail.h    -htail.c_r/4;
+htail.h_l_t = htail.h_q_t-htail.c_t/4;
+htail.lam_l = atand((htail.h_l_t-htail.h_l_r)/(htail.b/2));
 
 % Vertical Tail -----------------------------------------------------------
 
@@ -131,7 +145,13 @@ vtail.c_r = 2*vtail.c/(1+vtail.lam); % horizontal tail root chord length (ft)
 vtail.c_t = vtail.c_r*vtail.lam;     % wing tip chord length (ft)
 vtail.t = vtail.c*vtail.mtr;     % max root thickness average(ft)
 vtail.t_r =vtail.c_r*vtail.mtr;  % max root thickness at root (ft)
+vtail.t_t = vtail.c_t*vtail.mtr; % max root thickness at tip (ft)
 vtail.x_cg = vtail.h;            % vertical tail CG location (ft) TODO: is this correct?
+
+vtail.h_q_t = vtail.h+tand(vtail.lam_q)*vtail.b;
+vtail.h_l_r = vtail.h    -vtail.c_r/4;
+vtail.h_l_t = vtail.h_q_t-vtail.c_t/4;
+vtail.lam_l = atand((vtail.h_l_t-vtail.h_l_r)/(vtail.b/2));
 
 % Airfoil -----------------------------------------------------------------
 
@@ -147,6 +167,7 @@ fsys.x_cg = 0.65*fuse.L; % fuel system CG location (ft)
 
 % Propeller ---------------------------------------------------------------
 
+prop.h    = fuse.L; % beginning of prop is located at end of fuselge
 prop.x_cg = (1+0.025)*fuse.L; % propeller CG location (ft)
 
 % Electronics/Payloads ----------------------------------------------------

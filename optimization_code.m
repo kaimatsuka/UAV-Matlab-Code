@@ -54,7 +54,7 @@ for jj = 1:1
     % W_TO = 45;
     W_TO = 30; % initial weight guess of a/c (lbs)
     W_tolerance = 0.005; % tolerance of total weight estimate
-    max_weight_refine = 100; % number of iteration 
+    max_weight_refine = 10; % number of iteration 
 
     for ii = 1:max_weight_refine
 
@@ -89,11 +89,24 @@ for jj = 1:1
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     calc_CG
     
-%     % Trim Drag (high altitude scan)
-%     V = 
-%     [rho, T, a] = calc_atmos(7500);
-    
+    % Trim Drag (high altitude scan)
+    % define inputs needed for calc_drag
+    v_drag = 132; %ft/s
+    [rho, T, a] = calc_atmos(7500);
+    M = v_drag/a;
+    W = W_TO;
+    calc_drag;
+    TRIMDRAG1 = DRAG;
 
+    % Trim Drag (low altitude loiter)
+    % define inputs needed for calc_drag
+    v_drag = 73.30; %ft/s
+    [rho, T, a] = calc_atmos(1000);
+    M = v_drag/a;
+    W = W_TO;
+    calc_drag;
+    TRIMDRAG2 = DRAG;
+    
     %%% Check performance
     %
     % TODO:
@@ -104,6 +117,7 @@ for jj = 1:1
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    
     %%% Save results
     %
     % TODO: if UAV passes criteria, do following
