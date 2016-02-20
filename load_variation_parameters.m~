@@ -23,6 +23,7 @@ wing.sd_lam   = 0; % wing taper ratio variation
 wing.sd_lam_q = 0; % wing quarter chord sweep variation
 wing.sd_h     = 0; % head to 1/4 chord distance variation (ft)
 wing.sd_Q     = 0; % wing interference factor 
+
 % Fuselage ----------------------------------------------------------------
 
 fuse.sd_Q     = 0; % fuselage interference factor variation
