@@ -19,10 +19,16 @@
 
 wing.sd_A     = 0; % wing aspect ratio variation std dev 
 wing.sd_S     = 0; % wing area variation (ft^2)
-wing.sd_lam   = 0;
-wing.sd_lam_q = 0;
-wing.sd_mtr   = 0;
-wing.sd_h     = 0;
+wing.sd_lam   = 0; % wing taper ratio variation
+wing.sd_lam_q = 0; % wing quarter chord sweep variation
+wing.sd_h     = 0; % head to 1/4 chord distance variation
+
+% Fuselage ----------------------------------------------------------------
+
+fuse.sd_Q     = 0; % fuselage interference factor variation
+fuse.sd_L     = 0; % fuselage max length variation
+fuse.sd_W     = 0; % fuselage max width variation
+fuse.sd_D     = 0; % fuselage max depth variation
 
 % Fuselage ----------------------------------------------------------------
 
