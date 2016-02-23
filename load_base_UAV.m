@@ -69,6 +69,11 @@ vtail.mtr = 0.12; % maximum thickness ratio
 vtail.mtl = 0.3;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
 vtail.S_wet = 2.003*vtail.S;     % wet area for vertical tail (ft^2)
 
+% Propeller ---------------------------------------------------------------
+
+prop.h = 4.6315; % propeller location
+prop.D = 1.62; % propeller diameter (ft)
+
 % Ailron ------------------------------------------------------------------
 
 ail.S = 0.051*wing.S; % area (ft^2) multiplication factor ranges btwn 0 to 0.051

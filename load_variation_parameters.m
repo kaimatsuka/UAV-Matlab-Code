@@ -17,12 +17,13 @@
 
 % Wing --------------------------------------------------------------------
 
-wing.sd_A     = 0; % wing aspect ratio variation std dev 
+wing.sd_A     = 10; % wing aspect ratio variation std dev 
 wing.sd_S     = 0; % wing area variation (ft^2)
 wing.sd_lam   = 0; % wing taper ratio variation
 wing.sd_lam_q = 0; % wing quarter chord sweep variation
 wing.sd_h     = 0; % head to 1/4 chord distance variation (ft)
 wing.sd_Q     = 0; % wing interference factor 
+
 % Fuselage ----------------------------------------------------------------
 
 fuse.sd_Q     = 0; % fuselage interference factor variation
@@ -37,7 +38,7 @@ htail.sd_S       = 0; % htail area variation (ft^2)
 htail.sd_A       = 0; % htail aspect ratio variation std dev
 htail.sd_lam     = 0; % htail taper ratio variation
 htail.sd_lam_q   = 0; % htail quarter chord sweep variation 
-htail.sd_lam_max = 0; % htail sweep of maximum thickness line variation
+% htail.sd_lam_max = 0; % htail sweep of maximum thickness line variation
 htail.sd_h       = 0; % htail dist from head to 1/4 chord of variation (ft)
 htail.sd_Q       = 0; % htail interference factor variation
 
@@ -47,7 +48,7 @@ vtail.sd_S       = 0; % vtail area variation (ft^2)
 vtail.sd_A       = 0; % vtail aspect ratio variation 
 vtail.sd_lam     = 0; % vtail taper ratio variation
 vtail.sd_lam_q   = 0; % vtail quarter chord sweep variation
-vtail.sd_lam_max = 0; % vtail sweep of maximum thickness line variation
+% vtail.sd_lam_max = 0; % vtail sweep of maximum thickness line variation
 vtail.sd_Q       = 0; % vtail dist from head to 1/4 chord of variation (ft)
 vtail.sd_h       = 0; % vtail htail interference factor variation
 

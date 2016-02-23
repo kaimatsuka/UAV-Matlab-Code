@@ -9,7 +9,7 @@
 % INPUTS:
 %   rho     = density of air (1x1)
 %   v_drag  = velcoity of interest(1xM)
-%   S_ref   = reference surface area (1x1)
+%   wing.S  = reference surface area (1x1)
 %   M       = Mach number (1xM)
 %
 % OUTPUTS:
@@ -86,13 +86,13 @@ S_wet_vec = [wing.S_wet; fuse.S_wet; htail.S_wet; vtail.S_wet]; %wet area vector
 
 
 % Compute drag coefficients
-DRAG.C_L  = W_TO./(0.5*rho*v_drag.^2*S_ref);
+DRAG.C_L  = W_TO./(0.5*rho*v_drag.^2*wing.S);
 DRAG.C_Dp = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %parasite dragcoefficient equation
 DRAG.C_Di = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
 DRAG.C_Dt = DRAG.C_Dp + DRAG.C_Di;
 
-DRAG.D_p = DRAG.C_Dp*0.5*rho.*v_drag.^2*S_ref;
-DRAG.D_i = DRAG.C_Di*0.5*rho.*v_drag.^2*S_ref;
+DRAG.D_p = DRAG.C_Dp*0.5*rho.*v_drag.^2*wing.S;
+DRAG.D_i = DRAG.C_Di*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_t = DRAG.D_p+DRAG.D_i;
 
 DRAG.v = v_drag;

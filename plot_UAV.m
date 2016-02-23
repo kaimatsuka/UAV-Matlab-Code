@@ -1,4 +1,4 @@
-function [h] = plot_UAV(varargin) 
+function [h] = plot_UAV(wing,htail,vtail,fuse,prop) 
 %C130 draws a simple 3D airplane loosely modelled after a Lockheed C-130.
 % 
 %% c130 Syntax 
@@ -109,9 +109,12 @@ zscale        = 1;
 setroll       = false; 
 setpitch      = false; 
 setyaw        = false; 
+x             = 0;
+y             = 0;
+z             = 0;
 
 %% Parse Inputs: 
-
+%{
 if nargin>2 && isnumeric(varargin{1}) && isnumeric(varargin{2}) && isnumeric(varargin{3})
     x = varargin{1}; 
     y = varargin{2}; 
@@ -119,10 +122,6 @@ if nargin>2 && isnumeric(varargin{1}) && isnumeric(varargin{2}) && isnumeric(var
     assert(isscalar(x)==1,'c130 input x must be a scalar.')
     assert(isscalar(y)==1,'c130 input y must be a scalar.')
     assert(isscalar(z)==1,'c130 input z must be a scalar.')
-else
-    x = 0; 
-    y = 0; 
-    z = 0; 
 end
 
 tmp = strncmpi(varargin,'col',3); 
@@ -201,20 +200,21 @@ if any(tmp)
     yaw = varargin{find(tmp)+1}; 
     assert(isscalar(yaw)==1,'Yaw must be a scalar value in degrees.')
 end
+%}
 
 %% Dimensions: 
 
 % TODO LIST:
 %   adjust height of wing, tails,
 %   addjust max thickness line of wing, tails(optional)
-%   work on propeller
+%   propeller hub
 %   work on vtail shape
 %   work on nose shape
 %   work on htail shape
 %   create cone part of propeller
 
-% original code
-
+% Input List
+%{
 % fuse.L  = 4.2857; % baseUAV
 fuse.L  = 4.6315;
 fuse.D  = 1.0833; % fuselage depth (also diameter)
@@ -248,6 +248,10 @@ vtail.t_t   = 0.0692;  % horizontal tail thickness at tip
 
 prop.h = 4.6315; % propeller location
 prop.D = 1.62; % propeller diameter (ft)
+
+%}
+
+
 fusLength    = (fuse.L-fuse.D/2)/2;  % only middle part of fuselage
 tailLength   = fusLength; 
 fusRadius    = fuse.D/2;  

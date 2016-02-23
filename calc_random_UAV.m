@@ -40,7 +40,8 @@ htail.A = baseUAV.htail.A              + (rand-0.5)*htail.sd_A;    % aspect rati
 htail.S = baseUAV.htail.S              + (rand-0.5)*htail.sd_S; % area (ft^2)
 htail.lam = baseUAV.htail.lam          + (rand-0.5)*htail.sd_lam; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
 htail.lam_q = baseUAV.htail.lam_q      + (rand-0.5)*htail.sd_lam_q;  % horizontal tail sweep angle
-htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thickness line 
+% htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thickness line 
+% ^^ This value is derived parameter
 htail.h = baseUAV.htail.h              + (rand-0.5)*htail.sd_h; % dist from head to 1/4 chord of horizontal tail (ft)
 htail.Q   = baseUAV.htail.Q            + (rand-0.5)*htail.sd_Q; % horizontal tail interference factor 
 
@@ -57,7 +58,7 @@ vtail.S =  baseUAV.vtail.S         + (rand-0.5)*vtail.sd_S; % area (ft^2)
 vtail.A = baseUAV.vtail.A          + (rand-0.5)*vtail.sd_A;   % aspect ratio (defined as b^2/S) 
 vtail.lam = baseUAV.vtail.lam      + (rand-0.5)*vtail.sd_lam;  % taper ratio 
 vtail.lam_q = baseUAV.vtail.lam_q  + (rand-0.5)*vtail.sd_lam_q;  % quarter chord sweep angle
-vtail.lam_max = baseUAV.vtail.lam_max  + (rand-0.5)*vtail.sd_lam_max; % sweep of maximum thicknes line 
+% vtail.lam_max = baseUAV.vtail.lam_max  + (rand-0.5)*vtail.sd_lam_max; % sweep of maximum thicknes line 
 vtail.Q = baseUAV.vtail.Q          + (rand-0.5)*vtail.sd_Q;   % interference factor 
 vtail.h = baseUAV.vtail.h          + (rand-0.5)*vtail.sd_h; % dist from head to 1/4 chord of vertical tail (ft)
 

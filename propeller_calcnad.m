@@ -9,7 +9,7 @@ n = 7500/60; % revPS
 D = 2; % Diameter (ft)
 
 % Reading in excel files
-[num,txt] = xlsread('Propeller Design.xlsx','ClarkY Efficiency', 'A1:B35','basic');
+[num,txt] = xlsread('Propeller_Design.xlsx','ClarkY Efficiency', 'A1:B35','basic');
 
 % Separating excel data, performing pchip interpolation
 x = num(:, 1);

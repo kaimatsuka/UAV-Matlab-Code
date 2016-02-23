@@ -30,8 +30,12 @@ load_airfoils
 load_base_UAV  
 load_variation_parameters
 
+currentPath = pwd;
+addpath(genpath(currentPath));
 
-for jj = 1:1
+NUM_ITERATION = 100;
+
+for jj = 1:NUM_ITERATION
     
     % Set new base UAV (genetic algorithm)
     %
@@ -82,12 +86,13 @@ for jj = 1:1
     %     Calculate lift
     %     Calculate drag
     %     Calculate engine/prop  NADIA
+    %     Calculate moment of inertia
     %     Calculate stability (CG Calculation) EUGENE
     %     Calculate trim drag(?)
     %     Calculate stability derivatives
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    calc_CG
+%     calc_CG
     
     % Trim Drag (high altitude scan)
     % define inputs needed for calc_drag
@@ -117,6 +122,7 @@ for jj = 1:1
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%     history_wing(jj) = wing;
     
     %%% Save results
     %
@@ -126,6 +132,11 @@ for jj = 1:1
     %     toss bad UAV, keep good UAV
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+    
+    figure(1)
+    plot_UAV(wing,htail,vtail,fuse,prop);
+% 
+%     figure(2)
+%     hist(history_wing(jj).wing.S)
 end
 
