@@ -96,16 +96,16 @@ SDERIV.CD_de   =    -SDERIV.CL_a*(l_t*vtail.S)/(wing.S*wing.c)*...
 
 % Force from Y-Direction---------------------------------------------------
 
-SDERIV.CY_a    =    0.5; % guessed value
+SDERIV.CY_a    =    0; % assume 0 because of symmetric aircraft
 SDERIV.CY_beta =    -SDERIV.CY_a*(1-sigma_b)*(v_avg/v).^2*vtail.S/wing.S; 
     % lateral stability pdf
 SDERIV.CY_r    =    2*SDERIV.CY_a*(v_avg/v)^2*vtail.S/wing.S/wing.b;
 SDERIV.CY_dr   =    SDERIV.CY_de*(v_avg/v)^2*vtail.S/wing.S;
 
 % Roll Moment--------------------------------------------------------------
-
-SDERIV.Cl_beta =   -0.023;              
+             
 SDERIV.Cl_p    =   -SDERIV.CL_a/12*(1+3*lambda)/(1+lambda); % mae 154s hw4
+SDERIV.Cl_beta =   0; % dihedral term, roll stability
 SDERIV.Cl_r    =    SDERIV.CY_r*((z_v-z_cg)/wing.b*cos(a_0)-...
                     (x_v-x_cg)/wing.b*sin(a_0)); % lateral stability pdf
 SDERIV.Cl_da   =   2*L/(rho*v^2*wing.S*wing.b*d_a); % lateral stability pdf
@@ -117,14 +117,14 @@ SDERIV.Cl_dr   =   SDERIV.CY_dr*((z_v-z_cg)/wing.b*cos(a_0)-...
 SDERIV.Cm0     =   Cm_ac+V_H*i_t; % mae 154s lec 10             
 SDERIV.Cm_a    =   SDERIV.CL_a*(h_cg-h_n); % mae154s lec 10               
 SDERIV.Cm_adot =   -2*SDERIV.CL_adot*V_H*l_t/wing.C*eps_a; % mae154s lec 11
-SDERIV.Cm_q    =   1/(rho*v^2*wing.S*wing.c)*M_q; % longitudinal stability pdf
+SDERIV.Cm_q    =   -SDERIV.CL_q*l_t/wing.c;
 SDERIV.Cm_de   =   -SDERIV.CL_a*eta_h*V_H*vtail.b/htail.b*tau_e;
     % http://faculty.dwc.edu/sadraey/Elevator%20Design.pdf
 
 % Yaw Moment---------------------------------------------------------------
 
 SDERIV.Cn_beta =    CY_a*(1-sigma_b)*(v_avg/v)^2*vtail.S*l_v/wing.S/wing.b;
-SDERIV.Cn_p    =   -0.110;
+SDERIV.Cn_p    =   -0.110; 
 SDERIV.Cn_r    =   -CY_r*l_v/wing.b;              
 SDERIV.Cn_da   =   2*N/(d_a*rho*v^2*wing.S*wing.b);             
 SDERIV.Cn_dr   =   -CY_dr*l_t/wing.b;
