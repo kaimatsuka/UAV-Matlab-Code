@@ -66,6 +66,14 @@ fuse.c_f    = C_f(fuse.Re,M); %skin friction coefficient for fuselage
 htail.c_f   = C_f(htail.Re,M); %skin friction coefficient for horizontal tail
 vtail.c_f   = C_f(vtail.Re,M); %skin friction coefficient for vertical tail
 
+%INTERFERNCE FACTOR--------------------------------------------------------
+
+%  TODO: cite source
+wing.Q  = 1;    
+fuse.Q  = 1.25;
+htail.Q = 1.08;
+vtail.Q = 1.08;   
+
 %% Drag Estimation Equations
 
 %MISC DRAG TERMS

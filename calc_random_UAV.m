@@ -16,7 +16,6 @@ wing.A     = baseUAV.wing.A     + (rand-0.5)*wing.sd_A; % aspect ratio
 wing.lam   = baseUAV.wing.lam   + (rand-0.5)*wing.sd_lam; % taper ratio (must be between 0 < 1)
 wing.lam_q = baseUAV.wing.lam_q + (rand-0.5)*wing.sd_lam_q; % wing quarter chord sweep
 wing.h     = baseUAV.wing.h     + (rand-0.5)*wing.sd_h; % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
-wing.Q     = baseUAV.wing.Q     + (rand-0.5)*wing.sd_Q; % wing interference factor 
 wing.e = 0.8;     % Oswald's efficiency factor 
 %wing.gamma = 2;   % wing dihedral (deg)  GLOBAL HAWK
 
@@ -28,7 +27,6 @@ wing.S_wet = 2.003*wing.S;  % wet area for wing (ft^2)
 
 % Fuselage ----------------------------------------------------------------
 
-fuse.Q = baseUAV.fuse.Q  + (rand-0.5)*fuse.sd_Q;    % fuselage interference factor TODO: cite source
 fuse.L = baseUAV.fuse.L  + (rand-0.5)*fuse.sd_L;  % fuselage max length 
 fuse.W = baseUAV.fuse.W  + (rand-0.5)*fuse.sd_W;  % fuselage max width 
 fuse.D = baseUAV.fuse.D  + (rand-0.5)*fuse.sd_D;  % fuselage max depth
@@ -43,7 +41,6 @@ htail.lam_q = baseUAV.htail.lam_q      + (rand-0.5)*htail.sd_lam_q;  % horizonta
 % htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thickness line 
 % ^^ This value is derived parameter
 htail.h = baseUAV.htail.h              + (rand-0.5)*htail.sd_h; % dist from head to 1/4 chord of horizontal tail (ft)
-htail.Q   = baseUAV.htail.Q            + (rand-0.5)*htail.sd_Q; % horizontal tail interference factor 
 
 % airfoil properties
 %   TODO: update this once we have airfoil for horizontal tail
@@ -59,7 +56,6 @@ vtail.A = baseUAV.vtail.A          + (rand-0.5)*vtail.sd_A;   % aspect ratio (de
 vtail.lam = baseUAV.vtail.lam      + (rand-0.5)*vtail.sd_lam;  % taper ratio 
 vtail.lam_q = baseUAV.vtail.lam_q  + (rand-0.5)*vtail.sd_lam_q;  % quarter chord sweep angle
 % vtail.lam_max = baseUAV.vtail.lam_max  + (rand-0.5)*vtail.sd_lam_max; % sweep of maximum thicknes line 
-vtail.Q = baseUAV.vtail.Q          + (rand-0.5)*vtail.sd_Q;   % interference factor 
 vtail.h = baseUAV.vtail.h          + (rand-0.5)*vtail.sd_h; % dist from head to 1/4 chord of vertical tail (ft)
 
 % airfoil properties

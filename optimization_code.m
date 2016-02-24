@@ -20,7 +20,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-clear all; close all;
+clear all; close all; rng(1);
 
 %% Load Files
 load_unit_conversion
@@ -33,9 +33,19 @@ load_variation_parameters
 currentPath = pwd;
 addpath(genpath(currentPath));
 
-NUM_ITERATION = 100;
+NUM_ITERATION = 10000;
+
+display('Monte Carlo optimization begins.');
 
 for jj = 1:NUM_ITERATION
+    
+    if mod(jj,10) == 1
+        fprintf('.');
+    end
+    
+    if mod(jj,200) == 0
+        fprintf('%d iterations\n', jj)  
+    end
     
     % Set new base UAV (genetic algorithm)
     %
@@ -54,8 +64,6 @@ for jj = 1:NUM_ITERATION
     calc_random_UAV
     
     % Refine weight
-
-    % W_TO = 45;
     W_TO = 30; % initial weight guess of a/c (lbs)
     W_tolerance = 0.005; % tolerance of total weight estimate
     max_weight_refine = 10; % number of iteration 
@@ -75,11 +83,11 @@ for jj = 1:NUM_ITERATION
     % Check if converged
     if (ii == max_weight_refine) && (abs(WEIGHT.total-W_TO) > W_tolerance)
         error('Weight did not converge')
-    else
-        display(['Weight Converged: W = ', num2str(WEIGHT.total), ' lb']);
-        display(['Converged after ', num2str(ii),' iterations']);
     end
     
+%         display(['Weight Converged: W = ', num2str(WEIGHT.total), ' lb']);
+%         display(['Converged after ', num2str(ii),' iterations']);
+
     %%% Calculate performance
     %
     % TODO:
@@ -122,7 +130,9 @@ for jj = 1:NUM_ITERATION
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%     history_wing(jj) = wing;
+    history.wing.A(jj) = wing.A;
+    history.wing.S(jj) = wing.S;
+    history.weight(jj) = WEIGHT.total;
     
     %%% Save results
     %
@@ -133,10 +143,57 @@ for jj = 1:NUM_ITERATION
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    figure(1)
-    plot_UAV(wing,htail,vtail,fuse,prop);
-% 
-%     figure(2)
-%     hist(history_wing(jj).wing.S)
+%     figure(1)
+%     plot_UAV(wing,htail,vtail,fuse,prop);
+
+    
 end
 
+% INPUT DATA
+%   history.wing.S
+%   ind_good
+%   ind_bad
+
+[sorted_weight sort_ind] = sort(history.weight); 
+ind_good = sort_ind(1:NUM_ITERATION/10);     % select good aircraft (lowest 10% in weight)
+ind_bad  = sort_ind(NUM_ITERATION/10+1:end); % rest of aircraft
+% 
+% total_data = history.wing.A;
+% good_data  = history.wing.A(ind_good);
+% bad_data   = history.wing.A(ind_bad);
+% 
+% max_val = max(total_data);
+% min_val = min(total_data);
+% order_of_mag = order((max_val-min_val)/10); % order of magnitude
+% max_closest = 10^order_of_mag*ceil(max_val/10^order_of_mag);
+% min_closest = 10^order_of_mag*floor(min_val/10^order_of_mag);
+% edges = [min_closest:10^(order_of_mag+1):max_closest];
+% 
+% [N_good,BIN] = histc(good_data, edges);
+% N_good = fliplr(N_good);
+% [N_bad,BIN] = histc(bad_data, edges);
+% N_bad = fliplr(N_bad);
+% 
+% N_total = [N_good; N_bad];
+figure(2)
+subplot(3,3,1), plot_hist(history.weight,ind_good,ind_bad), ylabel('Weight (lbs)');
+subplot(3,3,2), plot_hist(history.wing.S,ind_good,ind_bad), ylabel('Wing Area (ft^2)');
+subplot(3,3,3), plot_hist(history.wing.A,ind_good,ind_bad), ylabel('Wing Aspect Ratio');
+
+% figure(2)
+% hist(history.wing.A,10), hold on, 
+%     subplot(3,3,1)
+%     hist(history.wing.A(ind_good))
+%     title('Wing aspect ratio')
+%     subplot(3,3,2)
+%     hist(history.wing.S,10)
+%     title('Wing area'), xlabel('ft^{2}')
+%     subplot(3,3,3)
+%     hist(history.weight,10)
+%     title('Total Weight'), xlabel('lb')
+%     subplot(3,3,4)
+%     [n1, xout1] = hist(history.weight(ind_good));
+%     bar(xout1,n1,'r'); grid on, hold on,
+%     [n2, xout2] = hist(history.weight(ind_bad));
+%     bar(xout2,n2,'g');
+    

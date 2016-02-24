@@ -49,6 +49,11 @@ for ii = 1:length(airfoil_data)
     airfoils(ii).ClCd  = airfoils(ii).Cl./airfoils(ii).Cd;
     airfoils(ii).maxClCd = max(airfoils(ii).ClCd);
     
+    % calculate max Cl, max alpha
+    [maxCl maxInd] = max(airfoils(ii).Cl);
+    airfoils(ii).maxCl    = maxCl;
+    airfolis(ii).maxAlpha = airfoils(ii).alpha(maxInd);
+    
     start_ind = find(airfoils(ii).alpha == -5);
     end_ind = find(airfoils(ii).alpha == 5.1);
     airfoils(ii).Cl_alpha_deg = (airfoils(ii).Cl(end_ind)-airfoils(ii).Cl(start_ind))/...
