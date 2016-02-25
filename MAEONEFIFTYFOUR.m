@@ -6,10 +6,11 @@ clear all; close all; clc;
 
 % Known parameters
 n = 7500/60; % revPS
-D = 2; % Diameter (ft)
+D = 1.62; % Diameter (ft)
 
 % Reading in excel files
-[num,txt] = xlsread('Propeller_Design.xlsx','ClarkY Efficiency', 'A1:B35','basic');
+
+[num,txt] = xlsread('Propeller Designnn.xlsx','Efficiency', 'A1:B35','basic');
 
 % Separating excel data, performing pchip interpolation
 x = num(:, 1);
@@ -28,6 +29,8 @@ v = linspace(0, 150, length(xx));
 
 % Finding corresponding efficiency for every velocity configuration
 N = eff( v, xx, yy, n, D );
+
+N = N(:, 1);
 
 % Plotting velocity vs efficiency
 figure(2);
