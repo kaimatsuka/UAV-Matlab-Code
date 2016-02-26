@@ -34,7 +34,7 @@ load_requirements
 currentPath = pwd;
 addpath(genpath(currentPath));
 
-NUM_ITERATION = 10000;
+NUM_ITERATION = 400;
 NUM_CLFAILS = 0;
 NUM_SUCCESS = 0;
 NUM_BASEUAVCHANGE = 0;
