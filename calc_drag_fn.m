@@ -1,4 +1,4 @@
-function DRAG = calc_drag_fn(v_drag, alt, W, wing, fuse,htail, vtail)
+function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail)
 %%% calc_drag_fn.m %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DESCRITPION:
@@ -12,21 +12,25 @@ function DRAG = calc_drag_fn(v_drag, alt, W, wing, fuse,htail, vtail)
 %   v_drag  = velcoity of interest(1xM)
 %   W       = weight of UAV at this time (1x1)
 %   wing    = wing structure
+%   airfoilw= airfoil of wing structure
 %   fuse    = fuselage structure
 %   htail   = horizontal tail structure
 %   vtail   = vertical tail structure
 %
 % OUTPUTS:
-%   DRAG.C_L  = lift coefficient (1xM)
-%       .C_Dp = parasite drag coefficient (1xM)
-%       .C_Di = induced drag coefficient (1xM)
-%       .C_Dt = total drag coefficient (1xM)
-%       .D_p = parasite drag in lb(1xM)
-%       .D_i = induced drag in lb(1xM)
-%       .D_t = total drag in lb (1xM)
-%       .v   = velocity in ft/s (1xM)
-%       .P_p = power req'd for parasite drag in HP (1xM)
-%       .P_i = power req'd for induced drag in HP (1xM)
+%   DRAG.C_L     = lift coefficient (1xM)
+%       .C_Dp    = parasite drag coefficient (1xM)
+%       .C_Di    = induced drag coefficient (1xM)
+%       .C_Dairf = drag coefficient due to airfoil (1xM)
+%       .C_Dt    = total drag coefficient (1xM)
+%       .D_p     = parasite drag in lb(1xM)
+%       .D_i     = induced drag in lb(1xM)
+%       .D_airf  = drag due to airfoil in lb (1xM)
+%       .D_t     = total drag in lb (1xM)
+%       .v       = velocity in ft/s (1xM)
+%       .P_p     = power req'd for parasite drag in HP (1xM)
+%       .P_i     = power req'd for induced drag in HP (1xM)
+%       .P_airf  = power red'd for airfoil drag in HP (1xM)
 %       .P_t = total power req'd in HP (1xM)
 %
 % REVISION HISTORY:
@@ -106,20 +110,22 @@ S_wet_vec = [wing.S_wet; fuse.S_wet; htail.S_wet; vtail.S_wet]; %wet area vector
 
 
 % Compute drag coefficients
-DRAG.C_L  = W./(0.5*rho*v_drag.^2*wing.S);
-DRAG.C_Dp = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %parasite dragcoefficient equation
-DRAG.C_Di = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
-DRAG.C_Dt = DRAG.C_Dp + DRAG.C_Di;
+DRAG.C_L     = W./(0.5*rho*v_drag.^2*wing.S);
+DRAG.C_Dp    = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %parasite dragcoefficient equation
+DRAG.C_Di    = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
+DRAG.C_Dairf = interp1(airfoilw.CL, airfoilw.Cd, DRAG.C_L); % airfoil produced drag
+DRAG.C_Dt    = DRAG.C_Dp + DRAG.C_Di + DRAG.C_Dairf;
 
-DRAG.D_p = DRAG.C_Dp*0.5*rho.*v_drag.^2*wing.S;
-DRAG.D_i = DRAG.C_Di*0.5*rho.*v_drag.^2*wing.S;
-DRAG.D_t = DRAG.D_p+DRAG.D_i;
+DRAG.D_p    = DRAG.C_Dp*0.5*rho.*v_drag.^2*wing.S;
+DRAG.D_i    = DRAG.C_Di*0.5*rho.*v_drag.^2*wing.S;
+DRAG.D_airf = DRAG.C_Dairf*0.5*rho.*v_drag.^2*wing.S;
+DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf;
 
 DRAG.v = v_drag;
 
 %POWER---------------------------------------------------------------------
 
-DRAG.P_p = DRAG.D_p.*v_drag*lbfts2hp;
-DRAG.P_i = DRAG.D_i.*v_drag*lbfts2hp;
-DRAG.P_t = DRAG.D_t.*v_drag*lbfts2hp;
-
+DRAG.P_p    = DRAG.D_p.*v_drag*lbfts2hp;
+DRAG.P_i    = DRAG.D_i.*v_drag*lbfts2hp;
+DRAG.P_airf = DRAG.D_airf.*v_drag*lbfts2hp;
+DRAG.P_t    = DRAG.D_t.*v_drag*lbfts2hp;

@@ -108,7 +108,7 @@ for jj = 1:NUM_ITERATION
     [rho, T, a] = calc_atmos(7500);
     M = v_drag/a;
     W = W_TO;
-    calc_drag;
+    DRAG = calc_drag_fn(v_drag, 7500, W, wing, airfoilw, fuse, htail, vtail);
     TRIMDRAG1 = DRAG;
 
     % Trim Drag (low altitude loiter)
@@ -117,7 +117,7 @@ for jj = 1:NUM_ITERATION
     [rho, T, a] = calc_atmos(1000);
     M = v_drag/a;
     W = W_TO;
-    calc_drag;
+    DRAG = calc_drag_fn(v_drag, 1000, W, wing, airfoilw, fuse, htail, vtail);
     TRIMDRAG2 = DRAG;
     
     %%% Check performance

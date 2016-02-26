@@ -20,15 +20,18 @@ wing.e = 0.8;     % Oswald's efficiency factor
 %wing.gamma = 2;   % wing dihedral (deg)  GLOBAL HAWK
 
 % airfoil properties
+airfoils = airfoil_to_wing(airfoils,wing.A, wing.e); % convert to wing props
 airf_index_w       = randi(12); % randomly select airfoil
-% airfoilw.CL_alpha = airfoils(airf_index_w).CL_alpha_deg; % CL_alpha (/deg)
-% airfoilw.CLmax    = airfoils(airf_index_w).CLmax; % CLmax (wing)
-% airfoilw.maxthick = airfoils(airf_index_w).GEO.max_thick; % max thickness (relative to chord length)
-% airfoilw.maxthick_loc = airfoils(airf_index_w).GEO.max_thick_location; % max thickness location (relative to chord length)
-% airfoilw.perim    = airfoils(airf_index_w).GEO.perimeter; % circumference/perimeter of airfoil
+airfoilw.CL       = airfoils(airf_index_w).CL;  % Entire CL profile
+airfoilw.Cd       = airfoils(airf_index_w).Cd;   % Drag due to airfoil choice
+airfoilw.CL_alpha = airfoils(airf_index_w).CL_alpha_deg; % CL_alpha (/deg)
+airfoilw.CLmax    = airfoils(airf_index_w).CLmax; % CLmax (wing)
+airfoilw.maxthick = airfoils(airf_index_w).GEO.max_thick; % max thickness (relative to chord length)
+airfoilw.maxthick_loc = airfoils(airf_index_w).GEO.max_thick_location; % max thickness location (relative to chord length)
+airfoilw.perim    = airfoils(airf_index_w).GEO.perimeter; % circumference/perimeter of airfoil
 
-wing.mtr = 0.12; % maximum thickness ratio
-wing.mtl = 0.3;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
+wing.mtr = airfoilw.maxthick; % maximum thickness ratio
+wing.mtl = airfoilw.maxthick_loc;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
 wing.S_wet = 2.003*wing.S;  % wet area for wing (ft^2)
 
 % Fuselage ----------------------------------------------------------------
@@ -47,17 +50,21 @@ htail.lam_q = baseUAV.htail.lam_q      + (rand-0.5)*htail.sd_lam_q;  % horizonta
 % htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thickness line 
 % ^^ This value is derived parameter
 htail.h = baseUAV.htail.h              + (rand-0.5)*htail.sd_h; % dist from head to 1/4 chord of horizontal tail (ft)
+htail.e = 0.8;      % Oswald Efficiency Factor
 
 % airfoil properties
+airfoils = airfoil_to_wing(airfoils,htail.A,htail.e);
 airf_index_h      = randi(12); % randomly select airfoil
-% airfoilh.CL_alpha = airfoils(airf_index_h).CL_alpha_deg; % CL_alpha (/deg)
-% airfoilh.CLmax    = airfoils(airf_index_h).CLmax; % CLmax (wing)
-% airfoilh.maxthick = airfoils(airf_index_h).GEO.max_thick; % max thickness (relative to chord length)
-% airfoilh.maxthick_loc = airfoils(airf_index_h).GEO.max_thick_location; % max thickness location (relative to chord length)
-% airfoilh.perim    = airfoils(airf_index_h).GEO.perimeter; % circumference/perimeter of airfoil
+airfoilh.CL       = airfoils(airf_index_h).CL;  % Entire CL profile
+airfoilh.Cd       = airfoils(airf_index_h).Cd;   % Drag due to airfoil choice
+airfoilh.CL_alpha = airfoils(airf_index_h).CL_alpha_deg; % CL_alpha (/deg)
+airfoilh.CLmax    = airfoils(airf_index_h).CLmax; % CLmax (wing)
+airfoilh.maxthick = airfoils(airf_index_h).GEO.max_thick; % max thickness (relative to chord length)
+airfoilh.maxthick_loc = airfoils(airf_index_h).GEO.max_thick_location; % max thickness location (relative to chord length)
+airfoilh.perim    = airfoils(airf_index_h).GEO.perimeter; % circumference/perimeter of airfoil
 
-htail.mtr = 0.24; % maximum thickness ratio
-htail.mtl = 0.3;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
+htail.mtr = airfoilh.maxthick; % maximum thickness ratio
+htail.mtl = airfoilh.maxthick_loc;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
 htail.S_wet = 2.003*htail.S; % wet area for horizontal tail (ft^2)
 
 % Vertical Tail -----------------------------------------------------------
@@ -68,17 +75,21 @@ vtail.A = baseUAV.vtail.A          + (rand-0.5)*vtail.sd_A;   % aspect ratio (de
 vtail.lam = baseUAV.vtail.lam      + (rand-0.5)*vtail.sd_lam;  % taper ratio 
 vtail.lam_q = baseUAV.vtail.lam_q  + (rand-0.5)*vtail.sd_lam_q;  % quarter chord sweep angle
 vtail.h = baseUAV.vtail.h          + (rand-0.5)*vtail.sd_h; % dist from head to 1/4 chord of vertical tail (ft)
+vtail.e = 0.8;  % Oswald Efficiency Factor
 
 % airfoil properties
+airfoils = airfoil_to_wing(airfoils,vtail.A,vtail.e);
 airf_index_v      = randi(12); % randomly select airfoil
-% airfoilv.CL_alpha = airfoils(airf_index_v).CL_alpha_deg; % CL_alpha (/deg)
-% airfoilv.CLmax    = airfoils(airf_index_v).CLmax; % CLmax (wing)
-% airfoilv.maxthick = airfoils(airf_index_v).GEO.max_thick; % max thickness (relative to chord length)
-% airfoilv.maxthick_loc = airfoils(airf_index_v).GEO.max_thick_location; % max thickness location (relative to chord length)
-% airfoilv.perim    = airfoils(airf_index_v).GEO.perimeter; % circumference/perimeter of airfoil
+airfoilv.CL       = airfoils(airf_index_v).CL;  % Entire CL profile
+airfoilv.Cd       = airfoils(airf_index_v).Cd;   % Drag due to airfoil choice
+airfoilv.CL_alpha = airfoils(airf_index_v).CL_alpha_deg; % CL_alpha (/deg)
+airfoilv.CLmax    = airfoils(airf_index_v).CLmax; % CLmax (wing)
+airfoilv.maxthick = airfoils(airf_index_v).GEO.max_thick; % max thickness (relative to chord length)
+airfoilv.maxthick_loc = airfoils(airf_index_v).GEO.max_thick_location; % max thickness location (relative to chord length)
+airfoilv.perim    = airfoils(airf_index_v).GEO.perimeter; % circumference/perimeter of airfoil
 
-vtail.mtr = 0.12; % maximum thickness ratio
-vtail.mtl = 0.3;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
+vtail.mtr = airfoilv.maxthick; % maximum thickness ratio
+vtail.mtl = airfoilv.maxthick_loc;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
 vtail.S_wet = 2.003*vtail.S; % wet area for vertical tail (ft^2)
 
 % Airfoil -----------------------------------------------------------------
