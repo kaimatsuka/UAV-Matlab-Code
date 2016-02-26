@@ -36,9 +36,9 @@ x_cg_vec = [wing.x_cg; % wing CG
             payld.x_cg_ANT;
             payld.x_cg_IMU;
             payld.x_cg_WR;
-            ail.x_cg_sfcl;   % ailron servo
-            rudd.x_cg_sfcl;  % rudder servo 
-            elev.x_cg_sfcl]; % elevator servo
+            sfcl.x_cg_wing;   % ailron servo
+            sfcl.x_cg_htail;  % rudder servo 
+            sfcl.x_cg_vtail]; % elevator servo
 
 xm_vec = x_cg_vec.*w_detail_vec; % (ft*lb)
 x_cg_total = sum(xm_vec)/sum(w_detail_vec); %(ft)
