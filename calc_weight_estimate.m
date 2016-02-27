@@ -52,13 +52,12 @@ payld.w_total = payld.w_EOIR + payld.w_SAR + payld.w_LiDAR + payld.w_ANT ...
                 + payld.w_WR + payld.w_IMU;
 
 %% Surface Control Weights
-% These are servos or mechanisms that move control surfaces like ailron
+% These are servos or mechanisms that move control surfaces like aileron
 
-% TODO: update the equation with actual servos
-WEIGHT.sc  = 0.4915*W_TO^(2/3); % Nadia Equation %TODO: update with actual servos
-ail.w_sfcl  = WEIGHT.sc*0.75;   % approximation
-rudd.w_sfcl = WEIGHT.sc*0.125;
-elev.w_sfcl = WEIGHT.sc*0.125;
+% WEIGHT.sc   = 0.4915*W_TO^(2/3);
+ail.w_sfcl  = 0.0919; % weight for aileron servo (lbs)
+rudd.w_sfcl = 0.00661; % weight for rudder servo (lbs)
+elev.w_sfcl = 0.0132; % weight for elevator servo (lbs)
 
             
 %% Weight Estimation
