@@ -1,4 +1,4 @@
-function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail)
+function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, airfoilh, fuse, htail, vtail)
 %%% calc_drag_fn.m %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DESCRITPION:
@@ -19,6 +19,8 @@ function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail)
 %
 % OUTPUTS:
 %   DRAG.C_L     = lift coefficient (1xM)
+%       .C_Lw    = wing component of lift coefficient (1xM)
+%       .C_Lh    = tail component of lift coefficient (1xM)
 %       .C_Dp    = parasite drag coefficient (1xM)
 %       .C_Di    = induced drag coefficient (1xM)
 %       .C_Dairf = drag coefficient due to airfoil (1xM)
@@ -26,6 +28,8 @@ function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail)
 %       .D_p     = parasite drag in lb(1xM)
 %       .D_i     = induced drag in lb(1xM)
 %       .D_airf  = drag due to airfoil in lb (1xM)
+%       .D_h     = drag due to tail in lb (1xM)
+%       .D_w     = drag due to wing in lb (1xM)
 %       .D_t     = total drag in lb (1xM)
 %       .v       = velocity in ft/s (1xM)
 %       .P_p     = power req'd for parasite drag in HP (1xM)
@@ -40,12 +44,44 @@ function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-load_unit_conversion
 load_enviro_parameters
+load_unit_conversion
 
 % find air density and mach number at particular altitude 
 [rho, t, a] = calc_atmos(alt);
 M = v_drag/a;
+
+%Parameters (Needed to Calculate Trim Conditions)-------------------------
+
+i_w      = 0; % incident angle of the wing assumed to be 0deg (level flight)
+eps_a    = 0.2; % estimated value for downwash effect
+
+alpha_0  = airfoilw.alpha0; 
+CL       = W./(0.5*rho*v_drag.^2*wing.S); % lift coefficient
+alpha    = interp1(airfoilw.CL,airfoilw.alpha,CL); 
+           % finds alpha corresponding to CL value
+a_w      = airfoilw.a_w;
+a_t      = airfoilh.a_t;
+
+V_H      = (htail.l_T*htail.S)/(wing.S*wing.c); 
+tau_e    = htail.e; % tail efficiency
+
+
+%STABILITY DERIVATIVES-----------------------------------------------------
+
+%lift
+CL_a    = 0.5; % airfoil property
+CL_i    = -a_t*htail.S/wing.S;
+CL_de   = -tau_e*a_t*htail.S/wing.S;
+
+%drag
+Cm_ac   = 0; % airfoil property
+Cm_a    = CL_a*htail.l_T/wing.c; 
+Cm_de   = CL_de*htail.l_T/wing.c;
+Cm_i    = a_t*V_H;
+i_t     = -(Cm_ac*CL_a + Cm_a*CL)/(CL_a*Cm_i-Cm_a*CL_i); % trim incident angle
+Cm0     = Cm_ac+V_H*i_t;
+de      = (Cm0*CL_a + Cm_a*CL)/(CL_a*Cm_de - Cm_a*CL_de); % elevator deflection angle
 
 %REYNOLDS NUMBER-----------------------------------------------------------
 
@@ -109,21 +145,22 @@ C_f_vec   = [wing.c_f; fuse.c_f; htail.c_f; vtail.c_f]; %skin friction vector
 S_wet_vec = [wing.S_wet; fuse.S_wet; htail.S_wet; vtail.S_wet]; %wet area vector
 
 % Compute drag coefficients
-DRAG.C_L     = W./(0.5*rho*v_drag.^2*wing.S);
+DRAG.C_L     = CL; % Calculated above
+DRAG.C_Lh    = CL_a*((alpha + i_w)*(1-eps_a)+(i_t-i_w)-alpha_0); % lift coefficient contribution of tail
+DRAG.C_Lw    = DRAG.C_L - DRAG.C_Lh; % lift coefficient contribution from wing
 DRAG.C_Dp    = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %parasite dragcoefficient equation
 DRAG.C_Di    = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
 DRAG.C_Dairf = interp1(airfoilw.CL, airfoilw.Cd, DRAG.C_L); % airfoil produced drag
 DRAG.C_Dt    = DRAG.C_Dp + DRAG.C_Di + DRAG.C_Dairf;
-% DRAG.C_Lw    = TRIM.CL_w;
-% DRAG.C_Lh    = TRIM.CL_t; 
+
 
 DRAG.D_p    = DRAG.C_Dp*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_i    = DRAG.C_Di*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_airf = DRAG.C_Dairf*0.5*rho.*v_drag.^2*wing.S;
-% DRAG.D_w    = DRAG.C_Lt^2*wing.K; % drag contribution of wing
-% DRAG.D_h    = DRAG.C_Lw^2*htail.K*htail.S/wing.S; % drag contribution of tail
-% DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf+DRAG.D_h+DRAG.D_w;
-DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf;
+DRAG.D_w    = DRAG.C_Lh.*DRAG.C_Lh.*wing.K; % drag contribution of wing
+DRAG.D_h    = DRAG.C_Lw.*DRAG.C_Lw.*htail.K*htail.S/wing.S; % drag contribution of tail
+DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf+DRAG.D_h+DRAG.D_w;
+
 
 DRAG.v = v_drag;
 

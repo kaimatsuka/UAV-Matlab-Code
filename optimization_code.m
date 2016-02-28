@@ -129,9 +129,9 @@ for jj = 1:NUM_ITERATION
     
     % ----- CALCULATE LIFT & DRAG -----
     DRAG_1000 = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total,...
-                        wing,airfoilw,fuse,htail,vtail);
+                        wing,airfoilw, airfoilh,fuse,htail,vtail);
     DRAG_7500 = calc_drag_fn([V_cruise V_max],atmos(2).altitude,...
-        WEIGHT.total,wing,airfoilw,fuse,htail,vtail);
+        WEIGHT.total,wing,airfoilw,airfoilh, fuse,htail,vtail);
     
     % De-reference Lift from DRAG Structure
     CL_max      = DRAG_1000.C_L(1);  % at 1000 ft

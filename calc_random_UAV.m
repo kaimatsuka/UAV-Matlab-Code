@@ -37,6 +37,9 @@ airfoilw.CLmax    = airfoils(airf_index_w).CLmax; % CLmax (wing)
 airfoilw.maxthick = airfoils(airf_index_w).GEO.max_thick; % max thickness (relative to chord length)
 airfoilw.maxthick_loc = airfoils(airf_index_w).GEO.max_thick_location; % max thickness location (relative to chord length)
 airfoilw.perim    = airfoils(airf_index_w).GEO.perimeter; % circumference/perimeter of airfoil
+airfoilw.a_w      = airfoils(airf_index_w).CL_alpha_rad; % lift curve slope of wing
+airfoilw.alpha0   = airfoils(airf_index_w).alpha0; % zero angle of attack
+airfoilw.alpha    = airfoils(airf_index_w).alpha; % angle of attack
 
 wing.mtr = airfoilw.maxthick; % maximum thickness ratio
 wing.mtl = airfoilw.maxthick_loc;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
@@ -71,6 +74,7 @@ airfoilh.CLmax    = airfoils(airf_index_h).CLmax; % CLmax (wing)
 airfoilh.maxthick = airfoils(airf_index_h).GEO.max_thick; % max thickness (relative to chord length)
 airfoilh.maxthick_loc = airfoils(airf_index_h).GEO.max_thick_location; % max thickness location (relative to chord length)
 airfoilh.perim    = airfoils(airf_index_h).GEO.perimeter; % circumference/perimeter of airfoil
+airfoilh.a_t      = airfoils(airf_index_h).CL_alpha_rad; % lift curve slope of tail
 
 htail.mtr = airfoilh.maxthick; % maximum thickness ratio
 htail.mtl = airfoilh.maxthick_loc;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)

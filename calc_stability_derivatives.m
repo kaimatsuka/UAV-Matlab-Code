@@ -74,6 +74,7 @@ function SDERIV = calc_stability_derivatives(wing,htail,vtail,DRAG, TRIM)
 % Revision History
 %   02/12: function created
 %   02/18: input correct equations for the coefficients
+%   02/27: change the variables to match code variable names
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
