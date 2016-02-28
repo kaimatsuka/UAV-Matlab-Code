@@ -1,4 +1,4 @@
-function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail)
+function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail, TRIM)
 %%% calc_drag_fn.m %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DESCRITPION:
@@ -108,18 +108,22 @@ Q_vec     = [wing.Q; fuse.Q; htail.Q; vtail.Q]; %interference factor vector
 C_f_vec   = [wing.c_f; fuse.c_f; htail.c_f; vtail.c_f]; %skin friction vector
 S_wet_vec = [wing.S_wet; fuse.S_wet; htail.S_wet; vtail.S_wet]; %wet area vector
 
-
 % Compute drag coefficients
 DRAG.C_L     = W./(0.5*rho*v_drag.^2*wing.S);
 DRAG.C_Dp    = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %parasite dragcoefficient equation
 DRAG.C_Di    = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
 DRAG.C_Dairf = interp1(airfoilw.CL, airfoilw.Cd, DRAG.C_L); % airfoil produced drag
 DRAG.C_Dt    = DRAG.C_Dp + DRAG.C_Di + DRAG.C_Dairf;
+DRAG.C_Lw    = TRIM.CL_w;
+DRAG.C_Lh    = TRIM.CL_t; 
 
 DRAG.D_p    = DRAG.C_Dp*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_i    = DRAG.C_Di*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_airf = DRAG.C_Dairf*0.5*rho.*v_drag.^2*wing.S;
-DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf;
+DRAG.D_w    = DRAG.C_Lt^2*wing.K; % drag contribution of wing
+DRAG.D_h    = DRAG.C_Lw^2*htail.K*htail.S/wing.S; % drag contribution of tail
+DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf+DRAG.D_h+DRAG.D_w;
+
 
 DRAG.v = v_drag;
 
