@@ -29,7 +29,7 @@ P_avail = engn.HP*prop.eta_p; % Power available
 
 fuel.cp = 0.85/550/3600;  %[1/ft] specific fuel consumption
 fuel.rho = 6.073; %[lbm/gallon] density of fuel for octane gas
-fuel.W = 3.5;             %[lb] fuel weight (calculated using test_fuel.m file)
+fuel.W = 6;             %[lb] fuel weight (calculated using test_fuel.m file)
 fuel.V = fuel.W/fuel.rho; %[gallon] volume of fuel
 fuel.V = fuel.V*gallon2ft3; %[ft^3] volume of fuel
 

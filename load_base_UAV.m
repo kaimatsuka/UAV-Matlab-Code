@@ -11,8 +11,8 @@
 
 % Wing --------------------------------------------------------------------
 
-wing.A = 13;      % aspect ratio      
-wing.S = 100/13;  % wing area (ft^2) 
+wing.A = 10;      % aspect ratio      
+wing.S = 15;  % wing area (ft^2) 
 wing.lam = 0.5;   % taper ratio (must be between 0 < 1)
 wing.lam_q = 0;   % wing quarter chord sweep (deg)
 % wing.lam_max = 0.49; % sweep of maximum thicknes line 

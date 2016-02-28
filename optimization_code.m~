@@ -84,7 +84,7 @@ for jj = 1:NUM_ITERATION
     % Compare previous UAV with base UAV; if weight is lower, use that as
     % base
     if (mod(jj,2000) == 0 && NUM_SUCCESS >= 1)
-       if (min(arrayfun(@(x) x.weight.total, UAVpass)) < baseUAV.weight.total)
+       if min(UAVpass(:).weight.total) < baseUAV.weight.total
            baseUAV = update_baseUAV(UAVpass(NUM_SUCCESS));
            NUM_BASEUAVCHANGE = NUM_BASEUAVCHANGE + 1;
        end

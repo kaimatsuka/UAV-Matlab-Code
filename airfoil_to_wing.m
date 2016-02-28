@@ -30,7 +30,8 @@ for ii = 1:length(airfoils)
     airfoils(ii).CL = airfoils(ii).CL_alpha_deg*(airfoils(ii).alpha-airfoils(ii).alpha0);
     
     % Calculate the max CL value (stall CL)
-    airfoils(ii).CLmax = max(airfoils(ii).CL);
+    idx = find(airfoils(ii).Clmax - airfoils(ii).Cl == 0);
+    airfoils(ii).CLmax = airfoils(ii).CL(idx);
 
     % Find CL and alpha corresponding to max Cl/Cd value
     idx = find(airfoils(ii).ClCd - airfoils(ii).maxClCd == 0);
