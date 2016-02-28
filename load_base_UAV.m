@@ -194,26 +194,4 @@ baseUAV.prop  = prop;
 baseUAV.payld = payld;
 % baseUAV.sfcl  = sfcl; % not used here
 
-% Refine weight
-W_TO = 30; % initial weight guess of a/c (lbs)
-W_tolerance = 0.005; % tolerance of total weight estimate
-max_weight_refine = 10; % number of iteration 
-
-for ii = 1:max_weight_refine
-
-    calc_weight_estimate
-
-    if abs(WEIGHT.total-W_TO) < W_tolerance
-        break
-    else
-        W_TO = WEIGHT.total;
-    end
-
-end
-
-% Check if converged
-if (ii == max_weight_refine) && (abs(WEIGHT.total-W_TO) > W_tolerance)
-    error('Weight did not converge')
-end
-
-baseUAV.weight = WEIGHT;
+% clear wing fuse htail vtail fuse engn fsys prop payld
