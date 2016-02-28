@@ -34,6 +34,7 @@ load_requirements
 currentPath = pwd;
 addpath(genpath(currentPath));
 
+% ----- Initialize Counter Variables -----
 NUM_ITERATION = 1000;
 NUM_SUCCESS = 0;
 NUM_FAIL = 0;
@@ -49,8 +50,7 @@ atmos(1).altitude = 1000;
 atmos(2).altitude = 7500;
 [atmos(2).rho, atmos(2).T, atmos(2).a] = calc_atmos(atmos(2).altitude);
 
-%INITIAL WEIGHT ESTIMATE OF BASE UAV
-% Refine weight
+% ----- INITIAL WEIGHT ESTIMATE OF BASE UAV -----
 W_TO = 30; % initial weight guess of a/c (lbs)
 W_tolerance = 0.005; % tolerance of total weight estimate
 max_weight_refine = 10; % number of iteration 
@@ -68,6 +68,9 @@ for ii = 1:max_weight_refine
 
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%               MONTE CARLO UAV OPTIMIZATION                      %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 display('Monte Carlo optimization begins.');
 
 for jj = 1:NUM_ITERATION
@@ -80,9 +83,10 @@ for jj = 1:NUM_ITERATION
         fprintf('%d iterations\n', jj)  
     end
     
-    % Set new base UAV (genetic algorithm)
-    % Compare previous UAV with base UAV; if weight is lower, use that as
-    % base
+    % ----- SET NEW BASE UAV (GENETIC ALGORITHM) -----
+    % Every 2000 iterations, take the lowest successful aircraft weight and
+    % if lightwest Monte Carlo AC lighter than base UAV, set that as the
+    % new base UAV and optimize for that aircraft
     if (mod(jj,2000) == 0 && NUM_SUCCESS >= 1)
        if (min(arrayfun(@(x) x.weight.total, UAVpass)) < baseUAV.weight.total)
            baseUAV = update_baseUAV(UAVpass(NUM_SUCCESS));
@@ -90,9 +94,8 @@ for jj = 1:NUM_ITERATION
        end
     end
     
-    % Randomize aircraft
+    % ----- RANDOMIZE AIRCRAFT -----
     calc_random_UAV
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Refine weight
     W_TO = 30; % initial weight guess of a/c (lbs)
@@ -110,32 +113,27 @@ for jj = 1:NUM_ITERATION
         end
 
     end
-
     % Check if converged
     if (ii == max_weight_refine) && (abs(WEIGHT.total-W_TO) > W_tolerance)
         error('Weight did not converge')
     end
     
-%         display(['Weight Converged: W = ', num2str(WEIGHT.total), ' lb']);
-%         display(['Converged after ', num2str(ii),' iterations']);
-
-    %%% Calculate performance
-    % 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%                   CALCULATE PERFORMANCE                     %%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % TODO:
     %     Calculate engine/prop  NADIA
     %     Calculate moment of inertia
     %     Calculate trim drag(?)
     %     Calculate stability derivatives
-    %
     
-    % Calculate drag
+    % ----- CALCULATE LIFT & DRAG -----
     DRAG_1000 = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total,...
                         wing,airfoilw,fuse,htail,vtail);
     DRAG_7500 = calc_drag_fn([V_cruise V_max],atmos(2).altitude,...
         WEIGHT.total,wing,airfoilw,fuse,htail,vtail);
     
-    
-    % Calculate Lift  -- Make sure it meets Lift Requirements
+    % De-reference Lift from DRAG Structure
     CL_max      = DRAG_1000.C_L(1);  % at 1000 ft
     CL_loiter   = DRAG_1000.C_L(2);  % at 1000 ft
     CL_cruise   = DRAG_7500.C_L(1);  % at 7500 ft
@@ -143,7 +141,9 @@ for jj = 1:NUM_ITERATION
     CL_VEC      = [CL_max CL_loiter CL_cruise CL_mxspd];
     
     
-    % Calculate Endurance -- Make sure it meets endurance requirements
+    % ----- CALCULATE ENDURANCE -----
+    % Determine how much fuel  burned for climb, cruise, and loiter
+    % CLIMBING 
     P_eng_reqd  = [DRAG_1000.P_t DRAG_7500.P_t]/prop.eta_p;
     P_eng_avail = ones(1,4)*engn.HP*prop.eta_p;
     P_excess = (P_eng_avail - P_eng_reqd)*hp2lbfts;    % lbf ft/s
@@ -152,28 +152,32 @@ for jj = 1:NUM_ITERATION
     endu_climb = (energy(2) - energy(1))/P_excess(2);   % time it takes to climb
     W_fuel(1) = fuel.cp*P_eng_avail(1)*hp2lbfts*endu_climb;
     W_final(1) = WEIGHT.total - W_fuel(1);
+    % CRUISING
     [W_final(2), W_fuel(2)] = endu2W_fuel(W_final(1),prop.eta_p,E_max,...
                             fuel.cp, CL_loiter, DRAG_1000.C_Dt(2), atmos(1).rho, wing.S);
+    % LOITERING
     [W_final(3), W_fuel(3)] = endu2W_fuel(W_final(2),prop.eta_p,E_min,...
                             fuel.cp, CL_cruise, DRAG_7500.C_Dt(1), atmos(2).rho, wing.S);
+    % TOTAL FUEL BURNED
      W_fuel_total = sum(W_fuel);
      
-    % Calculate Lift Constrined Load Factor --
+    % ----- CALCULATE LOAD FACTORS ----- 
+    % Lift Constrained Load Factor
     loadfact.maxLC_cruise = 0.5*atmos(2).rho*V_cruise^2*(CL_max/(WEIGHT.total/wing.S));
     loadfact.maxLC_loiter = 0.5*atmos(1).rho*V_loiter^2*(CL_max/(WEIGHT.total/wing.S));
     T_avail = (P_avail/V_stall)*hp2lbfts;
-%     K = 1/(pi*wing.A*wing.e);
-%     N_maxTC = sqrt(((0.5*atmos(2).rho*V_max^2)/(K*(WEIGHT.total/wing.S)))*...
-%                 ((T_avail/WEIGHT.total)-((0.5*atmos(2).rho*DRAG_7500.C_Dp(2)*V_max^2)/((WEIGHT.total/wing.S)))));
+    % Thrust Constrained Load Factor
     loadfact.maxTC = max(CL_VEC./[DRAG_1000.C_Dt DRAG_7500.C_Dt])*(T_avail/WEIGHT.total);
 
-    % Calculate stability (CG + NP Calculation)
-    calc_CG;
-    stab.x_np = calc_neutral_pt(wing, htail, airfoilw, airfoilh);
+    % ----- CALCULATE STATIC MARGIN -----
+    calc_CG;    % Center of Mass of UAV
+    % Neutral Point
+    stab.x_np = calc_neutral_pt(wing, htail, airfoilw, airfoilh); 
+    % Static Margin
     stab.static_margin_full = calc_static_marg(stab.x_cg_full,stab.x_np,wing);
     stab.static_margin_empty = calc_static_marg(stab.x_cg_empty,stab.x_np,wing);
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
 %     % Trim Drag (high altitude scan, 7500 ft)
 %     M = V_cruise/atmos(2).a;
@@ -190,51 +194,52 @@ for jj = 1:NUM_ITERATION
     % TODO:
     %     Check other various requirements
     %           - volume requirement
-    %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   if(CL_max > airfoilw.CLmax) % Determine if airfoil provides sufficient lift
+                    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%              CHECK AGAINST REQUIREMENTS                     %%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    FAIL_FLG = 0;
+    %---------- Determine if airfoil provides sufficient lift -------------
+    if(CL_max > airfoilw.CLmax) 
        NUM_CLFAILS = NUM_CLFAILS+1;
-       NUM_FAIL = NUM_FAIL + 1;
-       UAVfail(NUM_FAIL) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
-                        vtail, airfoilv, engn, fsys, prop, payld,...
-                        stab, loadfact, WEIGHT);
-       continue    
-   end
+       FAIL_FLG = FAIL_FLG + 1;
+       status(FAIL_FLG) = cellstr('CLmax Fail');
+    end
    
-   if (W_fuel_total > WEIGHT.fuel)    % Determine if we have enough fuel for mission
+   %---------- Determine if we have enough fuel for mission ---------------
+   if (W_fuel_total > WEIGHT.fuel)
         NUM_ENDUFAILS = NUM_ENDUFAILS + 1;
-        NUM_FAIL = NUM_FAIL + 1;
-        UAVfail(NUM_FAIL) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
-                        vtail, airfoilv, engn, fsys, prop, payld,...
-                        stab, loadfact, WEIGHT);
-        continue
-    end
+        FAIL_FLG = FAIL_FLG + 1;
+        status(FAIL_FLG) = cellstr('Fuel Fail');
+   end
     
-    if (loadfact.maxLC_cruise < N) || (loadfact.maxLC_loiter < N) || (loadfact.maxTC < N)
+    %--------- Determine if UAV can pull enough G's -----------------------
+    if ((loadfact.maxLC_cruise < N) || (loadfact.maxLC_loiter < N) || (loadfact.maxTC < N))
         NUM_LOADFACTFAILS = NUM_LOADFACTFAILS + 1;
-        NUM_FAIL = NUM_FAIL + 1;
-        UAVfail(NUM_FAIL) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
-                        vtail, airfoilv, engn, fsys, prop, payld,...
-                        stab, loadfact, WEIGHT);
-        continue
+        FAIL_FLG = FAIL_FLG + 1;
+        status(FAIL_FLG) = cellstr('Load Factor Fail');
     end
     
-    if(stab.static_margin_full < 0) % Determine if UAV statically stable w/ full fuel
+    %---------- Determine if UAV statically stable w/ full & empty fuel ---
+    if ((stab.static_margin_full < 0) || (stab.static_margin_empty < 0))
         NUM_STATICMARGINFAILS = NUM_STATICMARGINFAILS + 1;
+        FAIL_FLG = FAIL_FLG + 1;
+        status(FAIL_FLG) = cellstr('Static Margin Fail');
+    end
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    if FAIL_FLG > 0
         NUM_FAIL = NUM_FAIL + 1;
-        UAVfail(NUM_FAIL) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
-                        vtail, airfoilv, engn, fsys, prop, payld,...
-                        stab, loadfact, WEIGHT);
-        continue
-    elseif(stab.static_margin_empty < 0) % Determine if UAV statically stable w/ empty fuel
-        NUM_STATICMARGINFAILS = NUM_STATICMARGINFAILS + 1;
-        NUM_FAIL = NUM_FAIL + 1;
-        UAVfail(NUM_FAIL) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
-                        vtail, airfoilv, engn, fsys, prop, payld,...
-                        stab, loadfact, WEIGHT);
-        continue
+        UAVfail_ind(NUM_FAIL) = jj;
+    else
+        NUM_SUCCESS = NUM_SUCCESS + 1;
+        UAVsuccess_ind(NUM_SUCCESS) = jj;
+        status(1) = cellstr('Passed Req Check!');
     end
     
+    UAVall(jj) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
+                    vtail, airfoilv, engn, fsys, prop, payld,...
+                    stab, loadfact, WEIGHT, status);
     %%% Save results
     % TODO: if UAV passes criteria, do following
     %     save performance
@@ -242,11 +247,6 @@ for jj = 1:NUM_ITERATION
     %
     % IF UAV PASSES ALL CRITERIA ABOVE:
     % SAVE UAV PARAMETERS
-    NUM_SUCCESS = NUM_SUCCESS + 1;
-    UAVpass(NUM_SUCCESS) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
-                            vtail, airfoilv, fuse, engn, fsys, prop, payld,...
-                            stab, loadfact, WEIGHT);
-
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 
