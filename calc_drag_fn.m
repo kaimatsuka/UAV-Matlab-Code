@@ -1,4 +1,4 @@
-function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail, TRIM)
+function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, fuse, htail, vtail)
 %%% calc_drag_fn.m %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DESCRITPION:
@@ -114,16 +114,16 @@ DRAG.C_Dp    = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %paras
 DRAG.C_Di    = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
 DRAG.C_Dairf = interp1(airfoilw.CL, airfoilw.Cd, DRAG.C_L); % airfoil produced drag
 DRAG.C_Dt    = DRAG.C_Dp + DRAG.C_Di + DRAG.C_Dairf;
-DRAG.C_Lw    = TRIM.CL_w;
-DRAG.C_Lh    = TRIM.CL_t; 
+% DRAG.C_Lw    = TRIM.CL_w;
+% DRAG.C_Lh    = TRIM.CL_t; 
 
 DRAG.D_p    = DRAG.C_Dp*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_i    = DRAG.C_Di*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_airf = DRAG.C_Dairf*0.5*rho.*v_drag.^2*wing.S;
-DRAG.D_w    = DRAG.C_Lt^2*wing.K; % drag contribution of wing
-DRAG.D_h    = DRAG.C_Lw^2*htail.K*htail.S/wing.S; % drag contribution of tail
-DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf+DRAG.D_h+DRAG.D_w;
-
+% DRAG.D_w    = DRAG.C_Lt^2*wing.K; % drag contribution of wing
+% DRAG.D_h    = DRAG.C_Lw^2*htail.K*htail.S/wing.S; % drag contribution of tail
+% DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf+DRAG.D_h+DRAG.D_w;
+DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf;
 
 DRAG.v = v_drag;
 

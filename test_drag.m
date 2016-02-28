@@ -9,11 +9,44 @@ clc; clear all; close all;
 
 % load files
 load_unit_conversion
-load_requirements
-% uav_params
-load_UAV_parameters
 load_enviro_parameters
+load_requirements
+load_airfoils
+load_base_UAV  
+load_variation_parameters
+load_requirements
 
+currentPath = pwd;
+addpath(genpath(currentPath));
+
+%INITIAL WEIGHT ESTIMATE OF BASE UAV
+% Refine weight
+W_TO = 30; % initial weight guess of a/c (lbs)
+W_tolerance = 0.005; % tolerance of total weight estimate
+max_weight_refine = 10; % number of iteration 
+
+
+calc_random_UAV
+for ii = 1:max_weight_refine
+
+    calc_weight_estimate
+
+    if abs(WEIGHT.total-W_TO) < W_tolerance
+        baseUAV.weight = WEIGHT;
+        break
+    else
+        W_TO = WEIGHT.total;
+    end
+
+end
+
+% Check if converged
+if (ii == max_weight_refine) && (abs(WEIGHT.total-W_TO) > W_tolerance)
+    error('Weight did not converge')
+end
+
+v = linspace(50, 150,100);
+DRAG = calc_drag_fn(v,1000,WEIGHT.total,wing,aifoilw,fuse,htail,vtail);
 
 %% Initial guess of take-off weight 
 W_TO = 46.6; %initial weight guess of a/c (lbs)

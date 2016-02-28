@@ -46,13 +46,16 @@ else
     %       and min_closest = 8.6
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    order_of_mag = order((max_val-min_val)); % find relevant order of magnitude
+    N_edges = 20;
+    
+    order_of_mag = order((max_val-min_val))-1; % find relevant order of magnitude
     max_closest = 10^order_of_mag*ceil(max_val/10^order_of_mag);  
     min_closest = 10^order_of_mag*floor(min_val/10^order_of_mag);
+    
+    increment = (max_closest-min_closest)/N_edges;
 
     % define edges
-    edges = [min_closest:10^(order_of_mag):max_closest];
+    edges = [min_closest:increment:max_closest];
 
     N_good = histc(good_data, edges);
     N_good = fliplr(N_good); % for some reason, histc
