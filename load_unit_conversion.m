@@ -22,3 +22,6 @@ ft2m = 0.3048;
 m2ft = 1/ft2m;
 in2ft = 0.03333333;
 ft2in = 1/in2ft;
+
+% weight
+g2lb = 0.00220462;

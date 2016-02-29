@@ -27,14 +27,6 @@ P_avail = engn.HP*prop.eta_p; % Power available
 
 %% Fuel Calculation
 
-fuel.cp = 0.85/550/3600;  %[1/ft] specific fuel consumption
-fuel.rho = 6.073; %[lbm/gallon] density of fuel for octane gas
-fuel.W = 6;             %[lb] fuel weight (calculated using test_fuel.m file)
-fuel.V = fuel.W/fuel.rho; %[gallon] volume of fuel
-fuel.V = fuel.V*gallon2ft3; %[ft^3] volume of fuel
-
-%% Fuel Calculation
-
 fsys.int = 0.00; %percent of fuel tanks that are integral TODO: find out how much is integral
 fsys.N_T = 1;    %number of separate fuel tanks
 

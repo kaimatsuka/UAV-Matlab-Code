@@ -26,8 +26,8 @@ wing.sd_h     = 0.1;   % head to 1/4 chord distance variation (ft)
 % Fuselage ----------------------------------------------------------------
 
 fuse.sd_L     = 8; % fuselage max length variation (ft)
-fuse.sd_W     = 1; % fuselage max width variation (ft)
-fuse.sd_D     = 1; % fuselage max depth variation (ft)
+fuse.sd_W     = 0; % fuselage max width variation (ft)
+fuse.sd_D     = 0; % fuselage max depth variation (ft)
 
 % Horizontal Tail ---------------------------------------------------------
 
@@ -47,6 +47,9 @@ vtail.sd_lam     = 0.5; % vtail taper ratio variation
 vtail.sd_lam_q   = 0; % vtail quarter chord sweep variation
 % vtail.sd_lam_max = 0; % vtail sweep of maximum thickness line variation
 vtail.sd_h       = 0.01; % vtail htail interference factor variation
+
+% Fuel --------------------------------------------------------------------
+fuel.sd_W        = 2;   % lbs
 
 % CG locations ------------------------------------------------------------
 

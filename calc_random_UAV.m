@@ -11,8 +11,8 @@
 % Fuselage ----------------------------------------------------------------
 
 fuse.L    = check_allowable(baseUAV.fuse.L,(rand-0.5)*fuse.sd_L,0,100);    % fuselage max length
-fuse.W    = check_allowable(baseUAV.fuse.W,(rand-0.5)*fuse.sd_W,1,5);    % fuselage max width 
-fuse.D    = check_allowable(baseUAV.fuse.D,(rand-0.5)*fuse.sd_D,1,5);    % fuselage max depth
+fuse.W    = check_allowable(baseUAV.fuse.W,(rand-0.5)*fuse.sd_W,13/12,5);    % fuselage max width 
+fuse.D    = check_allowable(baseUAV.fuse.D,(rand-0.5)*fuse.sd_D,13/12,5);    % fuselage max depth
 
 % Wing --------------------------------------------------------------------
 
@@ -114,9 +114,19 @@ eng_index = randi(9); % radomly select engine
 % engn.weight = engines(eng_index).weight; % load weight
 % engn.rpm = engines(eng_index).rpm; % load rpm
 
+% Fuel --------------------------------------------------------------------
+
+fuel.cp = 0.85/550/3600;  %[1/ft] specific fuel consumption
+fuel.rho = 6.073; %[lbm/gallon] density of fuel for octane gas
+fuel.W = check_allowable(baseUAV.fuel.W,(rand-0.5)*fuel.sd_W,0,100);
+fuel.V = fuel.W/fuel.rho; %[gallon] volume of fuel
+fuel.V = fuel.V*gallon2ft3; %[ft^3] volume of fuel
+
 % Fuel System -------------------------------------------------------------
 
-%   no items here
+fsys.W = (fuel.V-0.00424)*1726.635+65; % in grams (emperically derived)
+fsys.W = fsys.W*g2lb; % in pounds
+fsys.length = fsys.W/(pi*(fuse.D/2)^2); % fuel tank length
 
 % Propeller ---------------------------------------------------------------
 

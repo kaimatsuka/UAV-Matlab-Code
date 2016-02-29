@@ -35,9 +35,10 @@ currentPath = pwd;
 addpath(genpath(currentPath));
 
 % ----- Initialize Counter Variables -----
-NUM_ITERATION = 1000;
+NUM_ITERATION = 10000;
 NUM_SUCCESS = 0;
 NUM_FAIL = 0;
+NUM_VOLUMEFAILS = 0;
 NUM_CLFAILS = 0;
 NUM_ENDUFAILS = 0;
 NUM_STATICMARGINFAILS = 0;
@@ -88,8 +89,9 @@ for jj = 1:NUM_ITERATION
     % if lightwest Monte Carlo AC lighter than base UAV, set that as the
     % new base UAV and optimize for that aircraft
     if (mod(jj,2000) == 0 && NUM_SUCCESS >= 1)
-       if (min(arrayfun(@(x) x.weight.total, UAVpass)) < baseUAV.weight.total)
-           baseUAV = update_baseUAV(UAVpass(NUM_SUCCESS));
+       [w ind] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
+       if (w < baseUAV.weight.total)
+           baseUAV = update_baseUAV(UAVsuccess(ind));
            NUM_BASEUAVCHANGE = NUM_BASEUAVCHANGE + 1;
        end
     end
@@ -126,6 +128,12 @@ for jj = 1:NUM_ITERATION
     %     Calculate moment of inertia
     %     Calculate trim drag(?)
     %     Calculate stability derivatives
+    
+    % ----- CALCULATE VOLUME REQUIREMENT -----
+    length_total = payld.length_TOTAL + fsys.length + engn.length;  % ft
+    wing.x_LE = wing.h - (0.25*wing.c);
+    htail.x_LE = htail.h - (0.25*htail.c);
+    vtail.x_LE = vtail.h - (0.25*vtail.c);
     
     % ----- CALCULATE LIFT & DRAG -----
     DRAG_1000 = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total,...
@@ -189,6 +197,15 @@ for jj = 1:NUM_ITERATION
     %%%%%              CHECK AGAINST REQUIREMENTS                     %%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     FAIL_FLG = 0;
+    %---------- Determine if Geometric Fail      -------------
+    if(length_total > fuse.L || wing.c+htail.c > fuse.L || wing.x_LE+wing.c > htail.x_LE || ...
+            wing.x_LE+wing.c > vtail.x_LE || htail.x_LE+htail.c > fuse.L || ...
+            vtail.x_LE+vtail.c > fuse.L)
+        NUM_VOLUMEFAILS = NUM_VOLUMEFAILS + 1;
+        FAIL_FLG = FAIL_FLG + 1;
+        status(FAIL_FLG) = cellstr('Geometric Fail');
+    end
+    
     %---------- Determine if airfoil provides sufficient lift -------------
     if(CL_max > airfoilw.CLmax) 
        NUM_CLFAILS = NUM_CLFAILS+1;
@@ -224,11 +241,14 @@ for jj = 1:NUM_ITERATION
     else
         NUM_SUCCESS = NUM_SUCCESS + 1;
         UAVsuccess_ind(NUM_SUCCESS) = jj;
+        UAVsuccess(NUM_SUCCESS) = saveUAV(wing, airfoilw, fuse, htail, ...
+                                airfoilh, vtail, airfoilv, engn, fsys, fuel, prop,...
+                                payld, stab, loadfact, WEIGHT, status);
         status(1) = cellstr('Passed Req Check!');
     end
     
     UAVall(jj) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
-                    vtail, airfoilv, engn, fsys, prop, payld,...
+                    vtail, airfoilv, engn, fsys, fuel, prop, payld,...
                     stab, loadfact, WEIGHT, status);
     %%% Save results
     % TODO: if UAV passes criteria, do following

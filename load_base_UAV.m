@@ -149,10 +149,20 @@ vtail.lam_l = atand((vtail.h_l_t-vtail.h_l_r)/(vtail.b/2));
 % Engine ------------------------------------------------------------------
 
 engn.x_cg = 0.95*fuse.L; % engine CG location (assume 95% of fuselage)
+engn.length = 0.403543;  % ft
+
+% Fuel --------------------------------------------------------------------
+
+fuel.cp = 0.85/550/3600;  %[1/ft] specific fuel consumption
+fuel.rho = 6.073; %[lbm/gallon] density of fuel for octane gas
+fuel.W = 6;             %[lb] fuel weight (calculated using test_fuel.m file)
+fuel.V = fuel.W/fuel.rho; %[gallon] volume of fuel
+fuel.V = fuel.V*gallon2ft3; %[ft^3] volume of fuel
 
 % Fuel System -------------------------------------------------------------
 
 fsys.x_cg = 0.65*fuse.L; % fuel system CG location (ft)
+fsys.length = 0.5;  % ft % TODO : CHANGE THIS TO ACTUAL VALUE
 
 % Propeller ---------------------------------------------------------------
 
@@ -182,7 +192,9 @@ payld.length_LiDAR  = 6.47*in2ft;   % (ft)
 payld.length_WR_IMU = 3.9*in2ft;    % (ft)
 
 % Payload-Unit
-
+payld.length_TOTAL = (0.2*m2ft) + payld.length_EOIR + payld.length_SAR + ...
+                    payld.length_LiDAR; % (ft)
+                
 % Surface control CG is dervied from geometries of wing surface and 
 % control surfaces. Calculated in calc_random_UAV
 % sfcl.x_cg_wing  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
@@ -198,6 +210,7 @@ baseUAV.vtail = vtail;
 baseUAV.fuse  = fuse;
 baseUAV.engn  = engn;
 baseUAV.fsys  = fsys;
+baseUAV.fuel  = fuel;
 baseUAV.prop  = prop;
 baseUAV.payld = payld;
 % baseUAV.sfcl  = sfcl; % not used here

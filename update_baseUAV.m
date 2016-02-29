@@ -87,6 +87,14 @@ new_baseUAV.rudd.S = 0.4*UAVsuccess.wing.S; % area (ft^2) multiplication factor 
 
 new_baseUAV.elev.S = 0.325*UAVsuccess.wing.S; % area 
 
+% Fuel --------------------------------------------------------------------
+
+new_baseUAV.fuel = UAVsuccess.fuel;
+
+% Fuel Sys ----------------------------------------------------------------
+
+new_baseUAV.fsys = UAVsuccess.fsys;
+
 % Weight ----------------------------------------------------------------
 new_baseUAV.weight  = UAVsuccess.weight;
 end
