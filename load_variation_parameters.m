@@ -48,6 +48,11 @@ vtail.sd_lam_q   = 0; % vtail quarter chord sweep variation
 % vtail.sd_lam_max = 0; % vtail sweep of maximum thickness line variation
 vtail.sd_h       = 0.01; % vtail htail interference factor variation
 
+% Propeller ---------------------------------------------------------------
+
+prop.sd_D = 1.6;    % propeller diameter variation (ft)
+prop.sd_pitch = 20; % propeller pitch (ft)
+
 % Fuel --------------------------------------------------------------------
 fuel.sd_W        = 2;   % lbs
 

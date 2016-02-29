@@ -68,7 +68,8 @@ vtail.S_wet = 2.003*vtail.S;     % wet area for vertical tail (ft^2)
 % Propeller ---------------------------------------------------------------
 
 prop.h = 4.6315; % propeller location
-prop.D = 1.62; % propeller diameter (ft)
+prop.D = 1.62;   % propeller diameter (ft)
+prop.pitch = 15; % propeller pitch (ft)
 
 % Ailron ------------------------------------------------------------------
 

@@ -135,6 +135,21 @@ for jj = 1:NUM_ITERATION
     htail.x_LE = htail.h - (0.25*htail.c);
     vtail.x_LE = vtail.h - (0.25*vtail.c);
     
+    if 0
+        v_vec = linspace(V_stall,V_max,100);
+        DRAG_1000 = calc_drag_fn(v_vec,atmos(1).altitude,WEIGHT.total,...
+                        wing,airfoilw, airfoilh,fuse,htail,vtail); 
+        DRAG_7500 = calc_drag_fn(v_vec,atmos(2).altitude,WEIGHT.total,...
+                        wing,airfoilw,airfoilh, fuse,htail,vtail);
+                    
+        figure(1)
+        plot(DRAG_1000.v, DRAG_1000.D_t,'b'); hold on, grid on
+        plot(DRAG_7500.v, DRAG_7500.D_t,'r');
+        legend('1000 ft','7000 ft');
+        return 
+    end 
+    
+    
     % ----- CALCULATE LIFT & DRAG -----
     DRAG_1000 = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total,...
                         wing,airfoilw, airfoilh,fuse,htail,vtail);
