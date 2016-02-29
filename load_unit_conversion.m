@@ -20,3 +20,5 @@ gallon2ft3 = 0.133681;
 %distance
 ft2m = 0.3048;
 m2ft = 1/ft2m;
+in2ft = 0.03333333;
+ft2in = 1/in2ft;

@@ -10,20 +10,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fuselage ----------------------------------------------------------------
 
-fuse.L    = check_allowable(baseUAV.fuse.L,(rand-0.5)*fuse.sd_L);    % fuselage max length
-fuse.W    = check_allowable(baseUAV.fuse.W,(rand-0.5)*fuse.sd_W);    % fuselage max width 
-fuse.D    = check_allowable(baseUAV.fuse.D,(rand-0.5)*fuse.sd_D);    % fuselage max depth
+fuse.L    = check_allowable(baseUAV.fuse.L,(rand-0.5)*fuse.sd_L,0,100);    % fuselage max length
+fuse.W    = check_allowable(baseUAV.fuse.W,(rand-0.5)*fuse.sd_W,1,5);    % fuselage max width 
+fuse.D    = check_allowable(baseUAV.fuse.D,(rand-0.5)*fuse.sd_D,1,5);    % fuselage max depth
 
 % Wing --------------------------------------------------------------------
 
-wing.S     = check_allowable(baseUAV.wing.S,(rand-0.5)*wing.sd_S); % wing area (ft^2) 
-wing.A     = check_allowable(baseUAV.wing.A,(rand-0.5)*wing.sd_A); % aspect ratio      
-wing.lam   = check_allowable(baseUAV.wing.lam,(rand-0.5)*wing.sd_lam); % taper ratio (must be between 0 < 1)
-wing.lam_q = check_allowable(baseUAV.wing.lam_q,(rand-0.5)*wing.sd_lam_q); % wing quarter chord sweep
-wing.h     = check_allowable(baseUAV.wing.h,(rand-0.5)*wing.sd_h); % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
-if wing.h >= (0.95*fuse.L)
-    wing.h = baseUAV.wing.h;
-end
+wing.S     = check_allowable(baseUAV.wing.S,(rand-0.5)*wing.sd_S,0,30); % wing area (ft^2) 
+wing.A     = check_allowable(baseUAV.wing.A,(rand-0.5)*wing.sd_A,0,30); % aspect ratio      
+wing.lam   = check_allowable(baseUAV.wing.lam,(rand-0.5)*wing.sd_lam,0,1); % taper ratio (must be between 0 < 1)
+wing.lam_q = check_allowable(baseUAV.wing.lam_q,(rand-0.5)*wing.sd_lam_q,0,1); % wing quarter chord sweep
+wing.h     = check_allowable(baseUAV.wing.h,(rand-0.5)*wing.sd_h,0,0.9*fuse.L); % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
 wing.e = 0.8;     % Oswald's efficiency factor 
 %wing.gamma = 2;   % wing dihedral (deg)  GLOBAL HAWK
 
@@ -48,20 +45,13 @@ wing.S_wet = 2.003*wing.S;  % wet area for wing (ft^2)
 % Horizontal Tail ---------------------------------------------------------
 
 % primary
-htail.A = check_allowable(baseUAV.htail.A,(rand-0.5)*htail.sd_A);    % aspect ratio
-htail.S = check_allowable(baseUAV.htail.S,(rand-0.5)*htail.sd_S); % area (ft^2)
-htail.lam = check_allowable(baseUAV.htail.lam,(rand-0.5)*htail.sd_lam); % taper ratio of horizontal tail (btw 0 and 1 inclusive)
-htail.lam_q = check_allowable(baseUAV.htail.lam_q,(rand-0.5)*htail.sd_lam_q);  % horizontal tail sweep angle
+htail.A = check_allowable(baseUAV.htail.A,(rand-0.5)*htail.sd_A,0,30);    % aspect ratio
+htail.S = check_allowable(baseUAV.htail.S,(rand-0.5)*htail.sd_S,0,30); % area (ft^2)
+htail.lam = check_allowable(baseUAV.htail.lam,(rand-0.5)*htail.sd_lam,0,1); % taper ratio of horizontal tail (btw 0 and 1 inclusive)
+htail.lam_q = check_allowable(baseUAV.htail.lam_q,(rand-0.5)*htail.sd_lam_q,0,1);  % horizontal tail sweep angle
 % htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thickness line 
 % ^^ This value is derived parameter
-htail.h = check_allowable(baseUAV.htail.h,(rand-0.5)*htail.sd_h); % dist from head to 1/4 chord of horizontal tail (ft)
-if htail.h >= (0.95*fuse.L)
-    htail.h = baseUAV.htail.h;
-end
-if htail.h < wing.h
-    htail.h = baseUAV.htail.h;
-end
-
+htail.h = check_allowable(baseUAV.htail.h,(rand-0.5)*htail.sd_h,1.05*wing.h,0.9*fuse.L); % dist from head to 1/4 chord of horizontal tail (ft)
 htail.e = 0.8;      % Oswald Efficiency Factor
 
 % airfoil properties
@@ -83,18 +73,12 @@ htail.S_wet = 2.003*htail.S; % wet area for horizontal tail (ft^2)
 % Vertical Tail -----------------------------------------------------------
 
 % primay
-vtail.S =  check_allowable(baseUAV.vtail.S,(rand-0.5)*vtail.sd_S); % area (ft^2)
-vtail.A = check_allowable(baseUAV.vtail.A,(rand-0.5)*vtail.sd_A);   % aspect ratio (defined as b^2/S) 
-vtail.lam = check_allowable(baseUAV.vtail.lam,(rand-0.5)*vtail.sd_lam);  % taper ratio 
-vtail.lam_q = check_allowable(baseUAV.vtail.lam_q,(rand-0.5)*vtail.sd_lam_q);  % quarter chord sweep angle
-vtail.h = check_allowable(baseUAV.vtail.h,(rand-0.5)*vtail.sd_h); % dist from head to 1/4 chord of vertical tail (ft)
+vtail.S =  check_allowable(baseUAV.vtail.S,(rand-0.5)*vtail.sd_S,0,30); % area (ft^2)
+vtail.A = check_allowable(baseUAV.vtail.A,(rand-0.5)*vtail.sd_A,0,30);   % aspect ratio (defined as b^2/S) 
+vtail.lam = check_allowable(baseUAV.vtail.lam,(rand-0.5)*vtail.sd_lam,0,1);  % taper ratio 
+vtail.lam_q = check_allowable(baseUAV.vtail.lam_q,(rand-0.5)*vtail.sd_lam_q,0,1);  % quarter chord sweep angle
+vtail.h = check_allowable(baseUAV.vtail.h,(rand-0.5)*vtail.sd_h,1.05*wing.h,0.9*fuse.L); % dist from head to 1/4 chord of vertical tail (ft)
 vtail.e = 0.8;  % Oswald Efficiency Factor
-if vtail.h >= (0.95*fuse.L)
-    vtail.h = baseUAV.vtail.h;
-end
-if vtail.h < wing.h
-    vtail.h = baseUAV.vtail.h;
-end
 
 % airfoil properties
 airfoils = airfoil_to_wing(airfoils,vtail.A,vtail.e);
@@ -217,7 +201,7 @@ engn.x_cg = 0.95*fuse.L; % engine CG location (assume 95% of fuselage)
 
 % Fuel System -------------------------------------------------------------
 
-fsys.x_cg = (0.65*fuse.L) + (rand-0.5)*fsys.sd_x_cg ; % fuel system CG location (ft)
+fsys.x_cg = check_allowable(baseUAV.fsys.x_cg,(rand-0.5)*fsys.sd_x_cg,0,0.9*fuse.L) ; % fuel system CG location (ft)
 
 % Propeller ---------------------------------------------------------------
 
@@ -229,10 +213,10 @@ prop.x_cg = (1+0.025)*fuse.L; % propeller CG location (ft)
 % CG locations
 payld.x_cg_EOIR  = 0.025*fuse.L; % EO/IR CG location (ft)
 payld.x_cg_SAR   = 0.05*fuse.L;  % Synthetic Apperature Radar CG location (ft)
-payld.x_cg_LiDAR = 0.075*fuse.L; % LiDAR CG location (ft)
-payld.x_cg_ANT   = 0.05*fuse.L;  % UHF/VHF antenna location (ft)
-payld.x_cg_WR    = 0.05*fuse.L;  % WaveRelay CG location (ft)
-payld.x_cg_IMU   = 0.05*fuse.L;  % IMU CG location (ft)
+payld.x_cg_LiDAR = check_allowable(0.075*fuse.L,(rand-0.5)*payld.sd_x_cg_LiDAR,0,0.9*fuse.L); % LiDAR CG location (ft)
+payld.x_cg_ANT   = check_allowable(0.05*fuse.L,(rand-0.5)*payld.sd_x_cg_ANT,0,0.9*fuse.L);  % UHF/VHF antenna location (ft)
+payld.x_cg_WR    = check_allowable(0.05*fuse.L,(rand-0.5)*payld.sd_x_cg_WR,0,0.9*fuse.L);  % WaveRelay CG location (ft)
+payld.x_cg_IMU   = check_allowable(0.05*fuse.L,(rand-0.5)*payld.sd_x_cg_IMU,0,0.9*fuse.L);  % IMU CG location (ft)
 
 % Surface Control ---------------------------------------------------------
 

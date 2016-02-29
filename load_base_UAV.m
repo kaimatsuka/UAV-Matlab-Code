@@ -175,6 +175,14 @@ payld.x_cg_ANT   = 0.05*fuse.L;  % (ft)
 payld.x_cg_WR    = 0.05*fuse.L;  % (ft)
 payld.x_cg_IMU   = 0.05*fuse.L; % (ft)
 
+% Payload lengths x-direction
+payld.length_EOIR   = 10.04*in2ft;  % (ft)
+payld.length_SAR    = 6.2*in2ft;    % (ft)
+payld.length_LiDAR  = 6.47*in2ft;   % (ft)
+payld.length_WR_IMU = 3.9*in2ft;    % (ft)
+
+% Payload-Unit
+
 % Surface control CG is dervied from geometries of wing surface and 
 % control surfaces. Calculated in calc_random_UAV
 % sfcl.x_cg_wing  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
