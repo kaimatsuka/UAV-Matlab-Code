@@ -27,7 +27,7 @@ rho = 0.002379;
 % need to initialize 6DOF block and aero coef data
 %%%
 %initial position in inertial axes [Xe, Ye, Ze]
-Posini = [0 0 -1000];
+Posini = [0 0 -7500];
 
 %initial velocity in body axes [U, v, w] - relative to wind i think?
 Velini = [118.1 0 0];    % 65.3 knots  - zero elevator trim from Bray pg 35
