@@ -42,6 +42,7 @@ NUM_VOLUMEFAILS = 0;
 NUM_CLFAILS = 0;
 NUM_ENDUFAILS = 0;
 NUM_STATICMARGINFAILS = 0;
+NUM_SDERIVFAILS = 0;
 NUM_LOADFACTFAILS = 0;
 NUM_BASEUAVCHANGE = 0;
 
@@ -200,22 +201,29 @@ for jj = 1:NUM_ITERATION
     stab.static_margin_full = calc_static_marg(stab.x_cg_full,stab.x_np,wing);
     stab.static_margin_empty = calc_static_marg(stab.x_cg_empty,stab.x_np,wing);
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % ----- CALCULATE STABILITY DERIVATIVES -----
+    SDERIV.alt1000_full = calc_stability_derivatives(atmos(1).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
+        htail,airfoilh,vtail,DRAG_1000,stab.x_cg_full,stab.z_cg_full,stab.static_margin_full);
+    SDERIV.alt1000_empty = calc_stability_derivatives(atmos(1).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
+        htail,airfoilh,vtail,DRAG_1000,stab.x_cg_empty,stab.z_cg_empty, stab.static_margin_empty);
+    SDERIV.alt7500_full = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_cruise,wing,airfoilw,...
+        htail,airfoilh,vtail,DRAG_7500,stab.x_cg_full,stab.z_cg_full, stab.static_margin_full);
+    SDERIV.alt7500_empty = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
+        htail,airfoilh,vtail,DRAG_7500,stab.x_cg_empty,stab.z_cg_empty,stab.static_margin_empty);
     
-    %%% Check performance
-    %
-    % TODO:
-    %     Check other various requirements
-    %           - volume requirement
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%              CHECK AGAINST REQUIREMENTS                     %%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     FAIL_FLG = 0;
     %---------- Determine if Geometric Fail      -------------
-    if(length_total > fuse.L || wing.c+htail.c > fuse.L || wing.x_LE+wing.c > htail.x_LE || ...
-            wing.x_LE+wing.c > vtail.x_LE || htail.x_LE+htail.c > fuse.L || ...
-            vtail.x_LE+vtail.c > fuse.L)
+    if(length_total > fuse.L || ...              % PL length > fuselage length
+            wing.c+htail.c > fuse.L || ...       % chord lengths of wing & tail > fuselage length
+            wing.x_LE+wing.c > htail.x_LE || ... % back of wing is farther back than front of htail
+            wing.x_LE+wing.c > vtail.x_LE || ... % back of wing is farther back than front of vtail
+            htail.x_LE+htail.c > fuse.L || ...   % back of htail > fuselage length
+            vtail.x_LE+vtail.c > fuse.L)         % back of vtail > fuselage length
         NUM_VOLUMEFAILS = NUM_VOLUMEFAILS + 1;
         FAIL_FLG = FAIL_FLG + 1;
         status(FAIL_FLG) = cellstr('Geometric Fail');
@@ -248,6 +256,16 @@ for jj = 1:NUM_ITERATION
         FAIL_FLG = FAIL_FLG + 1;
         status(FAIL_FLG) = cellstr('Static Margin Fail');
     end
+    
+    %---------- Determine if UAV stability derivatives correct sign -------
+    if (check_sderivs(SDERIV.alt1000_full)  == 0 || ...
+        check_sderivs(SDERIV.alt1000_empty) == 0 || ...
+        check_sderivs(SDERIV.alt7500_full)  == 0 || ...
+        check_sderivs(SDERIV.alt7500_empty) == 0)
+            NUM_SDERIVFAILS = NUM_SDERIVFAILS + 1;
+            FAIL_FLG = FAIL_FLG + 1;
+            status(FAIL_FLG) = cellstr('Stability Derivative Fail');
+    end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     if FAIL_FLG > 0
@@ -258,20 +276,14 @@ for jj = 1:NUM_ITERATION
         UAVsuccess_ind(NUM_SUCCESS) = jj;
         UAVsuccess(NUM_SUCCESS) = saveUAV(wing, airfoilw, fuse, htail, ...
                                 airfoilh, vtail, airfoilv, engn, fsys, fuel, prop,...
-                                payld, stab, loadfact, WEIGHT, status);
+                                payld, stab, SDERIV, loadfact, WEIGHT, status);
         status(1) = cellstr('Passed Req Check!');
     end
     
     UAVall(jj) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
                     vtail, airfoilv, engn, fsys, fuel, prop, payld,...
-                    stab, loadfact, WEIGHT, status);
-    %%% Save results
-    % TODO: if UAV passes criteria, do following
-    %     save performance
-    %     toss bad UAV, keep good UAV
-    %
-    % IF UAV PASSES ALL CRITERIA ABOVE:
-    % SAVE UAV PARAMETERS
+                    stab, SDERIV, loadfact, WEIGHT, status);
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 
@@ -299,6 +311,14 @@ end
 % 
 % N_total = [N_good; N_bad];
 
+disp(['Number of Successful Aircraft: ' num2str(NUM_SUCCESS)]);
+disp(['  Number of C_Lmax Fails: ' num2str(NUM_CLFAILS)]);
+disp(['  Number of Endurance Fails: ' num2str(NUM_ENDUFAILS)]);
+disp(['  Number of Load Factor Fails: ' num2str(NUM_LOADFACTFAILS)]);
+disp(['  Number of Volume Fails: ' num2str(NUM_VOLUMEFAILS)]);
+disp(['  Number of Static Margin Fails: ' num2str(NUM_STATICMARGINFAILS)]);
+disp(['  Number of Stability Deriv Fails: ' num2str(NUM_SDERIVFAILS)]);
+
 % ITERATION PLOTS
 figure(2)
 subplot(3,6,[1:2 7:8 13:14]), plot_hist(arrayfun(@(x) x.weight.total, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Weight (lbs)');
@@ -312,21 +332,22 @@ subplot(3,6,11), plot_hist(arrayfun(@(x) x.htail.b, UAVall),UAVsuccess_ind,UAVfa
 subplot(3,6,12), plot_hist(arrayfun(@(x) x.htail.c, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Chord (ft)');
 subplot(3,6,15:18), plot_hist(arrayfun(@(x) x.fuse.L, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Fuselage Length (ft)');
 
-% % Plots the lightest aircraft
-% [val idx] = min(arrayfun(@(x) x.weight.total, UAVpass));
-% figure(1);
-% plot_UAV(UAVpass(idx).wing, UAVpass(idx).htail, UAVpass(idx).vtail, UAVpass(idx).fuse, UAVpass(idx).prop);
-% 
-% figure(3);
-% weight_vec = [UAVpass(idx).weight.wing   UAVpass(idx).weight.fuse  ...
-%               UAVpass(idx).weight.htail  UAVpass(idx).weight.vtail ...
-%               UAVpass(idx).weight.engn   UAVpass(idx).weight.avion ...  
-%               UAVpass(idx).weight.fsys   UAVpass(idx).weight.fuel  ...
-%               UAVpass(idx).weight.prop];
-% weight_labels = {'wing',  'fuselage', 'horizontal tail', 'vertical tail', ...
-%                 'engine', 'payload/avionics', 'fuel system', 'fuel',   'propeller'};
-% pie(weight_vec, weight_labels); hold on;
+% Plots the lightest aircraft
+if(NUM_SUCCESS > 0)
+    [val idx] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
+    figure(1);
+    plot_UAV(UAVsuccess(idx).wing, UAVsuccess(idx).htail, UAVsuccess(idx).vtail, UAVsuccess(idx).fuse, UAVsuccess(idx).prop);
 
+    figure(3);
+    weight_vec = [UAVsuccess(idx).weight.wing   UAVsuccess(idx).weight.fuse  ...
+                  UAVsuccess(idx).weight.htail  UAVsuccess(idx).weight.vtail ...
+                  UAVsuccess(idx).weight.engn   UAVsuccess(idx).weight.avion ...  
+                  UAVsuccess(idx).weight.fsys   UAVsuccess(idx).weight.fuel  ...
+                  UAVsuccess(idx).weight.prop];
+    weight_labels = {'wing',  'fuselage', 'horizontal tail', 'vertical tail', ...
+                    'engine', 'payload/avionics', 'fuel system', 'fuel',   'propeller'};
+    pie(weight_vec, weight_labels); hold on;
+end
 % figure(2)
 % hist(history.wing.A,10), hold on, 
 %     subplot(3,3,1)

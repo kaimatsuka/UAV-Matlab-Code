@@ -47,26 +47,36 @@ stab.x_cg_full = sum(xm_vec)/sum(w_detail_vec); %(ft)
 
 
 % X-direction - EMPTY FUEL
-x_cg_empty_vec = [wing.x_cg; % wing CG
-                fuse.x_cg;
-                htail.x_cg;
-                vtail.x_cg;
-                engn.x_cg;
-                fsys.x_cg;
-                prop.x_cg;
-                fsys.x_cg; % fuel CG ASSUME SAME CG AS FUEL SYSTEM
-                payld.x_cg_EOIR;  % electro optical
-                payld.x_cg_SAR;   % synthetic apateur 
-                payld.x_cg_LiDAR; % LiDAR
-                payld.x_cg_ANT;
-                payld.x_cg_IMU;
-                payld.x_cg_WR;
-                sfcl.x_cg_wing;   % ailron servo
-                sfcl.x_cg_htail;  % rudder servo 
-                sfcl.x_cg_vtail]; % elevator servo
 w_detail_emp_vec = w_detail_vec;
 w_detail_emp_vec(8) = 0;    % Corresponds to fuel weight
-xm_empty_vec = x_cg_empty_vec.*w_detail_emp_vec; %(ft*lb)
+xm_empty_vec = x_cg_vec.*w_detail_emp_vec; %(ft*lb)
 stab.x_cg_empty = sum(xm_empty_vec)/sum(w_detail_emp_vec); %(ft)
 
-clearvars x_cg_empty_vec x_cg_vec xm_vec xm_empty_vec
+% Z-direction - FULL FUEL
+z_cg_vec = [wing.z_cg; % wing CG
+            fuse.z_cg;
+            htail.z_cg;
+            vtail.z_cg;
+            engn.z_cg;
+            fsys.z_cg;
+            prop.z_cg;
+            fsys.z_cg; % fuel CG ASSUME SAME CG AS FUEL SYSTEM
+            payld.z_cg_EOIR;  % electro optical
+            payld.z_cg_SAR;   % synthetic apateur 
+            payld.z_cg_LiDAR; % LiDAR
+            payld.z_cg_ANT;
+            payld.z_cg_IMU;
+            payld.z_cg_WR;
+            sfcl.z_cg_wing;   % ailron servo
+            sfcl.z_cg_htail;  % rudder servo 
+            sfcl.z_cg_vtail]; % elevator servo
+
+zm_vec = z_cg_vec.*w_detail_vec; % (ft*lb)
+stab.z_cg_full = sum(zm_vec)/sum(w_detail_vec); %(ft)
+
+w_detail_emp_vec = w_detail_vec;
+w_detail_emp_vec(8) = 0;    % Corresponds to fuel weight
+zm_empty_vec = z_cg_vec.*w_detail_emp_vec; %(ft*lb)
+stab.z_cg_empty = sum(zm_empty_vec)/sum(w_detail_emp_vec); %(ft)
+
+clearvars x_cg_empty_vec x_cg_vec xm_vec xm_empty_vec zm_vec zm_empty_vec

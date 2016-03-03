@@ -154,6 +154,7 @@ wing.t_t = wing.c_t*wing.mtr;     % max thickness at tip (ft)
 wing.t = wing.c*wing.mtr;         % average thickness of wing (ft) TODO: change name to wing.t_ave
 wing.K_i = 1/(pi*wing.A*wing.e);  % Drag coefficient
 wing.x_cg = wing.h;
+wing.z_cg = baseUAV.wing.z_cg;
 
 wing.h_q_t = wing.h+tand(wing.lam_q)*wing.b/2;  % wing c/4 tip location (ft)
 wing.h_l_r = wing.h-wing.c_r/4;                 % wing leading edge root location (ft)
@@ -163,6 +164,7 @@ wing.lam_l = atand((wing.h_l_t-wing.h_l_r)/(wing.b/2)); % wing leading edge swee
 % Fuselage ----------------------------------------------------------------
 
 fuse.x_cg = fuse.L*0.5; % Assume 50% fuselage length
+fuse.z_cg = baseUAV.fuse.z_cg;
 fuse.r = fuse.L/fuse.W; %fuselage ratio
 
 % arbitrarily defined 
@@ -179,6 +181,7 @@ htail.t_r = htail.c_r*htail.mtr;   % max thickness at root (ft)
 htail.t_t = htail.c_t*htail.mtr;   % max thickness ratio (ft)s
 htail.l_T = htail.h-wing.h;      % distance from wing 1/4 MAC to tail 1/4 MAC (ft)
 htail.x_cg = htail.h;
+htail.z_cg = baseUAV.htail.z_cg;
 
 htail.h_q_t = htail.h+tand(htail.lam_q)*htail.b/2;
 htail.h_l_r = htail.h    -htail.c_r/4;
@@ -195,6 +198,7 @@ vtail.t = vtail.c*vtail.mtr;     % max root thickness average(ft)
 vtail.t_r =vtail.c_r*vtail.mtr;  % max root thickness at root (ft)
 vtail.t_t = vtail.c_t*vtail.mtr; % max root thickness at tip (ft)
 vtail.x_cg = vtail.h;
+vtail.z_cg = baseUAV.vtail.z_cg;
 
 vtail.h_q_t = vtail.h+tand(vtail.lam_q)*vtail.b;
 vtail.h_l_r = vtail.h    -vtail.c_r/4;
@@ -208,15 +212,18 @@ vtail.lam_l = atand((vtail.h_l_t-vtail.h_l_r)/(vtail.b/2));
 % Engine ------------------------------------------------------------------
 
 engn.x_cg = 0.95*fuse.L; % engine CG location (assume 95% of fuselage)
+engn.z_cg = baseUAV.engn.z_cg;
 
 % Fuel System -------------------------------------------------------------
 
 fsys.x_cg = check_allowable(baseUAV.fsys.x_cg,(rand-0.5)*fsys.sd_x_cg,0,0.9*fuse.L) ; % fuel system CG location (ft)
+fsys.z_cg = baseUAV.fsys.z_cg;
 
 % Propeller ---------------------------------------------------------------
 
 prop.h    = fuse.L; % beginning of prop is located at end of fuselge
 prop.x_cg = (1+0.025)*fuse.L; % propeller CG location (ft)
+prop.z_cg = baseUAV.prop.z_cg;
 
 % Electronics/Payloads ----------------------------------------------------
 
@@ -228,8 +235,19 @@ payld.x_cg_ANT   = check_allowable(0.05*fuse.L,(rand-0.5)*payld.sd_x_cg_ANT,0,0.
 payld.x_cg_WR    = check_allowable(0.05*fuse.L,(rand-0.5)*payld.sd_x_cg_WR,0,0.9*fuse.L);  % WaveRelay CG location (ft)
 payld.x_cg_IMU   = check_allowable(0.05*fuse.L,(rand-0.5)*payld.sd_x_cg_IMU,0,0.9*fuse.L);  % IMU CG location (ft)
 
+payld.z_cg_EOIR  = baseUAV.payld.z_cg_EOIR;
+payld.z_cg_SAR   = baseUAV.payld.z_cg_SAR;
+payld.z_cg_LiDAR = baseUAV.payld.z_cg_LiDAR;
+payld.z_cg_ANT   = baseUAV.payld.z_cg_ANT;
+payld.z_cg_WR    = baseUAV.payld.z_cg_WR;
+payld.z_cg_IMU   = baseUAV.payld.z_cg_IMU;
+
 % Surface Control ---------------------------------------------------------
 
 sfcl.x_cg_wing  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
 sfcl.x_cg_htail = htail.x_cg+htail.c*(0.85-0.25); % assume 85% of average wing chord
 sfcl.x_cg_vtail = vtail.x_cg+htail.c*(0.85-0.25); % assume 85% of average wing chord
+
+sfcl.z_cg_wing  = wing.z_cg;
+sfcl.z_cg_htail = htail.z_cg;
+sfcl.z_cg_vtail = vtail.z_cg;

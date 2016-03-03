@@ -31,6 +31,7 @@ function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, airfoilh, fuse, hta
 %       .D_h     = drag due to tail in lb (1xM)
 %       .D_w     = drag due to wing in lb (1xM)
 %       .D_t     = total drag in lb (1xM)
+%       .i_t     = incident angle on the tail (1xM)
 %       .v       = velocity in ft/s (1xM)
 %       .P_p     = power req'd for parasite drag in HP (1xM)
 %       .P_i     = power req'd for induced drag in HP (1xM)
@@ -75,7 +76,7 @@ CL_i    = -a_t*htail.S/wing.S;
 CL_de   = -tau_e*a_t*htail.S/wing.S;
 
 %drag
-Cm_ac   = 0; % airfoil property
+Cm_ac   = -0.05; % airfoil property
 Cm_a    = CL_a*htail.l_T/wing.c; 
 Cm_de   = CL_de*htail.l_T/wing.c;
 Cm_i    = a_t*V_H;
@@ -162,6 +163,8 @@ DRAG.D_airf = DRAG.C_Dairf*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_w    = DRAG.C_Lh.*DRAG.C_Lh.*wing.K; % drag contribution of wing
 DRAG.D_h    = DRAG.C_Lw.*DRAG.C_Lw.*htail.K*htail.S/wing.S; % drag contribution of tail
 DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf+DRAG.D_h+DRAG.D_w;
+
+DRAG.i_t   = i_t;
 
 DRAG.C_Dt  = (2*DRAG.D_t)./(rho*v_drag.^2*wing.S);
 
