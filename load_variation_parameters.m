@@ -34,7 +34,7 @@ fuse.sd_D     = 0; % fuselage max depth variation (ft)
 %primary
 htail.sd_S       = 15; % htail area variation (ft^2)
 htail.sd_A       = 10; % htail aspect ratio variation std dev
-htail.sd_lam     = 0.5; % htail taper ratio variation
+htail.sd_lam     = 0; % htail taper ratio variation
 htail.sd_lam_q   = 0; % htail quarter chord sweep variation 
 % htail.sd_lam_max = 0; % htail sweep of maximum thickness line variation
 htail.sd_h       = 0.01; % htail dist from head to 1/4 chord of variation (ft)
@@ -43,10 +43,20 @@ htail.sd_h       = 0.01; % htail dist from head to 1/4 chord of variation (ft)
 
 vtail.sd_S       = 5; % vtail area variation (ft^2)
 vtail.sd_A       = 3; % vtail aspect ratio variation 
-vtail.sd_lam     = 0.5; % vtail taper ratio variation
+vtail.sd_lam     = 0; % vtail taper ratio variation
 vtail.sd_lam_q   = 0; % vtail quarter chord sweep variation
 % vtail.sd_lam_max = 0; % vtail sweep of maximum thickness line variation
 vtail.sd_h       = 0.01; % vtail htail interference factor variation
+
+% Surface Controls --------------------------------------------------------
+sfcl.ail.sd_S   = 0.5;
+sfcl.ail.sd_c   = 0.05;
+
+sfcl.rudd.sd_S  = 0.25;
+sfcl.rudd.sd_c  = 0.05;
+
+sfcl.elev.sd_S  = 0.25;
+sfcl.elev.sd_c  = 0.05;
 
 % Propeller ---------------------------------------------------------------
 

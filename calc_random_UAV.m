@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fuselage ----------------------------------------------------------------
 
-fuse.L    = check_allowable(baseUAV.fuse.L,(rand-0.5)*fuse.sd_L,0,100);    % fuselage max length
+fuse.L    = check_allowable(baseUAV.fuse.L,(rand-0.5)*fuse.sd_L,payld.length_TOTAL,100);    % fuselage max length
 fuse.W    = check_allowable(baseUAV.fuse.W,(rand-0.5)*fuse.sd_W,13/12,5);    % fuselage max width 
 fuse.D    = check_allowable(baseUAV.fuse.D,(rand-0.5)*fuse.sd_D,13/12,5);    % fuselage max depth
 
@@ -29,7 +29,6 @@ airfoils = airfoil_to_wing(airfoils,wing.A, wing.e); % convert to wing props
 airf_index_w       = randi(12); % randomly select airfoil
 airfoilw.CL       = airfoils(airf_index_w).CL;  % Entire CL profile
 airfoilw.Cd       = airfoils(airf_index_w).Cd;   % Drag due to airfoil choice
-airfoilw.CL_alpha = airfoils(airf_index_w).CL_alpha_rad; % CL_alpha (/rad)
 airfoilw.CLmax    = airfoils(airf_index_w).CLmax; % CLmax (wing)
 airfoilw.maxthick = airfoils(airf_index_w).GEO.max_thick; % max thickness (relative to chord length)
 airfoilw.maxthick_loc = airfoils(airf_index_w).GEO.max_thick_location; % max thickness location (relative to chord length)
@@ -37,6 +36,7 @@ airfoilw.perim    = airfoils(airf_index_w).GEO.perimeter; % circumference/perime
 airfoilw.a_w      = airfoils(airf_index_w).CL_alpha_rad; % lift curve slope of wing
 airfoilw.alpha0   = airfoils(airf_index_w).alpha0; % zero angle of attack
 airfoilw.alpha    = airfoils(airf_index_w).alpha; % angle of attack
+airfoilw.Cm_ac    = airfoils(airf_index_w).CM;
 
 wing.mtr = airfoilw.maxthick; % maximum thickness ratio
 wing.mtl = airfoilw.maxthick_loc;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
@@ -59,7 +59,6 @@ airfoils = airfoil_to_wing(airfoils,htail.A,htail.e);
 airf_index_h      = randi(12); % randomly select airfoil
 airfoilh.CL       = airfoils(airf_index_h).CL;  % Entire CL profile
 airfoilh.Cd       = airfoils(airf_index_h).Cd;   % Drag due to airfoil choice
-airfoilh.CL_alpha = airfoils(airf_index_h).CL_alpha_rad; % CL_alpha (/rad)
 airfoilh.CLmax    = airfoils(airf_index_h).CLmax; % CLmax (wing)
 airfoilh.maxthick = airfoils(airf_index_h).GEO.max_thick; % max thickness (relative to chord length)
 airfoilh.maxthick_loc = airfoils(airf_index_h).GEO.max_thick_location; % max thickness location (relative to chord length)
@@ -81,7 +80,7 @@ vtail.h = check_allowable(baseUAV.vtail.h,(rand-0.5)*vtail.sd_h,1.05*wing.h,0.9*
 vtail.e = 0.8;  % Oswald Efficiency Factor
 
 % airfoil properties
-airfoils = airfoil_to_wing(airfoils,vtail.A,vtail.e);
+airfoils = airfoil_to_wing(airfoils,1.6*vtail.A,vtail.e);
 airf_index_v      = randi(12); % randomly select airfoil
 airfoilv.CL       = airfoils(airf_index_v).CL;  % Entire CL profile
 airfoilv.Cd       = airfoils(airf_index_v).Cd;   % Drag due to airfoil choice
@@ -90,29 +89,21 @@ airfoilv.CLmax    = airfoils(airf_index_v).CLmax; % CLmax (wing)
 airfoilv.maxthick = airfoils(airf_index_v).GEO.max_thick; % max thickness (relative to chord length)
 airfoilv.maxthick_loc = airfoils(airf_index_v).GEO.max_thick_location; % max thickness location (relative to chord length)
 airfoilv.perim    = airfoils(airf_index_v).GEO.perimeter; % circumference/perimeter of airfoil
+airfoilv.a_v      = airfoils(airf_index_v).CL_alpha_rad; % lift curve slope of tail
 
 vtail.mtr = airfoilv.maxthick; % maximum thickness ratio
 vtail.mtl = airfoilv.maxthick_loc;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)
 vtail.S_wet = 2.003*vtail.S; % wet area for vertical tail (ft^2)
 
-% Airfoil -----------------------------------------------------------------
-
-%Randomly select airfoils from airfoil directory
-airf_index       = randi(12); % randomly select airfoil
-% airfoil.CL_alpha = airfoils(airf_index).CL_alpha_deg; % CL_alpha (/deg)
-% airfoil.CLmax    = airfoils(airf_index).CLmax; % CLmax (wing)
-% airfoil.maxthick = airfoils(airf_index).GEO.max_thick; % max thickness (relative to chord length)
-% airfoil.maxthick_loc = airfoils(airf_index).GEO.max_thick_location; % max thickness location (relative to chord length)
-% airfoil.perim    = airfoils(airf_index).GEO.perimeter; % circumference/perimeter of airfoil
 
 % Engine ------------------------------------------------------------------
 
 %Randomly select engines from engine directory
 eng_index = randi(9); % radomly select engine
-% engn.P_avail = engines(eng_index).P_avail; % load P_avail
-% engn.vol = engines(eng_index).vol; % load volume
-% engn.weight = engines(eng_index).weight; % load weight
-% engn.rpm = engines(eng_index).rpm; % load rpm
+engn.P_avail = engines(eng_index).P_avail; % load P_avail
+engn.vol = engines(eng_index).vol; % load volume
+engn.weight = engines(eng_index).weight; % load weight
+engn.rpm = engines(eng_index).rpm; % load rpm
 
 % Fuel --------------------------------------------------------------------
 
@@ -134,12 +125,7 @@ fsys.length = fsys.W/(pi*(fuse.D/2)^2); % fuel tank length
 
 % Electronics/Payloads ----------------------------------------------------
 
-% payld.w_total = payld.w_total; % in lbs (no variation in payload)
-
-% Surface Control ---------------------------------------------------------
-
-%   no items here
-
+payld.w_total = payld.w_total; % in lbs (no variation in payload)
 
 %% Calculate derived geometries/variables
 
@@ -205,10 +191,6 @@ vtail.h_l_r = vtail.h    -vtail.c_r/4;
 vtail.h_l_t = vtail.h_q_t-vtail.c_t/4;
 vtail.lam_l = atand((vtail.h_l_t-vtail.h_l_r)/(vtail.b/2));
 
-% Airfoil -----------------------------------------------------------------
-
-% afoil.CL_max = 1.2; % Max Cl
-
 % Engine ------------------------------------------------------------------
 
 engn.x_cg = 0.95*fuse.L; % engine CG location (assume 95% of fuselage)
@@ -242,12 +224,41 @@ payld.z_cg_ANT   = baseUAV.payld.z_cg_ANT;
 payld.z_cg_WR    = baseUAV.payld.z_cg_WR;
 payld.z_cg_IMU   = baseUAV.payld.z_cg_IMU;
 
-% Surface Control ---------------------------------------------------------
+% ============================ CONTROL SURFACE ============================
+% Aileron -----------------------------------------------------------------
 
-sfcl.x_cg_wing  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
-sfcl.x_cg_htail = htail.x_cg+htail.c*(0.85-0.25); % assume 85% of average wing chord
-sfcl.x_cg_vtail = vtail.x_cg+htail.c*(0.85-0.25); % assume 85% of average wing chord
+% primary
+sfcl.ail.S    = check_allowable(baseUAV.sfcl.ail.S,(rand-0.5)*sfcl.ail.sd_S,0.03*wing.S,0.12*wing.S); % aileron area
+sfcl.ail.c    = check_allowable(baseUAV.sfcl.ail.c,(rand-0.5)*sfcl.ail.sd_c,0.15*wing.c,0.3*wing.c); % aileron chord
+sfcl.ail.sc_W = 0.09193276; % weight of servo in lbs
 
-sfcl.z_cg_wing  = wing.z_cg;
-sfcl.z_cg_htail = htail.z_cg;
-sfcl.z_cg_vtail = vtail.z_cg;
+% derived
+sfcl.ail.b    = sfcl.ail.S/sfcl.ail.c; % aileron length
+
+% Rudder ------------------------------------------------------------------
+
+% primary
+sfcl.rudd.S    = check_allowable(baseUAV.sfcl.rudd.S,(rand-0.5)*sfcl.rudd.sd_S,0.15*vtail.S,0.3*vtail.S); % rudder area
+sfcl.rudd.c    = check_allowable(baseUAV.sfcl.rudd.c,(rand-0.5)*sfcl.rudd.sd_c,0.15*vtail.c,0.4*vtail.c); % rudder chord
+sfcl.rudd.sc_W = 0.0198416; % weight of servo in lbs
+
+% derived
+sfcl.rudd.b    = sfcl.rudd.S/sfcl.rudd.c; % rudder length
+
+% Elevator ----------------------------------------------------------------
+
+% primary
+sfcl.elev.S    = check_allowable(baseUAV.sfcl.elev.S,(rand-0.5)*sfcl.elev.sd_S,0.15*htail.S,0.4*htail.S); % elevator area
+sfcl.elev.c    = check_allowable(baseUAV.sfcl.elev.c,(rand-0.5)*sfcl.elev.sd_c,0.2*htail.c,0.4*htail.c); % elevator chord
+sfcl.elev.sc_W = 0.0198416; % weight of servo in lbs
+
+% derived
+sfcl.elev.b    = sfcl.elev.S/sfcl.elev.c; % elevator length
+
+sfcl.ail.x_cg  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
+sfcl.elev.x_cg = htail.x_cg+htail.c*(0.85-0.25); % assume 85% of average wing chord
+sfcl.rudd.x_cg = vtail.x_cg+htail.c*(0.85-0.25); % assume 85% of average wing chord
+
+sfcl.ail.z_cg  = wing.z_cg;
+sfcl.elev.z_cg = htail.z_cg;
+sfcl.rudd.z_cg = vtail.z_cg;

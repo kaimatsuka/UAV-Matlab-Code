@@ -1,5 +1,5 @@
 function SDERIV = calc_stability_derivatives(rho, V_stall,V_max,V_cruise,wing,airfoilw,...
-    htail,airfoilh,vtail,DRAG,x_cg_total,z_cg_total, static_margin)
+    htail,airfoilh,vtail,airfoilv,DRAG,x_cg_total,z_cg_total, static_margin)
 %% calc_stability_derivatives.m %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DESCRIPTION:
@@ -80,11 +80,13 @@ function SDERIV = calc_stability_derivatives(rho, V_stall,V_max,V_cruise,wing,ai
 L = 0.5;        % TODO: CHANGE TO REAL VALUE
 N_mom = 0.5;    % TODO: CHANGE TO REAL VALUE
 d_a = 0.1;      % TODO: CHANGE TO REAL VALUE
-Cm_ac = -0.01;   % TODO: CHANGE TO REAL VALUE
+Cm_ac = interp1(airfoilw.CL,airfoilw.Cm_ac,DRAG.C_L);   % TODO: CHANGE TO REAL VALUE
 
 % Parameters
 l_t = htail.x_cg-x_cg_total;
+l_v = vtail.x_cg-x_cg_total;
 V_H    = (l_t*htail.S)/(wing.S*wing.c); % tail volume ratio
+V_V    = (l_v*vtail.S)/(wing.S*wing.b); % vertical tail volume 
 eps_a  = 0.2; % estimated downwash effects
 v_avg  = (V_max+V_stall)/2; % average velocity
 v      = V_cruise; % flight velocity
@@ -92,10 +94,11 @@ eta_h  = 0.5; % TODO: replace with real value
 tau_e  = htail.e;
 sigma_b = -0.1; % estimated elevator downwash effects
 
-a_w      = airfoilw.CL_alpha; % lift curve slope for wing
+a_w      = airfoilw.a_w; % lift curve slope for wing
 alpha_0  = (airfoilw.alpha0)*(pi/180); 
 
-a_t      = airfoilh.CL_alpha;   % /rad
+a_t      = airfoilh.a_t;   % /rad
+a_v      = airfoilv.a_v;    % /rad
 
 % Lift Stability Derivatives-----------------------------------------------
 
@@ -111,7 +114,7 @@ SDERIV.CL_i    =    -a_t*htail.S/wing.S; % mae 154s lec 10
 
 SDERIV.CD0     =    DRAG.C_Dp;            
 SDERIV.CD_a    =    DRAG.C_Dairf; % guessed value              
-SDERIV.CD_de   =    -SDERIV.CL_a*(l_t*vtail.S)/(wing.S*wing.c)*...
+SDERIV.CD_de   =    -SDERIV.CL_a*((l_t*vtail.S)/(wing.S*wing.c))*...
                     tau_e*eta_h*(vtail.b/htail.c);
     % http://faculty.dwc.edu/sadraey/Elevator%20Design.pdf
 
@@ -119,18 +122,16 @@ SDERIV.CD_de   =    -SDERIV.CL_a*(l_t*vtail.S)/(wing.S*wing.c)*...
 
 SDERIV.CY_a    =    0; % assume 0 because of symmetric aircraft
 SDERIV.CY_de   =    0.1; %TODO: CHANGE THIS
-SDERIV.CY_beta =    -SDERIV.CY_a*(1-sigma_b)*(v_avg/v).^2*vtail.S/wing.S; 
-    % lateral stability pdf
-SDERIV.CY_r    =    2*SDERIV.CY_a*(v_avg/v)^2*vtail.S/wing.S/wing.b;
-SDERIV.CY_dr   =    SDERIV.CY_de*(v_avg/v)^2*vtail.S/wing.S;
+SDERIV.CY_beta =    -vtail.S*a_v/wing.S; % McCormick Eqn 10.57
+SDERIV.CY_p    =    -vtail.S*a_v*(vtail.z_cg-wing.z_cg); % McCormick Eqn 10.59
+SDERIV.CY_r    =    vtail.S*a_v*l_v/wing.S; % McCormick Eqn 10.58
+SDERIV.CY_dr   =    vtail.S*a_v*tau_e/wing.S;   % McCormick Eqn 9.127
 
 % Roll Moment--------------------------------------------------------------
              
 SDERIV.Cl_p    =   -SDERIV.CL_a/12*(1+3*wing.lam)/(1+wing.lam); % mae 154s hw4
 SDERIV.Cl_beta =   0; % dihedral term, roll stability
-SDERIV.Cl_r    =    SDERIV.CY_r*((vtail.z_cg-z_cg_total)/wing.b*cos(alpha_0)-...
-                    (vtail.x_cg-x_cg_total)/wing.b*sin(alpha_0)); % lateral stability pdf
-SDERIV.Cl_da   =   2*L/(rho*v^2*wing.S*wing.b*d_a); % lateral stability pdf
+SDERIV.Cl_r    =   ((SDERIV.CL_a/6)*((1+(3*wing.lam))/(1+wing.lam)));  % McCormick Eqn 9.128
 SDERIV.Cl_dr   =   SDERIV.CY_dr*(vtail.z_cg-z_cg_total)/wing.b*cos(alpha_0)-...
                     (vtail.x_cg-x_cg_total)/wing.b*sin(alpha_0); % lateral stability pdf
 
@@ -146,8 +147,8 @@ SDERIV.Cm_i    =   a_t*V_H; % MAE 154s lec 10
 
 % Yaw Moment---------------------------------------------------------------
 
-SDERIV.Cn_beta =    SDERIV.CY_a*(1-sigma_b)*(v_avg/v)^2*vtail.S*htail.l_T/wing.S/wing.b;
+SDERIV.Cn_beta =    V_V*a_v*(1-eps_a);  % McCormick Eqn 9.114
 SDERIV.Cn_p    =   -0.110; 
-SDERIV.Cn_r    =   -SDERIV.CY_r*htail.l_T/wing.b;              
+SDERIV.Cn_r    =   -SDERIV.CY_r*l_t/wing.b;              
 SDERIV.Cn_da   =   2*N_mom/(d_a*rho*v^2*wing.S*wing.b);             
-SDERIV.Cn_dr   =   -SDERIV.CY_dr*htail.l_T/wing.b;
+SDERIV.Cn_dr   =   -SDERIV.CY_dr*l_t/wing.b;

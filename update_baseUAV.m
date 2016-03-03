@@ -84,15 +84,18 @@ new_baseUAV.prop.z_cg = UAVsuccess.prop.z_cg;
 
 % Ailron ------------------------------------------------------------------
 
-new_baseUAV.ail.S = 0.051*UAVsuccess.wing.S; % area (ft^2) multiplication factor ranges btwn 0 to 0.051
+new_baseUAV.sfcl.ail.S = UAVsuccess.sfcl.ail.S; % area (ft^2) multiplication factor ranges btwn 0 to 0.051
+new_baseUAV.sfcl.ail.c = UAVsuccess.sfcl.ail.c;
 
 % Rudder ------------------------------------------------------------------
 
-new_baseUAV.rudd.S = 0.4*UAVsuccess.wing.S; % area (ft^2) multiplication factor ranges btwn 0.3 to 0.5
+new_baseUAV.sfcl.rudd.S = UAVsuccess.sfcl.rudd.S; % area (ft^2) multiplication factor ranges btwn 0.3 to 0.5
+new_baseUAV.sfcl.rudd.c = UAVsuccess.sfcl.rudd.c;
 
 % Elevator ----------------------------------------------------------------
 
-new_baseUAV.elev.S = 0.325*UAVsuccess.wing.S; % area 
+new_baseUAV.sfcl.elev.S = UAVsuccess.sfcl.elev.S; % area 
+new_baseUAV.sfcl.elev.c = UAVsuccess.sfcl.elev.c;
 
 % Fuel --------------------------------------------------------------------
 

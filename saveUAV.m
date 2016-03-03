@@ -1,5 +1,5 @@
 function [UAV] = saveUAV(wing, airfoilw, fuse, htail, airfoilh, vtail, airfoilv,...
-                    engn, fsys, fuel, prop, payld, stab, sderiv, loadfact, WEIGHT, status)
+                    engn, fsys, fuel, prop, payld, stab, sderiv, loadfact, sfcl, WEIGHT, status)
 % DESCRIPTION:
 %   This funciton saves UAV parameters into UAV structure.
 %
@@ -38,6 +38,7 @@ function [UAV] = saveUAV(wing, airfoilw, fuse, htail, airfoilh, vtail, airfoilv,
     UAV.prop     = prop;
     UAV.payld    = payld;
     UAV.stab     = stab;
+    UAV.sfcl     = sfcl;
     UAV.sderiv   = sderiv;
     UAV.loadfact = loadfact;
     UAV.weight   = WEIGHT; 

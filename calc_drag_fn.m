@@ -1,4 +1,4 @@
-function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, airfoilh, fuse, htail, vtail)
+function DRAG = calc_drag_fn(v_drag, alt, W, wing, airfoilw, airfoilh, fuse, htail, vtail, xcg_ttl, static_marg)
 %%% calc_drag_fn.m %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DESCRITPION:
@@ -57,32 +57,32 @@ M = v_drag/a;
 i_w      = 0; % incident angle of the wing assumed to be 0deg (level flight)
 eps_a    = 0.2; % estimated value for downwash effect
 
-alpha_0  = airfoilw.alpha0; 
+alpha_0  = (airfoilw.alpha0)*(pi/180); 
 CL       = W./(0.5*rho*v_drag.^2*wing.S); % lift coefficient
-alpha    = interp1(airfoilw.CL,airfoilw.alpha,CL); 
+alpha    = interp1(airfoilw.CL,airfoilw.alpha,CL)*(pi/180); 
            % finds alpha corresponding to CL value
+Cm_ac    = interp1(airfoilw.CL,airfoilw.Cm_ac,CL);
 a_w      = airfoilw.a_w;
 a_t      = airfoilh.a_t;
 
-V_H      = (htail.l_T*htail.S)/(wing.S*wing.c); 
+l_t = htail.x_cg-xcg_ttl;
+V_H      = (l_t*htail.S)/(wing.S*wing.c); 
 tau_e    = htail.e; % tail efficiency
 
 
 %STABILITY DERIVATIVES-----------------------------------------------------
 
 %lift
-CL_a    = 0.5; % airfoil property
 CL_i    = -a_t*htail.S/wing.S;
-CL_de   = -tau_e*a_t*htail.S/wing.S;
+CL_de   = tau_e*a_t*htail.S/wing.S;
 
 %drag
-Cm_ac   = -0.05; % airfoil property
-Cm_a    = CL_a*htail.l_T/wing.c; 
-Cm_de   = CL_de*htail.l_T/wing.c;
+Cm_a    = a_w*static_marg;
 Cm_i    = a_t*V_H;
-i_t     = -(Cm_ac*CL_a + Cm_a*CL)/(CL_a*Cm_i-Cm_a*CL_i); % trim incident angle
-Cm0     = Cm_ac+V_H*i_t;
-de      = (Cm0*CL_a + Cm_a*CL)/(CL_a*Cm_de - Cm_a*CL_de); % elevator deflection angle
+Cm_de   = -Cm_i*tau_e;
+i_t     = -(Cm_ac*a_w + Cm_a*CL)/(a_w*Cm_i-Cm_a*CL_i); % trim incident angle
+Cm0     = Cm_ac+(Cm_i*i_t);
+de      = -(Cm0*a_w + Cm_a*CL)/(a_w*Cm_de - Cm_a*CL_de); % elevator deflection angle
 
 %REYNOLDS NUMBER-----------------------------------------------------------
 
@@ -147,7 +147,7 @@ S_wet_vec = [wing.S_wet; fuse.S_wet; htail.S_wet; vtail.S_wet]; %wet area vector
 
 % Compute drag coefficients
 DRAG.C_L     = CL; % Calculated above
-DRAG.C_Lh    = CL_a*((alpha + i_w)*(1-eps_a)+(i_t-i_w)-alpha_0); % lift coefficient contribution of tail
+DRAG.C_Lh    = (a_t*(((alpha + i_w)*(1-eps_a))-(i_t-i_w)-alpha_0))*(htail.S/wing.S); % lift coefficient contribution of tail
 DRAG.C_Lw    = DRAG.C_L - DRAG.C_Lh; % lift coefficient contribution from wing
 DRAG.C_Dp    = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %parasite dragcoefficient equation
 DRAG.C_Di    = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
@@ -165,6 +165,7 @@ DRAG.D_h    = DRAG.C_Lw.*DRAG.C_Lw.*htail.K*htail.S/wing.S; % drag contribution 
 DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf+DRAG.D_h+DRAG.D_w;
 
 DRAG.i_t   = i_t;
+DRAG.Cm_ac = Cm_ac;
 
 DRAG.C_Dt  = (2*DRAG.D_t)./(rho*v_drag.^2*wing.S);
 

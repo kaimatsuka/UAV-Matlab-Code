@@ -37,7 +37,7 @@ fuse.D = 1.0833;  % fuselage max depth
 % primary
 htail.A = 3.9;    % aspect ratio
 htail.S = 2.3077; % area (ft^2)
-htail.lam = 0.49; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
+htail.lam = 0; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
 htail.lam_q = 0;  % horizontal tail sweep angle (deg)
 % htail.lam_max = 0.49; % sweep of maximum thicknes line 
 htail.h = 3.8571; % dist from head to 1/4 chord of horizontal tail (ft)
@@ -53,7 +53,7 @@ htail.S_wet = 2.003*htail.S; % wet area for horizontal tail (ft^2)
 % primay
 vtail.S = 1.1539; % area (ft^2)
 vtail.A = 1.95;   % aspect ratio (defined as b^2/S) 
-vtail.lam = 0.6;  % taper ratio 
+vtail.lam = 0;  % taper ratio 
 vtail.lam_q = 0;  % quarter chord sweep angle (deg)
 % vtail.lam_max = 0.49; % sweep of maximum thicknes line 
 vtail.h = 3.8571; % dist from head to 1/4 chord of vertical tail (ft)
@@ -70,17 +70,7 @@ prop.h = 4.6315; % propeller location
 prop.D = 1.62;   % propeller diameter (ft)
 prop.pitch = 15; % propeller pitch (ft)
 
-% Ailron ------------------------------------------------------------------
 
-ail.S = 0.051*wing.S; % area (ft^2) multiplication factor ranges btwn 0 to 0.051
-
-% Rudder ------------------------------------------------------------------
-
-rudd.S = 0.4*wing.S; % area (ft^2) multiplication factor ranges btwn 0.3 to 0.5
-
-% Elevator ----------------------------------------------------------------
-
-elev.S = 0.325*wing.S; % area (ft^2) multiplication factor rangers btwn 0.3 to 0.35
 
 %% Calculate derived geometries/variables
 
@@ -139,8 +129,6 @@ vtail.h_q_t = vtail.h+tand(vtail.lam_q)*vtail.b;
 vtail.h_l_r = vtail.h    -vtail.c_r/4;
 vtail.h_l_t = vtail.h_q_t-vtail.c_t/4;
 vtail.lam_l = atand((vtail.h_l_t-vtail.h_l_r)/(vtail.b/2));
-
-% Airfoil -----------------------------------------------------------------
 
 % Engine ------------------------------------------------------------------
 
@@ -201,11 +189,28 @@ payld.length_WR_IMU = 3.9*in2ft;    % (ft)
 payld.length_TOTAL = (0.2*m2ft) + payld.length_EOIR + payld.length_SAR + ...
                     payld.length_LiDAR; % (ft)
                 
+% ========================== CONTROL SURFACE ==============================
+
+% Aileron ------------------------------------------------------------------
+
+sfcl.ail.S = 0.075*wing.S; % area (ft^2) multiplication factor ranges btwn 0.03 to 0.12
+sfcl.ail.c = 0.2*wing.c; % aileron chord (ft) factor range btwn 0.15 to 0.3
+
+% Rudder ------------------------------------------------------------------
+
+sfcl.rudd.S = 0.225*vtail.S; % area (ft^2) multiplication factor ranges btwn 0.15 to 0.35
+sfcl.rudd.c = 0.275*vtail.c; % rudder chord (ft) assume cessna ratio could be 0.15 to 0.4
+
+% Elevator ----------------------------------------------------------------
+
+sfcl.elev.S = 0.275*htail.S; % area (ft^2) multiplication factor ranges btwn 0.15 to 0.4
+sfcl.elev.c = 0.3*htail.c; % elevator chord (ft) factor ranges btwn 0.2 to 0.4
+                
 % Surface control CG is dervied from geometries of wing surface and 
 % control surfaces. Calculated in calc_random_UAV
-% sfcl.x_cg_wing  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
-% sfcl.x_cg_htail = htail.x_cg+htail.c*(0.85-0.25); % assume 85% of average htail chord
-% sfcl.x_cg_vtail = vtail.x_cg+htail.c*(0.85-0.25); % assume 85% of average htail chord
+sfcl.ail.x_cg  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
+sfcl.elev.x_cg = htail.x_cg+htail.c*(0.85-0.25); % assume 85% of average htail chord
+sfcl.rudd.x_cg = vtail.x_cg+vtail.c*(0.85-0.25); % assume 85% of average vtail chord
 
 % Create baseUAV structure ------------------------------------------------
 
@@ -219,6 +224,6 @@ baseUAV.fsys  = fsys;
 baseUAV.fuel  = fuel;
 baseUAV.prop  = prop;
 baseUAV.payld = payld;
-% baseUAV.sfcl  = sfcl; % not used here
+baseUAV.sfcl  = sfcl;
 
 % clear wing fuse htail vtail fuse engn fsys prop payld
