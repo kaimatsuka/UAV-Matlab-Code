@@ -77,10 +77,9 @@ function SDERIV = calc_stability_derivatives(rho, V_stall,V_max,V_cruise,wing,ai
 %   02/27: change the variables to match code variable names
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-L = 0.5;        % TODO: CHANGE TO REAL VALUE
 N_mom = 0.5;    % TODO: CHANGE TO REAL VALUE
 d_a = 0.1;      % TODO: CHANGE TO REAL VALUE
-Cm_ac = interp1(airfoilw.CL,airfoilw.Cm_ac,DRAG.C_L);   % TODO: CHANGE TO REAL VALUE
+Cm_ac = DRAG.Cm_ac;
 
 % Parameters
 l_t = htail.x_cg-x_cg_total;
@@ -88,7 +87,6 @@ l_v = vtail.x_cg-x_cg_total;
 V_H    = (l_t*htail.S)/(wing.S*wing.c); % tail volume ratio
 V_V    = (l_v*vtail.S)/(wing.S*wing.b); % vertical tail volume 
 eps_a  = 0.2; % estimated downwash effects
-v_avg  = (V_max+V_stall)/2; % average velocity
 v      = V_cruise; % flight velocity
 eta_h  = 0.5; % TODO: replace with real value
 tau_e  = htail.e;
@@ -120,7 +118,6 @@ SDERIV.CD_de   =    -SDERIV.CL_a*((l_t*vtail.S)/(wing.S*wing.c))*...
 
 % Force from Y-Direction---------------------------------------------------
 
-SDERIV.CY_a    =    0; % assume 0 because of symmetric aircraft
 SDERIV.CY_de   =    0.1; %TODO: CHANGE THIS
 SDERIV.CY_beta =    -vtail.S*a_v/wing.S; % McCormick Eqn 10.57
 SDERIV.CY_p    =    -vtail.S*a_v*(vtail.z_cg-wing.z_cg); % McCormick Eqn 10.59
@@ -149,6 +146,6 @@ SDERIV.Cm_i    =   a_t*V_H; % MAE 154s lec 10
 
 SDERIV.Cn_beta =    V_V*a_v*(1-eps_a);  % McCormick Eqn 9.114
 SDERIV.Cn_p    =   -0.110; 
-SDERIV.Cn_r    =   -SDERIV.CY_r*l_t/wing.b;              
+%SDERIV.Cn_r    =   -SDERIV.CY_r*l_t/wing.b;              
 SDERIV.Cn_da   =   2*N_mom/(d_a*rho*v^2*wing.S*wing.b);             
 SDERIV.Cn_dr   =   -SDERIV.CY_dr*l_t/wing.b;

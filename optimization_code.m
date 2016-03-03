@@ -232,8 +232,8 @@ for jj = 1:NUM_ITERATION
             wing.c+htail.c > fuse.L || ...       % chord lengths of wing & tail > fuselage length
             wing.x_LE+wing.c > htail.x_LE || ... % back of wing is farther back than front of htail
             wing.x_LE+wing.c > vtail.x_LE || ... % back of wing is farther back than front of vtail
-            htail.x_LE+htail.c ~= fuse.L || ...   % back of htail not eq fuselage length
-            vtail.x_LE+vtail.c ~= fuse.L)         % back of vtail > fuselage length
+            htail.x_LE+htail.c > fuse.L || ...   % back of htail not eq fuselage length
+            vtail.x_LE+vtail.c > fuse.L)         % back of vtail > fuselage length
         NUM_VOLUMEFAILS = NUM_VOLUMEFAILS + 1;
         FAIL_FLG = FAIL_FLG + 1;
         status(FAIL_FLG) = cellstr('Geometric Fail');
@@ -329,21 +329,57 @@ disp(['  Number of Volume Fails: ' num2str(NUM_VOLUMEFAILS)]);
 disp(['  Number of Static Margin Fails: ' num2str(NUM_STATICMARGINFAILS)]);
 disp(['  Number of Stability Deriv Fails: ' num2str(NUM_SDERIVFAILS)]);
 
-% ITERATION PLOTS
+% ITERATION PLOTS -- ALL RUNS
 figure(2)
-subplot(3,6,[1:2 7:8 13:14]), plot_hist(arrayfun(@(x) x.weight.total, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Weight (lbs)');
-subplot(3,6,3), plot_hist(arrayfun(@(x) x.wing.S, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Area (ft^2)');
-subplot(3,6,4), plot_hist(arrayfun(@(x) x.wing.A, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Aspect Ratio');
-subplot(3,6,5), plot_hist(arrayfun(@(x) x.wing.b, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Span (ft)');
-subplot(3,6,6), plot_hist(arrayfun(@(x) x.wing.c, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Chord (ft)');
-subplot(3,6,9), plot_hist(arrayfun(@(x) x.htail.S, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Area (ft^2)');
-subplot(3,6,10), plot_hist(arrayfun(@(x) x.htail.A, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Aspect Ratio');
-subplot(3,6,11), plot_hist(arrayfun(@(x) x.htail.b, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Span (ft)');
-subplot(3,6,12), plot_hist(arrayfun(@(x) x.htail.c, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Chord (ft)');
-subplot(3,6,15:18), plot_hist(arrayfun(@(x) x.fuse.L, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Fuselage Length (ft)');
+% -- WEIGHT HISTOGRAM
+subplot(4,6,[1:2 7:8 13:14 19:20]), plot_hist(arrayfun(@(x) x.weight.total, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Weight (lbs)');
+% -- WING HISTOGRAMS
+subplot(4,6,3), plot_hist(arrayfun(@(x) x.wing.S, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Area (ft^2)');
+subplot(4,6,4), plot_hist(arrayfun(@(x) x.wing.A, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Aspect Ratio');
+subplot(4,6,5), plot_hist(arrayfun(@(x) x.wing.b, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Span (ft)');
+subplot(4,6,6), plot_hist(arrayfun(@(x) x.wing.c, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Chord (ft)');
+% -- HORIZONTAL TAIL HISTOGRAMS
+subplot(4,6,9), plot_hist(arrayfun(@(x) x.htail.S, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Area (ft^2)');
+subplot(4,6,10), plot_hist(arrayfun(@(x) x.htail.A, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Aspect Ratio');
+subplot(4,6,11), plot_hist(arrayfun(@(x) x.htail.b, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Span (ft)');
+subplot(4,6,12), plot_hist(arrayfun(@(x) x.htail.c, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Chord (ft)');
+% -- VERTICAL TAIL HISTOGRAMS
+subplot(4,6,15), plot_hist(arrayfun(@(x) x.vtail.S, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Area (ft^2)');
+subplot(4,6,16), plot_hist(arrayfun(@(x) x.vtail.A, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Aspect Ratio');
+subplot(4,6,17), plot_hist(arrayfun(@(x) x.vtail.b, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Span (ft)');
+subplot(4,6,18), plot_hist(arrayfun(@(x) x.vtail.c, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Chord (ft)');
+% -- FUSELAGE HISTOGRAMS
+subplot(4,6,21:24), plot_hist(arrayfun(@(x) x.fuse.L, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Fuselage Length (ft)');
 
 % Plots the lightest aircraft
 if(NUM_SUCCESS > 0)
+    [sorted_weight sort_ind] = sort(arrayfun(@(x) x.weight.total, UAVsuccess)); 
+    ind_good = sort_ind(1:NUM_SUCCESS/10);     % select good aircraft (lowest 10% in weight)
+    ind_bad  = sort_ind(NUM_SUCCESS/10+1:end); % rest of aircraft
+    
+    
+    % ITERATION PLOTS -- SUCCESSFUL RUNS
+    figure(5)
+    % -- WEIGHT HISTOGRAM
+    subplot(4,6,[1:2 7:8 13:14 19:20]), plot_hist(arrayfun(@(x) x.weight.total, UAVsuccess),ind_good,ind_bad), ylabel('Weight (lbs)');
+    % -- WING HISTOGRAMS
+    subplot(4,6,3), plot_hist(arrayfun(@(x) x.wing.S, UAVsuccess),ind_good,ind_bad), ylabel('Wing Area (ft^2)');
+    subplot(4,6,4), plot_hist(arrayfun(@(x) x.wing.A, UAVsuccess),ind_good,ind_bad), ylabel('Wing Aspect Ratio');
+    subplot(4,6,5), plot_hist(arrayfun(@(x) x.wing.b, UAVsuccess),ind_good,ind_bad), ylabel('Wing Span (ft)');
+    subplot(4,6,6), plot_hist(arrayfun(@(x) x.wing.c, UAVsuccess),ind_good,ind_bad), ylabel('Wing Chord (ft)');
+    % -- HORIZONTAL TAIL HISTOGRAMS
+    subplot(4,6,9), plot_hist(arrayfun(@(x) x.htail.S, UAVsuccess),ind_good,ind_bad),ylabel('Horizontal Tail Area (ft^2)');
+    subplot(4,6,10), plot_hist(arrayfun(@(x) x.htail.A, UAVsuccess),ind_good,ind_bad),ylabel('Horizontal Aspect Ratio');
+    subplot(4,6,11), plot_hist(arrayfun(@(x) x.htail.b, UAVsuccess),ind_good,ind_bad),ylabel('Horizontal Tail Span (ft)');
+    subplot(4,6,12), plot_hist(arrayfun(@(x) x.htail.c, UAVsuccess),ind_good,ind_bad),ylabel('Horizontal Tail Chord (ft)');
+    % -- VERTICAL TAIL HISTOGRAMS
+    subplot(4,6,15), plot_hist(arrayfun(@(x) x.vtail.S, UAVsuccess),ind_good,ind_bad),ylabel('Vertical Tail Area (ft^2)');
+    subplot(4,6,16), plot_hist(arrayfun(@(x) x.vtail.A, UAVsuccess),ind_good,ind_bad),ylabel('Vertical Aspect Ratio');
+    subplot(4,6,17), plot_hist(arrayfun(@(x) x.vtail.b, UAVsuccess),ind_good,ind_bad),ylabel('Vertical Tail Span (ft)');
+    subplot(4,6,18), plot_hist(arrayfun(@(x) x.vtail.c, UAVsuccess),ind_good,ind_bad),ylabel('Vertical Tail Chord (ft)');
+    % -- FUSELAGE HISTOGRAMS
+    subplot(4,6,21:24), plot_hist(arrayfun(@(x) x.fuse.L, UAVsuccess),ind_good, ind_bad), ylabel('Fuselage Length (ft)');
+
     [val idx] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
     figure(3);
     plot_UAV(UAVsuccess(idx).wing, UAVsuccess(idx).htail, UAVsuccess(idx).vtail, UAVsuccess(idx).fuse, UAVsuccess(idx).prop);

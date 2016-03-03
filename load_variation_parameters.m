@@ -32,21 +32,21 @@ fuse.sd_D     = 0; % fuselage max depth variation (ft)
 % Horizontal Tail ---------------------------------------------------------
 
 %primary
-htail.sd_S       = 15; % htail area variation (ft^2)
-htail.sd_A       = 10; % htail aspect ratio variation std dev
+htail.sd_S       = 10; % htail area variation (ft^2)
+htail.sd_A       = 5; % htail aspect ratio variation std dev
 htail.sd_lam     = 0; % htail taper ratio variation
 htail.sd_lam_q   = 0; % htail quarter chord sweep variation 
 % htail.sd_lam_max = 0; % htail sweep of maximum thickness line variation
-htail.sd_h       = 0.01; % htail dist from head to 1/4 chord of variation (ft)
+htail.sd_h       = 0.15; % htail dist from head to 1/4 chord of variation (ft)
 
 % Vertical Tail -----------------------------------------------------------
 
-vtail.sd_S       = 5; % vtail area variation (ft^2)
-vtail.sd_A       = 3; % vtail aspect ratio variation 
+vtail.sd_S       = 10; % vtail area variation (ft^2)
+vtail.sd_A       = 5; % vtail aspect ratio variation 
 vtail.sd_lam     = 0; % vtail taper ratio variation
 vtail.sd_lam_q   = 0; % vtail quarter chord sweep variation
 % vtail.sd_lam_max = 0; % vtail sweep of maximum thickness line variation
-vtail.sd_h       = 0.01; % vtail htail interference factor variation
+vtail.sd_h       = 0.15; % vtail htail interference factor variation
 
 % Surface Controls --------------------------------------------------------
 sfcl.ail.sd_S   = 0.5;
@@ -78,9 +78,9 @@ prop.sd_x_cg       = 0;  % (ft)
 payld.sd_x_cg_EOIR = 0;  % (ft)
 payld.sd_x_cg_SAR  = 0;   % (ft)
 payld.sd_x_cg_LiDAR = 0; % (ft)
-payld.sd_x_cg_ANT  = 4;   % (ft)
-payld.sd_x_cg_WR   = 4;   % (ft)
-payld.sd_x_cg_IMU  = 4;   % (ft)
+payld.sd_x_cg_ANT  = 0;   % (ft)
+payld.sd_x_cg_WR   = 0;   % (ft)
+payld.sd_x_cg_IMU  = 0;   % (ft)
 sfcl.sd_x_cg_wing  = 0;  % (ft)
 sfcl.sd_x_cg_htail = 0;  % (ft)
 sfcl.sd_x_cg_vtail = 0;  % (ft)

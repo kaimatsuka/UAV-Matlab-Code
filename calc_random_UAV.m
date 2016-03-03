@@ -20,7 +20,7 @@ wing.S     = check_allowable(baseUAV.wing.S,(rand-0.5)*wing.sd_S,0,30); % wing a
 wing.A     = check_allowable(baseUAV.wing.A,(rand-0.5)*wing.sd_A,0,30); % aspect ratio      
 wing.lam   = check_allowable(baseUAV.wing.lam,(rand-0.5)*wing.sd_lam,0,1); % taper ratio (must be between 0 < 1)
 wing.lam_q = check_allowable(baseUAV.wing.lam_q,(rand-0.5)*wing.sd_lam_q,0,1); % wing quarter chord sweep
-wing.h     = check_allowable(baseUAV.wing.h,(rand-0.5)*wing.sd_h,0,0.9*fuse.L); % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
+wing.h     = check_allowable(baseUAV.wing.h,(rand-0.5)*wing.sd_h,0,fuse.L); % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
 wing.e = 0.8;     % Oswald's efficiency factor 
 %wing.gamma = 2;   % wing dihedral (deg)  GLOBAL HAWK
 
@@ -51,7 +51,7 @@ htail.lam = check_allowable(baseUAV.htail.lam,(rand-0.5)*htail.sd_lam,0,1); % ta
 htail.lam_q = check_allowable(baseUAV.htail.lam_q,(rand-0.5)*htail.sd_lam_q,0,1);  % horizontal tail sweep angle
 % htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thickness line 
 % ^^ This value is derived parameter
-htail.h = check_allowable(baseUAV.htail.h,(rand-0.5)*htail.sd_h,1.05*wing.h,0.9*fuse.L); % dist from head to 1/4 chord of horizontal tail (ft)
+htail.h = check_allowable(baseUAV.htail.h,(rand-0.5)*htail.sd_h,1.05*wing.h,fuse.L); % dist from head to 1/4 chord of horizontal tail (ft)
 htail.e = 0.8;      % Oswald Efficiency Factor
 
 % airfoil properties
@@ -76,7 +76,7 @@ vtail.S =  check_allowable(baseUAV.vtail.S,(rand-0.5)*vtail.sd_S,0,30); % area (
 vtail.A = check_allowable(baseUAV.vtail.A,(rand-0.5)*vtail.sd_A,0,30);   % aspect ratio (defined as b^2/S) 
 vtail.lam = check_allowable(baseUAV.vtail.lam,(rand-0.5)*vtail.sd_lam,0,1);  % taper ratio 
 vtail.lam_q = check_allowable(baseUAV.vtail.lam_q,(rand-0.5)*vtail.sd_lam_q,0,1);  % quarter chord sweep angle
-vtail.h = check_allowable(baseUAV.vtail.h,(rand-0.5)*vtail.sd_h,1.05*wing.h,0.9*fuse.L); % dist from head to 1/4 chord of vertical tail (ft)
+vtail.h = check_allowable(baseUAV.vtail.h,(rand-0.5)*vtail.sd_h,1.05*wing.h,fuse.L); % dist from head to 1/4 chord of vertical tail (ft)
 vtail.e = 0.8;  % Oswald Efficiency Factor
 
 % airfoil properties
