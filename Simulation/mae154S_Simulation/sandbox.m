@@ -2,18 +2,22 @@
 % define discrete points on trajectory 
 
 %
-clear all, close all
+clear all
+close all
+global traj_total
 
 opt = 1;
 switch opt 
     case 1
-        traj_total = load_traj;
+
+        load_traj;
         figure(2)
-        plot(traj_total(:,1),traj_total(:,2),'.')
+        plot(traj_total(:,2),traj_total(:,1)'.')
         hold on, grid on
-        plot(traj_total(1,1),traj_total(1,2),'xr')
+        plot(traj_total(end,2),traj_total(end,1),'xr')
 %         plot(path1(:,1),path1(:,2),'xr')
         axis('equal')
+        
     case 2
         in = [1 0 0 0 120];
         out = my_guid(in);
