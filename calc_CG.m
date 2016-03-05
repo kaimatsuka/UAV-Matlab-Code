@@ -45,7 +45,6 @@ x_cg_vec = [wing.x_cg; % wing CG
 xm_vec = x_cg_vec.*w_detail_vec; % (ft*lb)
 stab.x_cg_full = sum(xm_vec)/sum(w_detail_vec); %(ft)
 
-
 % X-direction - EMPTY FUEL
 w_detail_emp_vec = w_detail_vec;
 w_detail_emp_vec(8) = 0;    % Corresponds to fuel weight

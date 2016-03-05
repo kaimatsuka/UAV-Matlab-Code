@@ -30,7 +30,7 @@ for i = 1:9
     engines(i).W        = eng_data(i,6); % engine box width (ft)
     engines(i).L        = eng_data(i,7); % engine box length (ft)
     engines(i).H        = eng_data(i,8); % engine box depth (ft)
-    engines(i).vol      = eng_data(i,9); % engine total volume (ft^2)
+    engines(i).vol      = eng_data(i,9); % engine total volume (ft^3)
     engines(i).weight   = eng_data(i,10); % engine weight (lbs)
     engines(i).rpm      = eng_data(i,10); % engine rpm 
     

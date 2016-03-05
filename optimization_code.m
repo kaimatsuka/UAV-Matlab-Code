@@ -27,15 +27,15 @@ load_unit_conversion
 load_enviro_parameters
 load_requirements
 load_airfoils
-load_base_UAV  
+load_engine_directory
+load_base_UAV
 load_variation_parameters
-engine_directory
 
 currentPath = pwd;
 addpath(genpath(currentPath));
 
 % ----- Initialize Counter Variables -----
-NUM_ITERATION = 10000;
+NUM_ITERATION = 1;
 NUM_SUCCESS = 0;
 NUM_FAIL = 0;
 NUM_VOLUMEFAILS = 0;
@@ -82,7 +82,7 @@ for jj = 1:NUM_ITERATION
     end
     
     if mod(jj,200) == 0
-        fprintf('%d iterations\n', jj)  
+        fprintf(' %d iterations\n', jj)  
     end
     
     % ----- SET NEW BASE UAV (GENETIC ALGORITHM) -----
@@ -99,6 +99,7 @@ for jj = 1:NUM_ITERATION
     
     % ----- RANDOMIZE AIRCRAFT -----
     calc_random_UAV
+
     
     % Refine weight
     W_TO = 30; % initial weight guess of a/c (lbs)
@@ -141,6 +142,9 @@ for jj = 1:NUM_ITERATION
     % Static Margin
     stab.static_margin_full = calc_static_marg(stab.x_cg_full,stab.x_np,wing);
     stab.static_margin_empty = calc_static_marg(stab.x_cg_empty,stab.x_np,wing);
+    
+    % ----- CALCULATE PROPELLER EFFICIENCY -----
+    calc_propeller
     
     % ----- CALCULATE LIFT & DRAG -----
     if 0
@@ -205,7 +209,7 @@ for jj = 1:NUM_ITERATION
     % Lift Constrained Load Factor
     loadfact.maxLC_cruise = 0.5*atmos(2).rho*V_cruise^2*(CL_max/(WEIGHT.total/wing.S));
     loadfact.maxLC_loiter = 0.5*atmos(1).rho*V_loiter^2*(CL_max/(WEIGHT.total/wing.S));
-    T_avail = (P_avail/V_stall)*hp2lbfts;
+    T_avail = (engn.HP/V_stall)*hp2lbfts;
     % Thrust Constrained Load Factor
     loadfact.maxTC = max(CL_VEC./[DRAG_1000_full.C_Dt DRAG_7500_full.C_Dt])*(T_avail/WEIGHT.total);
     
@@ -320,6 +324,9 @@ end
 % 
 % N_total = [N_good; N_bad];
 
+
+% Display Monte Carlo Results in Command Prompt
+fprintf('\n-----------------------------------------------\n');
 disp(['Number of Successful Aircraft: ' num2str(NUM_SUCCESS)]);
 disp(['  Number of C_Lmax Fails: ' num2str(NUM_CLFAILS)]);
 disp(['  Number of Endurance Fails: ' num2str(NUM_ENDUFAILS)]);
@@ -329,26 +336,28 @@ disp(['  Number of Static Margin Fails: ' num2str(NUM_STATICMARGINFAILS)]);
 disp(['  Number of Stability Deriv Fails: ' num2str(NUM_SDERIVFAILS)]);
 
 % ITERATION PLOTS -- ALL RUNS
-figure(2)
-% -- WEIGHT HISTOGRAM
-subplot(4,6,[1:2 7:8 13:14 19:20]), plot_hist(arrayfun(@(x) x.weight.total, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Weight (lbs)');
-% -- WING HISTOGRAMS
-subplot(4,6,3), plot_hist(arrayfun(@(x) x.wing.S, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Area (ft^2)');
-subplot(4,6,4), plot_hist(arrayfun(@(x) x.wing.A, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Aspect Ratio');
-subplot(4,6,5), plot_hist(arrayfun(@(x) x.wing.b, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Span (ft)');
-subplot(4,6,6), plot_hist(arrayfun(@(x) x.wing.c, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Chord (ft)');
-% -- HORIZONTAL TAIL HISTOGRAMS
-subplot(4,6,9), plot_hist(arrayfun(@(x) x.htail.S, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Area (ft^2)');
-subplot(4,6,10), plot_hist(arrayfun(@(x) x.htail.A, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Aspect Ratio');
-subplot(4,6,11), plot_hist(arrayfun(@(x) x.htail.b, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Span (ft)');
-subplot(4,6,12), plot_hist(arrayfun(@(x) x.htail.c, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Chord (ft)');
-% -- VERTICAL TAIL HISTOGRAMS
-subplot(4,6,15), plot_hist(arrayfun(@(x) x.vtail.S, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Area (ft^2)');
-subplot(4,6,16), plot_hist(arrayfun(@(x) x.vtail.A, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Aspect Ratio');
-subplot(4,6,17), plot_hist(arrayfun(@(x) x.vtail.b, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Span (ft)');
-subplot(4,6,18), plot_hist(arrayfun(@(x) x.vtail.c, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Chord (ft)');
-% -- FUSELAGE HISTOGRAMS
-subplot(4,6,21:24), plot_hist(arrayfun(@(x) x.fuse.L, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Fuselage Length (ft)');
+if(NUM_SUCCESS > 0)
+    figure(2)
+    % -- WEIGHT HISTOGRAM
+    subplot(4,6,[1:2 7:8 13:14 19:20]), plot_hist(arrayfun(@(x) x.weight.total, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Weight (lbs)');
+    % -- WING HISTOGRAMS
+    subplot(4,6,3), plot_hist(arrayfun(@(x) x.wing.S, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Area (ft^2)');
+    subplot(4,6,4), plot_hist(arrayfun(@(x) x.wing.A, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Aspect Ratio');
+    subplot(4,6,5), plot_hist(arrayfun(@(x) x.wing.b, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Span (ft)');
+    subplot(4,6,6), plot_hist(arrayfun(@(x) x.wing.c, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Wing Chord (ft)');
+    % -- HORIZONTAL TAIL HISTOGRAMS
+    subplot(4,6,9), plot_hist(arrayfun(@(x) x.htail.S, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Area (ft^2)');
+    subplot(4,6,10), plot_hist(arrayfun(@(x) x.htail.A, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Aspect Ratio');
+    subplot(4,6,11), plot_hist(arrayfun(@(x) x.htail.b, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Span (ft)');
+    subplot(4,6,12), plot_hist(arrayfun(@(x) x.htail.c, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Horizontal Tail Chord (ft)');
+    % -- VERTICAL TAIL HISTOGRAMS
+    subplot(4,6,15), plot_hist(arrayfun(@(x) x.vtail.S, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Area (ft^2)');
+    subplot(4,6,16), plot_hist(arrayfun(@(x) x.vtail.A, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Aspect Ratio');
+    subplot(4,6,17), plot_hist(arrayfun(@(x) x.vtail.b, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Span (ft)');
+    subplot(4,6,18), plot_hist(arrayfun(@(x) x.vtail.c, UAVall),UAVsuccess_ind,UAVfail_ind),ylabel('Vertical Tail Chord (ft)');
+    % -- FUSELAGE HISTOGRAMS
+    subplot(4,6,21:24), plot_hist(arrayfun(@(x) x.fuse.L, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Fuselage Length (ft)');
+end
 
 % Plots the lightest aircraft
 if(NUM_SUCCESS > 0)
