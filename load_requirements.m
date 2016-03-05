@@ -9,6 +9,8 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+load_unit_conversion
+
 % primary requirements
 V_stall  = 45*mph2fps; % stall speed(ft/s)
 V_loiter = 50*mph2fps; % loiter speed(ft/s)

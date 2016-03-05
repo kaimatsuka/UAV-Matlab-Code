@@ -29,7 +29,6 @@ load_requirements
 load_airfoils
 load_base_UAV  
 load_variation_parameters
-load_requirements
 engine_directory
 
 currentPath = pwd;

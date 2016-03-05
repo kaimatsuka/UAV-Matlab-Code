@@ -86,11 +86,11 @@ de      = -(Cm0*a_w + Cm_a*CL)/(a_w*Cm_de - Cm_a*CL_de); % elevator deflection a
 
 %REYNOLDS NUMBER-----------------------------------------------------------
 
-wing.Re   = Re(rho,v_drag,wing.c,mu); %average Reynolds number for wing
+wing.Re   = Re(rho,v_drag,wing.c,mu_a); %average Reynolds number for wing
 % winglet.Re = Re(rho,v_drag,winglet.c,mu); %average Reynolds number for winglet
-fuse.Re   = Re(rho,v_drag,fuse.L,mu); %average Reynolds number for fuselage 
-htail.Re  = Re(rho,v_drag,htail.c,mu); %average Reynolds number for htail
-vtail.Re  = Re(rho,v_drag,vtail.c,mu); %average Reynolds number for vtail
+fuse.Re   = Re(rho,v_drag,fuse.L,mu_a); %average Reynolds number for fuselage 
+htail.Re  = Re(rho,v_drag,htail.c,mu_a); %average Reynolds number for htail
+vtail.Re  = Re(rho,v_drag,vtail.c,mu_a); %average Reynolds number for vtail
 
 %FROM FACTOR--------------------------------------------------------------- 
 
