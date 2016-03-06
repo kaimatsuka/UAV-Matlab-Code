@@ -16,8 +16,8 @@
 
 % Wing --------------------------------------------------------------------
 
-wing.S = 10;      % wing area (ft^2) 
-wing.A = 10;      % aspect ratio      
+wing.S = 8.75;      % wing area (ft^2) 
+wing.A = 12;      % aspect ratio      
 wing.lam = 0.5;   % taper ratio (must be between 0 < 1)
 wing.lam_q = 0;   % wing quarter chord sweep (deg)
 % wing.lam_max = 0.49; % sweep of maximum thicknes line 
@@ -26,7 +26,7 @@ wing.h_q = 1.286+1.5;   % dist from head to wing 1/4 chord at root (ft)
 %wing.gamma = 2;   % wing dihedral (deg)  GLOBAL HAWK
 
 % airfoil properties
-airfoilw.ind = 1; % base airfoil is 1!
+airfoilw.ind = 9; % base airfoil is 1!
 
 % Fuselage ----------------------------------------------------------------
 
@@ -44,7 +44,7 @@ htail.lam_q = 0;  % horizontal tail sweep angle (deg)
 % htail.lam_max = 0.49; % sweep of maximum thicknes line 
 htail.h = 3.8571+2.5; % dist from head to 1/4 chord of horizontal tail (ft)
 
-aifoilh.ind = 1; % default is 1!
+airfoilh.ind = 1; % default is 1!
 
 % Vertical Tail -----------------------------------------------------------
 
@@ -120,5 +120,8 @@ baseUAV.fuel  = fuel;
 baseUAV.prop  = prop;
 baseUAV.payld = payld;
 baseUAV.sfcl  = sfcl;
+baseUAV.airfoilw = airfoilw;
+baseUAV.airfoilh = airfoilh;
+baseUAV.airfoilv = airfoilv;
 
 % clear wing fuse htail vtail fuse engn fsys prop payld

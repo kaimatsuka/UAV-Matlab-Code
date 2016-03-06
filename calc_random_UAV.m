@@ -9,7 +9,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-VARY_WING  = 1;
+VARY_WING  = 0;
 VARY_FUSE  = 0;
 VARY_HTAIL = 0;
 VARY_VTAIL = 0;
@@ -53,7 +53,7 @@ else
     wing.h_q   = baseUAV.wing.h_q;     % dist from head to wing 1/4 chord at root (ft)
 
     % randomly pick airfoil
-    airfoilw.ind  = 1; % randomly select airfoil
+    airfoilw.ind  = baseUAV.airfoilw.ind; % by default, select airfoil 2
 end
 
 % Fuselage ----------------------------------------------------------------
@@ -76,7 +76,7 @@ if VARY_HTAIL
     htail.S = check_allowable(baseUAV.htail.S,(rand-0.5)*htail.sd_S,0,30); % area (ft^2)
     htail.lam = check_allowable(baseUAV.htail.lam,(rand-0.5)*htail.sd_lam,0,1); % taper ratio of horizontal tail (btw 0 and 1 inclusive)
     htail.lam_q = check_allowable(baseUAV.htail.lam_q,(rand-0.5)*htail.sd_lam_q,0,1);  % horizontal tail sweep angle
-    htail.h = check_allowable(baseUAV.htail.h,(rand-0.5)*htail.sd_h,1.05*wing.h,fuse.L); % dist from head to 1/4 chord of horizontal tail (ft)
+    htail.h = check_allowable(baseUAV.htail.h,(rand-0.5)*htail.sd_h,1.05*wing.h_q,fuse.L); % dist from head to 1/4 chord of horizontal tail (ft)
     % htail.lam_max = baseUAV.htail.lam_max  + (rand-0.5)*htail.sd_lam_max; % sweep of maximum thickness line 
     % ^^ This value is derived parameter
 
@@ -93,7 +93,7 @@ else
     % ^^ This value is derived parameter
 
     % randomly pick airfoil
-    airfoilh.ind = 1; % randomly select airfoil
+    airfoilh.ind = baseUAV.airfoilh.ind; % randomly select airfoil
 end
 
 % Vertical Tail -----------------------------------------------------------
@@ -117,7 +117,7 @@ else
     vtail.h = baseUAV.vtail.h;
 
     % randomly pick airfoil
-    airfoilv.ind = 1; % randomly select airfoil
+    airfoilv.ind = baseUAV.airfoilv.ind; % randomly select airfoil
 end
 
 % Fuel --------------------------------------------------------------------

@@ -17,11 +17,11 @@
 
 % Wing --------------------------------------------------------------------
 
-    wing.sd_A     = 10;  % wing aspect ratio variation std dev 
-    wing.sd_S     = 15;   % wing area variation (ft^2)
-    wing.sd_lam   = 0.5; % wing taper ratio variation(n/a)
+    wing.sd_A     = 7.5;  % wing aspect ratio variation std dev 
+    wing.sd_S     = 14.2;   % wing area variation (ft^2)
+    wing.sd_lam   = 0.5*0; % wing taper ratio variation(n/a)
     wing.sd_lam_q = 0;   % wing quarter chord sweep variation (deg)
-    wing.sd_h     = 0.1;   % head to 1/4 chord distance variation (ft)
+    wing.sd_h     = 0.1*0;   % head to 1/4 chord distance variation (ft)
 
 
 % Fuselage ----------------------------------------------------------------

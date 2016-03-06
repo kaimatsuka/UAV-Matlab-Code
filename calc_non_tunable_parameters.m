@@ -49,13 +49,13 @@ htail.e = 0.8;      % Oswald Efficiency Factor
 % airfoil properties for horizontal tail
 airfoils = airfoil_to_wing(airfoils,htail.A,htail.e);
 
-airfoilh.CL       = airfoils(aifoilh.ind).CL;  % Entire CL profile
-airfoilh.Cd       = airfoils(aifoilh.ind).Cd;   % Drag due to airfoil choice
-airfoilh.CLmax    = airfoils(aifoilh.ind).CLmax; % CLmax (wing)
-airfoilh.maxthick = airfoils(aifoilh.ind).GEO.max_thick; % max thickness (relative to chord length)
-airfoilh.maxthick_loc = airfoils(aifoilh.ind).GEO.max_thick_location; % max thickness location (relative to chord length)
-airfoilh.perim    = airfoils(aifoilh.ind).GEO.perimeter; % circumference/perimeter of airfoil
-airfoilh.a_t      = airfoils(aifoilh.ind).CL_alpha_rad; % lift curve slope of tail
+airfoilh.CL       = airfoils(airfoilh.ind).CL;  % Entire CL profile
+airfoilh.Cd       = airfoils(airfoilh.ind).Cd;   % Drag due to airfoil choice
+airfoilh.CLmax    = airfoils(airfoilh.ind).CLmax; % CLmax (wing)
+airfoilh.maxthick = airfoils(airfoilh.ind).GEO.max_thick; % max thickness (relative to chord length)
+airfoilh.maxthick_loc = airfoils(airfoilh.ind).GEO.max_thick_location; % max thickness location (relative to chord length)
+airfoilh.perim    = airfoils(airfoilh.ind).GEO.perimeter; % circumference/perimeter of airfoil
+airfoilh.a_t      = airfoils(airfoilh.ind).CL_alpha_rad; % lift curve slope of tail
 
 htail.mtr = airfoilh.maxthick; % maximum thickness ratio
 htail.mtl = airfoilh.maxthick_loc;  % chordwise lcoation of the airfoil max thickness location (range 0.3~0.5, Raymer pg 435)

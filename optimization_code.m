@@ -337,6 +337,13 @@ for jj = 1:NUM_ITERATION
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 
+if ~exist('UAVfail_ind','var')
+    UAVfail_ind = -1;
+end
+
+if ~exist('UAVsuccess_ind','var')
+    UAVsuccess_ind = -1;
+end
 
 % if 1
 %     figure(10)
