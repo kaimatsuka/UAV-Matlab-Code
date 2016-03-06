@@ -10,16 +10,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 VARY_WING  = 1;
-VARY_FUSE  = 1;
-VARY_HTAIL = 1;
-VARY_VTAIL = 1;
-VARY_FUEL  = 1;
-VARY_ENGN  = 1;
-VARY_PROP  = 1;
-VARY_SFCL  = 1;
-VARY_CG    = 1;
+VARY_FUSE  = 0;
+VARY_HTAIL = 0;
+VARY_VTAIL = 0;
+VARY_FUEL  = 0;
+VARY_ENGN  = 0;
+VARY_PROP  = 0;
+VARY_SFCL  = 0;
+VARY_CG    = 0;
 
-DO_NOT_VARY_ANYTHING = 1;
+DO_NOT_VARY_ANYTHING = 0;
 
 if DO_NOT_VARY_ANYTHING
     VARY_WING  = 0;
@@ -41,7 +41,7 @@ if VARY_WING
     wing.A     = check_allowable(baseUAV.wing.A,(rand-0.5)*wing.sd_A,0,30); % aspect ratio      
     wing.lam   = check_allowable(baseUAV.wing.lam,(rand-0.5)*wing.sd_lam,0,1); % taper ratio (must be between 0 < 1)
     wing.lam_q = check_allowable(baseUAV.wing.lam_q,(rand-0.5)*wing.sd_lam_q,0,1); % wing quarter chord sweep
-    wing.h_q   = check_allowable(baseUAV.wing.h,(rand-0.5)*wing.sd_h,0,fuse.L); % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
+    wing.h_q   = check_allowable(baseUAV.wing.h_q,(rand-0.5)*wing.sd_h,0,fuse.L); % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
 
     % randomly pick airfoil
     airfoilw.ind  = randi(12); % randomly select airfoil
@@ -81,7 +81,7 @@ if VARY_HTAIL
     % ^^ This value is derived parameter
 
     % randomly pick airfoil
-    aifoilh.ind = randi(12); % randomly select airfoil
+    airfoilh.ind = randi(12); % randomly select airfoil
 else
     % primary
     htail.A     = baseUAV.htail.A;
@@ -93,7 +93,7 @@ else
     % ^^ This value is derived parameter
 
     % randomly pick airfoil
-    aifoilh.ind = 1; % randomly select airfoil
+    airfoilh.ind = 1; % randomly select airfoil
 end
 
 % Vertical Tail -----------------------------------------------------------
