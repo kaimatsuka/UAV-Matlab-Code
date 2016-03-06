@@ -37,7 +37,7 @@ load_variation_parameters
 
 
 % ----- Initialize Counter Variables -----
-NUM_ITERATION = 10000;
+NUM_ITERATION = 1000;
 NUM_SUCCESS = 0;
 NUM_FAIL = 0;
 NUM_VOLUMEFAILS = 0;
@@ -244,6 +244,7 @@ for jj = 1:NUM_ITERATION
     %%%%%              CHECK AGAINST REQUIREMENTS                     %%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     FAIL_FLG = 0;
+    clear status
     %---------- Determine if Geometric Fail      -------------
     if(length_total > fuse.L || ...              % PL length > fuselage length
             wing.c+htail.c > fuse.L || ...       % chord lengths of wing & tail > fuselage length
@@ -323,7 +324,7 @@ for jj = 1:NUM_ITERATION
         status(1) = cellstr('Passed Req Check!');
         UAVsuccess(NUM_SUCCESS) = saveUAV(wing, airfoilw, fuse, htail, ...
                                 airfoilh, vtail, airfoilv, engn, fsys, fuel, prop,...
-                                payld, stab, SDERIV, loadfact, sfcl, WEIGHT, status);
+                                payld, stab, SDERIV, loadfact, sfcl, WEIGHT, status,jj);
     else
         NUM_FAIL = NUM_FAIL + 1;
         UAVfail_ind(NUM_FAIL) = jj;
@@ -331,7 +332,7 @@ for jj = 1:NUM_ITERATION
     
     UAVall(jj) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
                     vtail, airfoilv, engn, fsys, fuel, prop, payld,...
-                    stab, SDERIV, loadfact, sfcl, WEIGHT, status);
+                    stab, SDERIV, loadfact, sfcl, WEIGHT, status,jj);
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
@@ -386,10 +387,10 @@ if(NUM_SUCCESS > 0)
     ind_light = sort_ind(1:ceil(NUM_SUCCESS/10));     % select good aircraft (lowest 10% in weight)
     ind_heavy  = sort_ind(ceil(NUM_SUCCESS/10)+1:end); % rest of aircraft
     
-    UAV_light_ind = ind_light;
-    UAV_heavy_ind = ind_heavy;
-%    UAV_light_ind = arrayfun(@(x) x.ind, UAVsuccess(ind_light));
-%    UAV_heavy_ind = arrayfun(@(x) x.ind, UAVsuccess(ind_heavy));
+%     UAV_light_ind = ind_light;
+%     UAV_heavy_ind = ind_heavy;
+   UAV_light_ind = arrayfun(@(x) x.ind, UAVsuccess(ind_light));
+   UAV_heavy_ind = arrayfun(@(x) x.ind, UAVsuccess(ind_heavy));
 
     [val idx] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
     figure(3);
@@ -411,7 +412,8 @@ end
 if(NUM_SUCCESS > 0) 
     figure(2)
     % -- WEIGHT HISTOGRAM
-    subplot(4,6,[1:2 7:8 13:14 19:20]), plot_hist(arrayfun(@(x) x.weight.total, UAVall),UAV_light_ind,UAV_heavy_ind,UAVfail_ind), ylabel('Weight (lbs)');
+    subplot(4,6,[1:2 7:8 13:14 19:20]), 
+    plot_hist(arrayfun(@(x) x.weight.total, UAVall),UAV_light_ind,UAV_heavy_ind,UAVfail_ind), ylabel('Weight (lbs)');
     % -- WING HISTOGRAMS
     subplot(4,6,3), plot_hist(arrayfun(@(x) x.wing.S, UAVall),UAV_light_ind,UAV_heavy_ind,UAVfail_ind), ylabel('Wing Area (ft^2)');
     subplot(4,6,4), plot_hist(arrayfun(@(x) x.wing.A, UAVall),UAV_light_ind,UAV_heavy_ind,UAVfail_ind), ylabel('Wing Aspect Ratio');

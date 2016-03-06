@@ -110,7 +110,8 @@ N_total = [N_light; N_heavy; N_fail];
 
 axis_name = linspace(max_closest,min_closest,length(N_light)); % fix last arg
 axis_name = axis_name+(axis_name(1)-axis_name(2))/2;
-barh(axis_name,N_total',1,'stacked');
+h_bar = barh(axis_name,N_total',1,'stacked');
+set(h_bar,{'FaceColor'},{'y';'b';'r'});
 % 
 % P=findobj(gca,'type','patch');
 % C=['y','y','r','r','b','b',]; 

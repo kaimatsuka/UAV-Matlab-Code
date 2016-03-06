@@ -16,7 +16,7 @@
 
 % Wing --------------------------------------------------------------------
 
-wing.S = 15;      % wing area (ft^2) 
+wing.S = 10;      % wing area (ft^2) 
 wing.A = 10;      % aspect ratio      
 wing.lam = 0.5;   % taper ratio (must be between 0 < 1)
 wing.lam_q = 0;   % wing quarter chord sweep (deg)

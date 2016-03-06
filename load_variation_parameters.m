@@ -26,9 +26,9 @@
 
 % Fuselage ----------------------------------------------------------------
 
-    fuse.sd_L     = 8; % fuselage max length variation (ft)
+    fuse.sd_L     = 8*0; % fuselage max length variation (ft)
     fuse.sd_W     = 0; % fuselage max width variation (ft)
-    fuse.sd_D     = 0; % fuselage max depth variation (ft)
+    fuse.sd_D     = 0.5; % fuselage max depth variation (ft)
 
 % Horizontal Tail ---------------------------------------------------------
 
