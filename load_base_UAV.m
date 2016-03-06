@@ -87,16 +87,22 @@ payld.x_cg_IMU   = 0.05*fuse.L; % (ft)
 
 sfcl.ail.S = 1.1250; % area (ft^2) 3%~12% of wing area
 sfcl.ail.c = 0.2449; % aileron chord (ft) 15%~30% of wing chord
+sfcl.ail.maxallow = 30; % degrees
+sfcl.ail.minallow = -25; % degrees
 
 % Rudder ------------------------------------------------------------------
 
 sfcl.rudd.S = 0.2596; % area (ft^2) 15%~35% of vertical tail area
 sfcl.rudd.c = 0.2115; % rudder chord (ft) 15%~40% of vertical tail chord
+sfcl.rudd.maxallow = 24; % degrees
+sfcl.rudd.minallow = -20; % degrees
 
 % Elevator ----------------------------------------------------------------
 
 sfcl.elev.S = 0.6346; % area (ft^2) 15%~40% of horizontal tail area
 sfcl.elev.c = 0.2308; % elevator chord (ft) 20%~40% of horizontal tail chord
+sfcl.elev.maxallow = 25; % degrees
+sfcl.elev.minallow = -20; % degrees
 
 %% calculate derived parameters
 calc_non_tunable_parameters

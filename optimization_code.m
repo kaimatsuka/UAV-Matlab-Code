@@ -47,6 +47,10 @@ NUM_STATICMARGINFAILS = 0;
 NUM_SDERIVFAILS = 0;
 NUM_LOADFACTFAILS = 0;
 NUM_BASEUAVCHANGE = 0;
+NUM_AILFAILS = 0;
+NUM_RUDDFAILS = 0;
+NUM_ELEVFAILS = 0;
+
 
 % Atmos structure has all atmospheric properties for calculation
 atmos(1).altitude = 1000;
@@ -225,6 +229,14 @@ for jj = 1:NUM_ITERATION
     SDERIV.alt7500_empty = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
         htail,airfoilh,vtail,airfoilv,DRAG_7500_empty,stab.x_cg_empty,stab.z_cg_empty,stab.static_margin_empty);
     
+    % ----- CALCULATE SURFACE CONTROL DEFLECTION -----
+    d_a = DRAG_7500_full.C_L/SDERIV.alt7500_full.CL_a*180/pi;
+    
+    d_r = DRAG_7500_full.C_L/SDERIV.alt7500_full.CL_de*180/pi;
+    
+    d_e = (-SDERIV.alt7500_full.Cm0*SDERIV.alt7500_full.CL_a+ SDERIV.alt7500_full.Cm_a*DRAG_7500_full.C_L)/...
+          (SDERIV.alt7500_full.CL_a*SDERIV.alt7500_full.Cm_de - SDERIV.alt7500_full.Cm_a*SDERIV.alt7500_full.CL_de)*180/pi;
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -249,6 +261,28 @@ for jj = 1:NUM_ITERATION
        FAIL_FLG = FAIL_FLG + 1;
        status(FAIL_FLG) = cellstr('CLmax Fail');
     end
+    
+   %---------- Determine if aileron deflection is maximized ---------------
+   if (d_a >= sfcl.ail.maxallow & d_a <= sfcl.ail.minallow)
+       NUM_AILFAILS = NUM_AILFAILS + 1;
+       FAIL_FLG = FAIL_FLG + 1;
+       status(FAIL_FLG) = cellstr('AILERON DEFLECTION EXCEEDED');
+   end
+   
+   %---------- Determine if rudder deflection is maximized ----------------
+   
+   if (d_r >= sfcl.rudd.maxallow & d_r <= sfcl.rudd.minallow)
+      NUM_RUDDFAILS = NUM_RUDDFAILS + 1;
+       FAIL_FLG = FAIL_FLG + 1;
+       status(FAIL_FLG) = cellstr('RUDDER DEFLECTION EXCEEDED');
+   end 
+   
+   %---------- Determine if elevator deflection is maximized --------------
+   if (d_e >= sfcl.elev.maxallow & d_e <= sfcl.elev.minallow)
+      NUM_ELEVFAILS = NUM_ELEVFAILS + 1;
+       FAIL_FLG = FAIL_FLG + 1;
+       status(FAIL_FLG) = cellstr('ELEVATOR DEFLECTION EXCEEDED');
+   end 
    
    %---------- Determine if we have enough fuel for mission ---------------
    if (W_fuel_total > WEIGHT.fuel)
@@ -341,6 +375,9 @@ disp(['  Number of Load Factor Fails: ' num2str(NUM_LOADFACTFAILS)]);
 disp(['  Number of Volume Fails: ' num2str(NUM_VOLUMEFAILS)]);
 disp(['  Number of Static Margin Fails: ' num2str(NUM_STATICMARGINFAILS)]);
 disp(['  Number of Stability Deriv Fails: ' num2str(NUM_SDERIVFAILS)]);
+disp(['  Number of Aileron Deflecion Fails: ' num2str(NUM_AILFAILS)]);
+disp(['  Number of Rudder Deflection Fails: ' num2str(NUM_RUDDFAILS)]);
+disp(['  Number of Elevator Deflection Fails: ' num2str(NUM_ELEVFAILS)]);
 
 % ITERATION PLOTS -- ALL RUNS
 if(NUM_SUCCESS > 0) &&0
