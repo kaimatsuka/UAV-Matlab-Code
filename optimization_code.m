@@ -22,7 +22,11 @@
 
 clear all; close all; rng(1);
 
-%% Load Files
+% set path to all subfolders
+currentPath = pwd;
+addpath(genpath(currentPath));
+
+% ----- Load Files -----
 load_unit_conversion
 load_enviro_parameters
 load_requirements
@@ -31,8 +35,6 @@ load_engine_directory
 load_base_UAV
 load_variation_parameters
 
-currentPath = pwd;
-addpath(genpath(currentPath));
 
 % ----- Initialize Counter Variables -----
 NUM_ITERATION = 1;
@@ -126,12 +128,11 @@ for jj = 1:NUM_ITERATION
     %%%%%                   CALCULATE PERFORMANCE                     %%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % TODO:
-    %     Calculate engine/prop  NADIA
     %     Calculate moment of inertia
     
     % ----- CALCULATE VOLUME REQUIREMENT -----
     length_total = payld.length_TOTAL + fsys.length + engn.length;  % ft
-    wing.x_LE = wing.h - (0.25*wing.c);
+    wing.x_LE = wing.h_q - (0.25*wing.c);
     htail.x_LE = htail.h - (0.25*htail.c);
     vtail.x_LE = vtail.h - (0.25*vtail.c);
     
@@ -287,10 +288,10 @@ for jj = 1:NUM_ITERATION
     else
         NUM_SUCCESS = NUM_SUCCESS + 1;
         UAVsuccess_ind(NUM_SUCCESS) = jj;
+        status(1) = cellstr('Passed Req Check!');
         UAVsuccess(NUM_SUCCESS) = saveUAV(wing, airfoilw, fuse, htail, ...
                                 airfoilh, vtail, airfoilv, engn, fsys, fuel, prop,...
                                 payld, stab, SDERIV, loadfact, sfcl, WEIGHT, status);
-        status(1) = cellstr('Passed Req Check!');
     end
     
     UAVall(jj) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
@@ -298,6 +299,12 @@ for jj = 1:NUM_ITERATION
                     stab, SDERIV, loadfact, sfcl, WEIGHT, status);
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+end
+
+
+if 1
+    figure(10)
+    plot_UAV(wing,htail,vtail,fuse,prop)
 end
 
 % INPUT DATA
@@ -327,7 +334,7 @@ end
 
 % Display Monte Carlo Results in Command Prompt
 fprintf('\n-----------------------------------------------\n');
-disp(['Number of Successful Aircraft: ' num2str(NUM_SUCCESS)]);
+disp(['Number of Successful Aircraft: ' num2str(NUM_SUCCESS) ' out of ' num2str(NUM_ITERATION)]);
 disp(['  Number of C_Lmax Fails: ' num2str(NUM_CLFAILS)]);
 disp(['  Number of Endurance Fails: ' num2str(NUM_ENDUFAILS)]);
 disp(['  Number of Load Factor Fails: ' num2str(NUM_LOADFACTFAILS)]);
@@ -336,7 +343,7 @@ disp(['  Number of Static Margin Fails: ' num2str(NUM_STATICMARGINFAILS)]);
 disp(['  Number of Stability Deriv Fails: ' num2str(NUM_SDERIVFAILS)]);
 
 % ITERATION PLOTS -- ALL RUNS
-if(NUM_SUCCESS > 0)
+if(NUM_SUCCESS > 0) &&0
     figure(2)
     % -- WEIGHT HISTOGRAM
     subplot(4,6,[1:2 7:8 13:14 19:20]), plot_hist(arrayfun(@(x) x.weight.total, UAVall),UAVsuccess_ind,UAVfail_ind), ylabel('Weight (lbs)');
@@ -402,6 +409,7 @@ if(NUM_SUCCESS > 0)
                     'engine', 'payload/avionics', 'fuel system', 'fuel',   'propeller'};
     pie(weight_vec, weight_labels); hold on;
 end
+
 % figure(2)
 % hist(history.wing.A,10), hold on, 
 %     subplot(3,3,1)

@@ -41,7 +41,7 @@ if VARY_WING
     wing.A     = check_allowable(baseUAV.wing.A,(rand-0.5)*wing.sd_A,0,30); % aspect ratio      
     wing.lam   = check_allowable(baseUAV.wing.lam,(rand-0.5)*wing.sd_lam,0,1); % taper ratio (must be between 0 < 1)
     wing.lam_q = check_allowable(baseUAV.wing.lam_q,(rand-0.5)*wing.sd_lam_q,0,1); % wing quarter chord sweep
-    wing.h     = check_allowable(baseUAV.wing.h,(rand-0.5)*wing.sd_h,0,fuse.L); % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
+    wing.h_q   = check_allowable(baseUAV.wing.h,(rand-0.5)*wing.sd_h,0,fuse.L); % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
 
     % randomly pick airfoil
     airfoilw.ind  = randi(12); % randomly select airfoil
@@ -50,7 +50,7 @@ else
     wing.A     = baseUAV.wing.A;
     wing.lam   = baseUAV.wing.lam;
     wing.lam_q = baseUAV.wing.lam_q;
-    wing.h     = baseUAV.wing.h;
+    wing.h_q   = baseUAV.wing.h_q;     % dist from head to wing 1/4 chord at root (ft)
 
     % randomly pick airfoil
     airfoilw.ind  = 1; % randomly select airfoil
@@ -144,11 +144,9 @@ end
 % Propeller ---------------------------------------------------------------
 
 if VARY_PROP
-    prop.h     = check_allowable(baseUAV.prop.h,(rand-0.5)*prop.sd_h,0,9999); %[ft]
     prop.D     = check_allowable(baseUAV.prop.D,(rand-0.5)*prop.sd_D,0,9999); %[ft]
     prop.pitch = check_allowable(baseUAV.prop.pitch,(rand-0.5)*prop.sd_pitch,0,9999); %[ft]
 else
-    prop.h     = baseUAV.prop.h;
     prop.D     = baseUAV.prop.D;
     prop.pitch = baseUAV.prop.pitch;
 end

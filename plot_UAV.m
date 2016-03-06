@@ -377,15 +377,86 @@ yp = zeros(size(xp))+prop.h;
 h(10) = patch(x+xp,y+yp,z+zp*zscale,propColor); 
 
 
-% % Propeller Hub: 
-% [xph,zph,yph] = cylinder(fusRadius.*([1 .95 .9 .8 .7 .5 .5 .5 .5]).*(cos(linspace(0,pi/2,9)).^.2)); 
-% zcn(6:end,:) = zcn(6:end,:)-fusRadius/5; % lower the tip of nose down
-% % ycn = -ycn.*.7*chordlength; 
-% ycn = -ycn*fusRadius+fuse.D/2;
-% h(2) = surface(x+xcn,y+ycn,z+zcn*zscale,...
-%     'facecolor',fusColor,'linestyle',linestyle,...
-%     'edgecolor',edgeColor);
+% EOIR
+r_EOIR = 0.328; % radius of cylinder part
+l_EOIR = 1.017; % height of EOIR
+h_EOIR = 1.7; % front of nose to center of EOIR
+z_EOIR = -l_EOIR/2;
 
+[xpe,ype,zpe] = cylinder(r_EOIR,40); 
+zpe = l_EOIR*zpe;
+h(11) = surface(xpe+x,y+ype+h_EOIR,z+zpe*zscale+z_EOIR,...
+    'facecolor',fusColor,'linestyle',linestyle,...
+    'edgecolor',edgeColor);
+
+% SAR
+r_SAR = 0.3609; %(ft)
+l_SAR = 0.3609; %(ft)
+xcg_SAR = 1.017; % front of nose to center of EOIR
+z_adjust_SAR = -l_SAR/2;
+
+[xps,yps,zps] = cylinder(r_SAR,40); 
+zps = l_SAR*zps; % adjust height
+
+h(12) = surface(xps+x,y+yps+xcg_SAR,z+zps*zscale+z_adjust_SAR,...
+    'facecolor',fusColor,'linestyle',linestyle,...
+    'edgecolor',edgeColor);
+
+% LiDAR
+wx_LiDAR = 0.2953; % width
+wz_LiDAR = 0.2953; % height
+wy_LiDAR = 0.5249; % length (along fuselage axis)
+xcg_LiDAR = 2.4; % from front
+h(13:18) = drawRectangle([0 y+xcg_LiDAR 0],[wx_LiDAR wy_LiDAR wz_LiDAR],'w');
+
+% IMU
+wx_IMU = 0.15;    % width
+wz_IMU = 0.075;   % height
+wy_IMU = 0.1417;  % length (along fuselage axis)
+xcg_IMU = 0.3474; % from front
+h(19:24) = drawRectangle([0 y+xcg_IMU 0],[wx_IMU wy_IMU wz_IMU],'w');
+
+% Wave Relay Antenna
+wx_WR = 0.216667;
+wy_WR = 0.325;
+wz_WR = 0.05;
+xcg_WR = 0.2316; % from front
+zcg_WR = 0.44-fusRadius; % cg_z 
+h(25:30) = drawRectangle([0 y+xcg_WR zcg_WR],[wx_WR wy_WR wz_WR],'w');
+
+% Engine-cylinder part
+xcg_Ec = 4.3;  % axial
+zcg_EC = 0;    % center of cylinder part of engine relative to center of fuselage
+d_Ec = 0.2559; % diameter of cylindrical part
+l_Ec = 0.6414; % length of cylindrical part
+[xEc,zEc,yEc] = cylinder(d_Ec/2,40); 
+yEc=yEc*l_Ec;
+h(31) = surface(xEc+x,y+yEc+xcg_Ec-l_Ec/2,z+zEc*zscale+zcg_EC,...
+               'facecolor','b','edgecolor',[0 0 0]);
+
+% Engine-rectangular part
+wz_Er = 0.6414;
+wy_Er = 0.4035;
+wx_Er = 0.2559;
+
+h(32:37) = drawRectangle([0 y+xcg_Ec zcg_EC+wz_Er/2+d_Ec/2], [wx_Er wy_Er wz_Er], 'b');
+
+% Fuel Tank
+r_FT = 0.6500/2;
+l_FT = 0.3980;
+xcg_FT = 3.3;
+z_adjust_FT = 0; % relative to center of fuselage
+[xFT,zFT,yFT] = cylinder(r_FT,40);
+yFT = l_FT*yFT;
+
+h(38)= surface(x+xFT,y+yFT+xcg_FT,z+zFT*zscale+z_adjust_FT,...
+    'facecolor',fusColor,'linestyle',linestyle,...
+    'edgecolor',edgeColor);
+
+% make fuselage/wing/tails transparent
+for  ii =  1:9
+    set(h(ii),'facealpha',.2,'edgealpha',.2)
+end
 set(h(10),'facealpha',.2,'edgealpha',.5)
 
 
@@ -426,4 +497,18 @@ end
 if nargout==0
     clear h
 end
+end
+
+function handle = drawRectangle( origin, size,color)
+%
+% INPUT:
+%   origin = origin respect to tip of nose 
+%
+     x=([0 1 1 0 0 0;1 1 0 0 1 1;1 1 0 0 1 1;0 1 1 0 0 0]-0.5)*size(1)+origin(1);%+size(1)/2;
+     y=([0 0 1 1 0 0;0 1 1 0 0 0;0 1 1 0 1 1;0 0 1 1 1 1]-0.5)*size(2)+origin(2);%+size(2)/2;
+     z=([0 0 0 0 0 1;0 0 0 0 0 1;1 1 1 1 0 1;1 1 1 1 0 1]-0.5)*size(3)+origin(3);%+size(3)/2;
+
+     for i=1:6
+         handle(i) =patch(x(:,i),y(:,i),z(:,i),color);
+     end
 end

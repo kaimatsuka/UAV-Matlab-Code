@@ -21,7 +21,7 @@ wing.A = 10;      % aspect ratio
 wing.lam = 0.5;   % taper ratio (must be between 0 < 1)
 wing.lam_q = 0;   % wing quarter chord sweep (deg)
 % wing.lam_max = 0.49; % sweep of maximum thicknes line 
-wing.h = 1.286;   % dist from head to wing 1/4 chord (ft) TODO: where in quarter chord?
+wing.h_q = 1.286+1.5;   % dist from head to wing 1/4 chord at root (ft)
 
 %wing.gamma = 2;   % wing dihedral (deg)  GLOBAL HAWK
 
@@ -30,7 +30,7 @@ airfoilw.ind = 1; % base airfoil is 1!
 
 % Fuselage ----------------------------------------------------------------
 
-fuse.L = 4.6315;  % fuselage max length 
+fuse.L = 4.6315+3;  % fuselage max length 
 fuse.W = 1.0833;  % fuselage max width 
 fuse.D = 1.0833;  % fuselage max depth
 
@@ -38,11 +38,11 @@ fuse.D = 1.0833;  % fuselage max depth
 
 % primary
 htail.A = 3.9;    % aspect ratio
-htail.S = 2.3077; % area (ft^2)
+htail.S = 2.3077+5; % area (ft^2)
 htail.lam = 1; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
 htail.lam_q = 0;  % horizontal tail sweep angle (deg)
 % htail.lam_max = 0.49; % sweep of maximum thicknes line 
-htail.h = 3.8571; % dist from head to 1/4 chord of horizontal tail (ft)
+htail.h = 3.8571+2.5; % dist from head to 1/4 chord of horizontal tail (ft)
 
 aifoilh.ind = 1; % default is 1!
 
@@ -54,7 +54,7 @@ vtail.A = 1.95;   % aspect ratio (defined as b^2/S)
 vtail.lam = 1;  % taper ratio 
 vtail.lam_q = 0;  % quarter chord sweep angle (deg)
 % vtail.lam_max = 0.49; % sweep of maximum thicknes line 
-vtail.h = 3.8571; % dist from head to 1/4 chord of vertical tail (ft)
+vtail.h = 3.8571+3; % dist from head to 1/4 chord of vertical tail (ft)
 
 airfoilv.ind = 1;
 
@@ -72,7 +72,6 @@ engn.ind = 1; % choose 1 (out of 9) as base engine
 
 % Propeller ---------------------------------------------------------------
 
-prop.h = 4.6315; % propeller location
 prop.D = 1.62;   % propeller diameter (ft)
 prop.pitch = 15; % propeller pitch (ft)
 

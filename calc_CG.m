@@ -78,4 +78,4 @@ w_detail_emp_vec(8) = 0;    % Corresponds to fuel weight
 zm_empty_vec = z_cg_vec.*w_detail_emp_vec; %(ft*lb)
 stab.z_cg_empty = sum(zm_empty_vec)/sum(w_detail_emp_vec); %(ft)
 
-clearvars x_cg_empty_vec x_cg_vec xm_vec xm_empty_vec zm_vec zm_empty_vec
+% clearvars x_cg_empty_vec x_cg_vec xm_vec xm_empty_vec zm_vec zm_empty_vec

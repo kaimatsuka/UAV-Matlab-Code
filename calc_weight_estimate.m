@@ -26,9 +26,9 @@ WEIGHT.fsys  = W_FS(fuel.V,fsys.int,fsys.N_T, engn.N_E); %fuel system %TODO: upd
 
 % Sum of components 
 WEIGHT.engn  = 1.1*engn.W_bare*engn.N_E; % assume 10% for mounting fudge factor
-WEIGHT.avion = payld.w_total;  % electronics/avionics
+WEIGHT.avion = payld.w_total;            % electronics/avionics
 WEIGHT.fuel  = fuel.W;
-WEIGHT.prop  = 0.75; %TODO: incorporate equation
+WEIGHT.prop  = 0.12+0.0625*prop.D;       % assume hub 0.12 lb and propeller + hub (kai online research)
 
 % Detailed weight list
 w_detail_vec = [WEIGHT.wing;

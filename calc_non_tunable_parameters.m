@@ -29,11 +29,9 @@ wing.t_r = wing.c_r*wing.mtr;     % max thickness at root (ft)
 wing.t_t = wing.c_t*wing.mtr;     % max thickness at tip (ft)
 wing.t = wing.c*wing.mtr;         % average thickness of wing (ft) TODO: change name to wing.t_ave
 wing.K_i = 1/(pi*wing.A*wing.e);  % Drag coefficient
-wing.x_cg = wing.h;
-wing.z_cg = (0.5*fuse.D)+(0.5*wing.t);
 
-wing.h_q_t = wing.h+tand(wing.lam_q)*wing.b/2;  % wing c/4 tip location (ft)
-wing.h_l_r = wing.h-wing.c_r/4;                 % wing leading edge root location (ft)
+wing.h_q_t = wing.h_q+tand(wing.lam_q)*wing.b/2;  % wing c/4 tip location (ft)
+wing.h_l_r = wing.h_q-wing.c_r/4;                 % wing leading edge root location (ft)
 wing.h_l_t = wing.h_q_t-wing.c_t/4;             % wing leading edge tip location (ft)
 wing.lam_l = atand((wing.h_l_t-wing.h_l_r)/(wing.b/2)); % wing leading edge sweep location (deg)
 
@@ -70,7 +68,7 @@ htail.c_t = htail.c_r*htail.lam;     % wing tip chord length (ft)
 % htail.t   = htail.c*htail.mtr;     % max thickness (average) (ft) TODO: change name to htail.t_ave
 htail.t_r = htail.c_r*htail.mtr;   % max thickness at root (ft)
 htail.t_t = htail.c_t*htail.mtr;   % max thickness ratio (ft)s
-htail.l_T = htail.h-wing.h;      % distance from wing 1/4 MAC to tail 1/4 MAC (ft)
+htail.l_T = htail.h-wing.h_q;      % distance from wing 1/4 MAC to tail 1/4 MAC (ft)
 
 htail.h_q_t = htail.h+tand(htail.lam_q)*htail.b/2;
 htail.h_l_r = htail.h    -htail.c_r/4;
@@ -130,7 +128,7 @@ fuel.V = fuel.V*gallon2ft3; %[ft^3] volume of fuel
 
 % Propeller ---------------------------------------------------------------
 
-prop.h    = fuse.L; % beginning of prop is located at end of fuselge
+prop.h = fuse.L; % beginning of prop is located at end of fuselge
 
 % Fuel System -------------------------------------------------------------
 
@@ -139,7 +137,8 @@ fsys.N_T = 1;    %number of separate fuel tanks
 
 fsys.W = (fuel.V-0.00424)*1726.635+65; % in grams (emperically derived)
 fsys.W = fsys.W*g2lb; % in pounds
-fsys.length = fuel.V/(pi*(fuse.D-(1/12)^2));  % ft
+fsys.D = fuse.D*.6;
+fsys.length = fuel.V/(pi*fsys.D^2/4);  % ft
 
 % Electronics/Payloads ----------------------------------------------------
 
@@ -171,21 +170,21 @@ sfcl.elev.b    = sfcl.elev.S/sfcl.elev.c; % elevator length
 
 % CG locations ------------------------------------------------------------
 
-wing.x_cg  = wing.h;   % (ft)
+wing.x_cg = wing.h_q+wing.c/12; % (ft) one 3rd chord from tip of chord %TODO: implement tapering effect
 fuse.x_cg  = fuse.L/2; % (ft)
 htail.x_cg = htail.h;  % (ft)
 vtail.x_cg = vtail.h;  % (ft)
 engn.x_cg = 0.95*fuse.L;  % (ft)
-fsys.x_cg = 0.65*fuse.L;  % (ft)
+fsys.x_cg = 0.50*fuse.L;  % (ft)
 % fsys.x_cg = check_allowable(baseUAV.fsys.x_cg,(rand-0.5)*fsys.sd_x_cg,0,0.9*fuse.L) ; % fuel system CG location (ft)
 prop.x_cg = 1.025*fuse.L; % (ft) TODO: why 2.5%?
-payld.x_cg_EOIR  = 0.025*fuse.L; % (ft)
-payld.x_cg_SAR   = 0.05*fuse.L;  % (ft)
+payld.x_cg_EOIR  = 1.7; % (ft)
+payld.x_cg_SAR   = 0.36*fuse.L;  % (ft) assume 37%
 sfcl.ail.x_cg  = wing.x_cg+wing.c*(0.85-0.25); % assume 85% of average wing chord
 sfcl.elev.x_cg = htail.x_cg+htail.c*(0.85-0.25); % assume 85% of average wing chord
 sfcl.rudd.x_cg = vtail.x_cg+htail.c*(0.85-0.25); % assume 85% of average wing chord
 
-
+% bottom of fuselage as reference
 wing.z_cg = (0.5*fuse.D)+(0.5*wing.t); % Assume z_cg is middle of average thickness (ft)
 fuse.z_cg = fuse.D/2;
 htail.z_cg = (0.5*fuse.D)+(0.5*wing.t); % tail z-CG location (ft)
@@ -211,4 +210,4 @@ payld.length_WR_IMU = 3.9*in2ft;    % (ft)
 
 % Payload-Unit
 payld.length_TOTAL = (0.2*m2ft) + payld.length_EOIR + payld.length_SAR + ...
-                    payld.length_LiDAR; % (ft)
+                    payld.length_LiDAR; % (ft) 0.2 meter for  

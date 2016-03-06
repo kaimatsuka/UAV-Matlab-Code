@@ -20,9 +20,9 @@ function x_np = calc_neutral_pt(wing, htail, airfoilw, airfoilh)
 
 % Dereference Block -------------------------------------------------------
 chord = wing.c; % Chord length of the wing (ft)
-x_w_LE = wing.x_cg - (0.25*chord);  % Distance from nose to wing LE (ft)
+x_w_LE = wing.h_q - (0.25*chord);  % Distance from nose to wing LE (ft)
 x_w_AC = 0.25*chord;    % Distance from wing LE to AC (ft) [quarter chord pt]
-x_t_AC = htail.x_cg-wing.x_cg+x_w_AC;   % Distance from wing LE to tail AC (ft)
+x_t_AC = htail.h-wing.h_q+x_w_AC;   % Distance from wing LE to tail AC (ft)
 S_t    = htail.S;   % Horizontal Tail Area (ft2)
 S_w    = wing.S;    % Wing Area (ft2)
 a_t    = airfoilh.a_t; % Tail Lift Curve Slope (/rad)
