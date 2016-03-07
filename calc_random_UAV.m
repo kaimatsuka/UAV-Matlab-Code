@@ -9,11 +9,11 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-VARY_WING  = 0;
-VARY_FUSE  = 0;
-VARY_HTAIL = 0;
-VARY_VTAIL = 0;
-VARY_FUEL  = 0;
+VARY_WING  = 1;
+VARY_FUSE  = 1;
+VARY_HTAIL = 1;
+VARY_VTAIL = 1;
+VARY_FUEL  = 1;
 VARY_ENGN  = 0;
 VARY_PROP  = 0;
 VARY_SFCL  = 0;
@@ -104,7 +104,7 @@ if VARY_VTAIL
     vtail.A = check_allowable(baseUAV.vtail.A,(rand-0.5)*vtail.sd_A,0,30);   % aspect ratio (defined as b^2/S) 
     vtail.lam = check_allowable(baseUAV.vtail.lam,(rand-0.5)*vtail.sd_lam,0,1);  % taper ratio 
     vtail.lam_q = check_allowable(baseUAV.vtail.lam_q,(rand-0.5)*vtail.sd_lam_q,0,1);  % quarter chord sweep angle
-    vtail.h = check_allowable(baseUAV.vtail.h,(rand-0.5)*vtail.sd_h,1.05*wing.h,fuse.L); % dist from head to 1/4 chord of vertical tail (ft)
+    vtail.h = check_allowable(baseUAV.vtail.h,(rand-0.5)*vtail.sd_h,1.05*wing.h_q,fuse.L); % dist from head to 1/4 chord of vertical tail (ft)
 
     % randomly pick airfoil
     airfoilv.ind = randi(12); % randomly select airfoil

@@ -320,7 +320,7 @@ h(3) = surface(x+[x1;x2],y+[y1;y2],z+[z1;z2]*zscale,...
     'edgecolor',edgeColor);
 
 % Wings: 
-xw1 = -linspace(-wing.b/2,wing.b/2,20); % wing width
+xw1 = -linspace(-wing.b/2-fuse.D/2,wing.b/2+fuse.D/2,20); % wing width
 % yw1 = 1.4*chordlength + abs(xw1)/100;       % 
 yw1 = wing.h_l_r+(wing.h_l_t-wing.h_l_r)*abs(linspace(-1,1,length(xw1))); % leading edge
 % yw2 = zeros(size(xw1))+1.4*chordlength + chordlength/3; 
@@ -328,7 +328,7 @@ yw1 = wing.h_l_r+(wing.h_l_t-wing.h_l_r)*abs(linspace(-1,1,length(xw1))); % lead
 yw2 = wing.h_l_r+wing.c_r*0.3+zeros(size(xw1));
 yw3 = yw1+wing.c_r-(wing.c_r-wing.c_t)*abs(linspace(-1,1,length(xw1)));
 
-zw1 = 0.85*fusRadius*ones(size(xw1)); % height of center of wing
+zw1 = 0.85*fusRadius*zeros(size(xw1)); % height of center of wing
 zw2 = wing.t_r-(wing.t_r-wing.t_t)*abs(linspace(-1,1,length(xw1))); % thickness of wing
 
 h(4) = surface(x+[1*xw1;1*xw1;1*xw1],y+[yw1;yw2;yw3],...
@@ -339,7 +339,7 @@ h(5) = surface(x+[1*xw1;xw1;1*xw1],y+[yw1;yw2;yw3],...
     'linestyle',linestyle,'edgecolor',edgeColor);
 
 % tail wing (horizontal tail): 
-xtw1 = -linspace(-htail.b/2,htail.b/2,10); 
+xtw1 = -linspace(-htail.b/2-fuse.D/2,htail.b/2+fuse.D/2,10); 
 xtw  = [xtw1;xtw1;xtw1];
 ytw1 = htail.h_l_r+(htail.h_l_t-htail.h_l_r)*abs(linspace(-1,1,length(xtw1)));  % leading edge of horizontal tail
 ytw2 = htail.h_l_r+wing.c_r*0.3+zeros(size(xtw1)); % horitail max thickness line
@@ -435,8 +435,8 @@ h(31) = surface(xEc+x,y+yEc+xcg_Ec-l_Ec/2,z+zEc*zscale+zcg_EC,...
                'facecolor','b','edgecolor',[0 0 0]);
 
 % Engine-rectangular part
-wz_Er = 0.6414;
-wy_Er = 0.4035;
+wz_Er = 0.4035;
+wy_Er = 0.6414;
 wx_Er = 0.2559;
 
 h(32:37) = drawRectangle([0 y+xcg_Ec zcg_EC+wz_Er/2+d_Ec/2], [wx_Er wy_Er wz_Er], 'b');
