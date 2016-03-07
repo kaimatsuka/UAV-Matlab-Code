@@ -34,6 +34,7 @@ load_airfoils
 load_engine_directory
 load_base_UAV
 load_variation_parameters
+load_propeller
 
 
 % ----- Initialize Counter Variables -----
@@ -51,6 +52,7 @@ NUM_AILFAILS = 0;
 NUM_RUDDFAILS = 0;
 NUM_ELEVFAILS = 0;
 NUM_RCFAILS = 0;
+
 
 % Atmos structure has all atmospheric properties for calculation
 atmos(1).altitude = 1000;
@@ -150,7 +152,12 @@ for jj = 1:NUM_ITERATION
     stab.static_margin_empty = calc_static_marg(stab.x_cg_empty,stab.x_np,wing);
     
     % ----- CALCULATE PROPELLER EFFICIENCY -----
-    calc_propeller
+    prop.eta_p.v_stall = calc_propeller(propeller,V_stall,engn.rpm,prop.D);
+    prop.eta_p.loiter  = calc_propeller(propeller,V_loiter,engn.rpm,prop.D);
+    prop.eta_p.cruise  = calc_propeller(propeller,V_cruise,engn.rpm,prop.D);
+    prop.eta_p.v_max   = calc_propeller(propeller,V_max,engn.rpm,prop.D);
+    
+    eta_p_vec = [prop.eta_p.v_stall prop.eta_p.loiter prop.eta_p.cruise prop.eta_p.v_max];
     
     % ----- CALCULATE LIFT & DRAG -----
     if 0
@@ -189,18 +196,19 @@ for jj = 1:NUM_ITERATION
     CL_cruise   = DRAG.alt7500.full.C_L(1);  % at 7500 ft
     CL_mxspd    = DRAG.alt7500.full.C_L(2);  % at 7500 ft
     CL_VEC      = [CL_max CL_loiter CL_cruise CL_mxspd];
-    
+           
     % ---- CALCULATE RATE OF CLIMB -----
     dt = atmos(2).altitude/RC_max;
     P_excess_RC = (WEIGHT.total*(RC_max + ((V_cruise/g)*((V_cruise-V_launch)/dt))))*lbfts2hp;
     P_reqd_RC = max([DRAG.alt1000.empty.P_t DRAG.alt1000.full.P_t DRAG.alt7500.empty.P_t DRAG.alt7500.full.P_t]);
-    P_avail_RC = P_excess_RC+P_reqd_RC;
+    P_avail_RC = (P_excess_RC+P_reqd_RC)/prop.eta_p.cruise;
+    
     
     % ----- CALCULATE ENDURANCE -----
     % Determine how much fuel  burned for climb, cruise, and loiter
     % CLIMBING 
-    P_eng_reqd  = [DRAG.alt1000.full.P_t DRAG.alt7500.full.P_t]/prop.eta_p;
-    P_eng_avail = ones(1,4)*engn.HP*prop.eta_p;
+    P_eng_reqd  = [DRAG.alt1000.full.P_t DRAG.alt7500.full.P_t];
+    P_eng_avail = ones(1,4)*engn.HP.*eta_p_vec;
     P_excess = (P_eng_avail - P_eng_reqd)*hp2lbfts;    % lbf ft/s
     energy(1) =  ((0.5*WEIGHT.total*V_launch^2)/g)+(WEIGHT.total*5); %lbf ft
     energy(2) =  ((0.5*WEIGHT.total*V_cruise^2)/g)+(WEIGHT.total*atmos(2).altitude); %lbf ft
@@ -208,10 +216,10 @@ for jj = 1:NUM_ITERATION
     W_fuel(1) = fuel.cp*P_eng_avail(1)*hp2lbfts*endu_climb;
     W_final(1) = WEIGHT.total - W_fuel(1);
     % CRUISING
-    [W_final(2), W_fuel(2)] = endu2W_fuel(W_final(1),prop.eta_p,E_max,...
+    [W_final(2), W_fuel(2)] = endu2W_fuel(W_final(1),prop.eta_p.cruise,E_max,...
                             fuel.cp, CL_loiter, DRAG.alt1000.full.C_Dt(2), atmos(1).rho, wing.S);
     % LOITERING
-    [W_final(3), W_fuel(3)] = endu2W_fuel(W_final(2),prop.eta_p,E_min,...
+    [W_final(3), W_fuel(3)] = endu2W_fuel(W_final(2),prop.eta_p.loiter,E_min,...
                             fuel.cp, CL_cruise, DRAG.alt7500.full.C_Dt(1), atmos(2).rho, wing.S);
     % TOTAL FUEL BURNED
      W_fuel_total = sum(W_fuel);
