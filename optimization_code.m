@@ -258,7 +258,10 @@ for jj = 1:NUM_ITERATION
     end
     
     %---------- Determine if airfoil provides sufficient lift -------------
-    if(CL_max > airfoilw.CLmax) 
+    if(CL_max > airfoilw.CLmax || ...
+       CL_loiter > airfoilw.CLmax || ...
+       CL_cruise > airfoilw.CLmax || ...
+       CL_mxspd > airfoilw.CLmax) 
        NUM_CLFAILS = NUM_CLFAILS+1;
        FAIL_FLG = FAIL_FLG + 1;
        status(FAIL_FLG) = cellstr('CLmax Fail');
@@ -400,6 +403,8 @@ if(NUM_SUCCESS > 0)
    UAV_heavy_ind = arrayfun(@(x) x.ind, UAVsuccess(ind_heavy));
 
     [val idx] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
+    UAVmin = UAVsuccess(idx);
+    save('MinWeightUAV.mat','-struct','UAVmin');
     figure(3);
     plot_UAV(UAVsuccess(idx).wing, UAVsuccess(idx).htail, UAVsuccess(idx).vtail, UAVsuccess(idx).fuse, UAVsuccess(idx).prop);
 
