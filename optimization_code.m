@@ -50,7 +50,7 @@ NUM_BASEUAVCHANGE = 0;
 NUM_AILFAILS = 0;
 NUM_RUDDFAILS = 0;
 NUM_ELEVFAILS = 0;
-
+NUM_RCFAILS = 0;
 
 % Atmos structure has all atmospheric properties for calculation
 atmos(1).altitude = 1000;
@@ -190,6 +190,11 @@ for jj = 1:NUM_ITERATION
     CL_mxspd    = DRAG.alt7500.full.C_L(2);  % at 7500 ft
     CL_VEC      = [CL_max CL_loiter CL_cruise CL_mxspd];
     
+    % ---- CALCULATE RATE OF CLIMB -----
+    dt = atmos(2).altitude/RC_max;
+    P_excess_RC = (WEIGHT.total*(RC_max + ((V_cruise/g)*((V_cruise-V_launch)/dt))))*lbfts2hp;
+    P_reqd_RC = max([DRAG.alt1000.empty.P_t DRAG.alt1000.full.P_t DRAG.alt7500.empty.P_t DRAG.alt7500.full.P_t]);
+    P_avail_RC = P_excess_RC+P_reqd_RC;
     
     % ----- CALCULATE ENDURANCE -----
     % Determine how much fuel  burned for climb, cruise, and loiter
@@ -289,6 +294,13 @@ for jj = 1:NUM_ITERATION
        status(FAIL_FLG) = cellstr('ELEVATOR DEFLECTION EXCEEDED');
    end 
    
+   %---------- Determine if enough power for rate of climb ---------------
+   if(engn.HP < P_avail_RC)
+       NUM_RCFAILS = NUM_RCFAILS + 1;
+       FAIL_FLG = FAIL_FLG + 1;
+       status(FAIL_FLG) = cellstr('RC FAIL');
+   end
+   
    %---------- Determine if we have enough fuel for mission ---------------
    if (W_fuel_total > WEIGHT.fuel)
         NUM_ENDUFAILS = NUM_ENDUFAILS + 1;
@@ -383,6 +395,7 @@ fprintf('\n-----------------------------------------------\n');
 disp(['Number of Successful Aircraft: ' num2str(NUM_SUCCESS) ' out of ' num2str(NUM_ITERATION)]);
 disp(['  Number of C_Lmax Fails: ' num2str(NUM_CLFAILS)]);
 disp(['  Number of Endurance Fails: ' num2str(NUM_ENDUFAILS)]);
+disp(['  Number of Rate of Climb Fails: ' num2str(NUM_RCFAILS)]);
 disp(['  Number of Load Factor Fails: ' num2str(NUM_LOADFACTFAILS)]);
 disp(['  Number of Volume Fails: ' num2str(NUM_VOLUMEFAILS)]);
 disp(['  Number of Static Margin Fails: ' num2str(NUM_STATICMARGINFAILS)]);

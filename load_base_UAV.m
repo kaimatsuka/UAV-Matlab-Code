@@ -37,8 +37,8 @@ fuse.D = 1.0833;  % fuselage max depth
 % Horizontal Tail ---------------------------------------------------------
 
 % primary
-htail.A = 5;    % aspect ratio
-htail.S = 2.3077+5; % area (ft^2)
+htail.A = 4;    % aspect ratio
+htail.S = 2.3077+2; % area (ft^2)
 htail.lam = 1; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
 htail.lam_q = 0;  % horizontal tail sweep angle (deg)
 % htail.lam_max = 0.49; % sweep of maximum thicknes line 
@@ -49,12 +49,12 @@ airfoilh.ind = 1; % default is 1!
 % Vertical Tail -----------------------------------------------------------
 
 % primay
-vtail.S = 1.1539; % area (ft^2)
-vtail.A = 1.95;   % aspect ratio (defined as b^2/S) 
+vtail.S = 1.1539-0.15; % area (ft^2)
+vtail.A = 1.95-0.15;   % aspect ratio (defined as b^2/S) 
 vtail.lam = 1;  % taper ratio 
 vtail.lam_q = 0;  % quarter chord sweep angle (deg)
 % vtail.lam_max = 0.49; % sweep of maximum thicknes line 
-vtail.h = 3.8571+3; % dist from head to 1/4 chord of vertical tail (ft)
+vtail.h = 3.8571+2.5; % dist from head to 1/4 chord of vertical tail (ft)
 
 airfoilv.ind = 1;
 
