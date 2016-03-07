@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.146"
+    ComputedModelVersion    "1.164"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -29,7 +29,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [309.0, 72.0, 1420.0, 1025.0]
+      Location		      [-32.0, 0.0, 904.0, 1160.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -54,16 +54,16 @@ Model {
 	  IsActive		  [1]
 	  ViewObjType		  "SimulinkTopLevel"
 	  LoadSaveID		  "0"
-	  Extents		  [1370.0, 848.0]
+	  Extents		  [854.0, 983.0]
 	  ZoomFactor		  [1.0]
-	  Offset		  [0.0, -35.17500051856041]
+	  Offset		  [249.0, -10.17500051856041]
 	}
 	Object {
 	  $ObjectID		  6
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "338"
-	  Extents		  [1370.0, 848.0]
+	  Extents		  [1493.0, 983.0]
 	  ZoomFactor		  [1.0]
 	  Offset		  [0.0, 0.0]
 	}
@@ -77,9 +77,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "matsuka"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Mar 04 15:44:51 2016"
-  RTWModifiedTimeStamp	  379007076
-  ModelVersionFormat	  "1.%<AutoIncrement:146>"
+  LastModifiedDate	  "Sun Mar 06 19:18:14 2016"
+  RTWModifiedTimeStamp	  379191792
+  ModelVersionFormat	  "1.%<AutoIncrement:164>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1073,7 +1073,7 @@ Model {
   }
   System {
     Name		    "Pioneer_sim_ucla_mae154S_post"
-    Location		    [309, 72, 1729, 1097]
+    Location		    [-32, 0, 872, 1160]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1087,19 +1087,19 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "361"
+    SIDHighWatermark	    "368"
     Block {
       BlockType		      SubSystem
       Name		      "Aircraft Dynamics"
       SID		      "1"
       Ports		      [4, 7]
-      Position		      [695, 33, 815, 407]
+      Position		      [695, 58, 815, 432]
       ZOrder		      -1
       BackgroundColor	      "lightBlue"
       RequestExecContextInheritance off
       System {
 	Name			"Aircraft Dynamics"
-	Location		[132, 130, 972, 758]
+	Location		[186, 0, 1729, 1160]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -2433,15 +2433,25 @@ Model {
 	  Position		  [485, 14, 515, 46]
 	  ZOrder		  -15
 	  Floating		  off
-	  Location		  [157, 71, 481, 307]
+	  Location		  [157, 71, 1112, 556]
 	  Open			  off
 	  NumInputPorts		  "1"
 	  List {
 	    ListType		    AxesTitles
 	    axes1		    "%<SignalLabel>"
 	  }
-	  YMin			  "107.5"
-	  YMax			  "130"
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  YMin			  "0"
+	  YMax			  "90"
 	  SaveName		  "ScopeData6"
 	  DataFormat		  "StructureWithTime"
 	  SampleTime		  "0"
@@ -2753,13 +2763,13 @@ Model {
       Name		      "Autopilot"
       SID		      "82"
       Ports		      [8, 4]
-      Position		      [515, 36, 605, 424]
+      Position		      [515, 61, 605, 449]
       ZOrder		      -2
       BackgroundColor	      "yellow"
       RequestExecContextInheritance off
       System {
 	Name			"Autopilot"
-	Location		[203, 52, 987, 893]
+	Location		[186, 0, 1729, 1160]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -2929,7 +2939,7 @@ Model {
 	  RequestExecContextInheritance	off
 	  System {
 	    Name		    "airspeed hold"
-	    Location		    [211, 55, 1048, 718]
+	    Location		    [186, 0, 1729, 1160]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4427,14 +4437,14 @@ Model {
       Name		      "Check Guid State"
       SID		      "360"
       Ports		      [1, 1]
-      Position		      [465, 530, 495, 560]
+      Position		      [465, 555, 495, 585]
       ZOrder		      2
       LibraryVersion	      "1.356"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
       SourceType	      "Compare To Constant"
       ContentPreviewEnabled   off
       relop		      "=="
-      const		      "99"
+      const		      "6"
       OutDataTypeStr	      "boolean"
       ZeroCross		      on
     }
@@ -4442,7 +4452,7 @@ Model {
       BlockType		      Constant
       Name		      "Constant1"
       SID		      "241"
-      Position		      [645, 105, 675, 135]
+      Position		      [645, 130, 675, 160]
       ZOrder		      -3
       BlockMirror	      on
       ShowName		      off
@@ -4452,7 +4462,7 @@ Model {
       BlockType		      Constant
       Name		      "Constant2"
       SID		      "159"
-      Position		      [645, 35, 675, 65]
+      Position		      [645, 60, 675, 90]
       ZOrder		      -4
       BlockMirror	      on
       ShowName		      off
@@ -4462,7 +4472,7 @@ Model {
       BlockType		      Constant
       Name		      "Constant3"
       SID		      "325"
-      Position		      [645, 205, 675, 235]
+      Position		      [645, 230, 675, 260]
       ZOrder		      -5
       BlockMirror	      on
       ShowName		      off
@@ -4470,27 +4480,9 @@ Model {
     }
     Block {
       BlockType		      Constant
-      Name		      "Constant4"
-      SID		      "161"
-      Position		      [440, 240, 470, 270]
-      ZOrder		      -6
-      ShowName		      off
-      Value		      "7500"
-    }
-    Block {
-      BlockType		      Constant
-      Name		      "Constant5"
-      SID		      "162"
-      Position		      [440, 190, 470, 220]
-      ZOrder		      -7
-      ShowName		      off
-      Value		      "110"
-    }
-    Block {
-      BlockType		      Constant
       Name		      "Constant6"
       SID		      "260"
-      Position		      [265, 175, 295, 205]
+      Position		      [125, 125, 155, 155]
       ZOrder		      -8
       ShowName		      off
       Value		      "0"
@@ -4499,7 +4491,7 @@ Model {
       BlockType		      Gain
       Name		      "D -> alt"
       SID		      "164"
-      Position		      [870, 339, 890, 361]
+      Position		      [870, 364, 890, 386]
       ZOrder		      -9
       Gain		      "-1"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
@@ -4511,7 +4503,7 @@ Model {
       Name		      "Demux1"
       SID		      "165"
       Ports		      [1, 5]
-      Position		      [85, 287, 90, 473]
+      Position		      [85, 322, 90, 508]
       ZOrder		      -10
       BackgroundColor	      "black"
       ShowName		      off
@@ -4523,7 +4515,7 @@ Model {
       Name		      "Demux2"
       SID		      "166"
       Ports		      [1, 3]
-      Position		      [845, 321, 850, 359]
+      Position		      [845, 346, 850, 384]
       ZOrder		      -11
       BackgroundColor	      "black"
       ShowName		      off
@@ -4535,7 +4527,7 @@ Model {
       Name		      "Demux3"
       SID		      "167"
       Ports		      [1, 3]
-      Position		      [835, 201, 840, 239]
+      Position		      [835, 226, 840, 264]
       ZOrder		      -12
       BackgroundColor	      "black"
       ShowName		      off
@@ -4547,7 +4539,7 @@ Model {
       Name		      "Demux5"
       SID		      "168"
       Ports		      [1, 3]
-      Position		      [975, 211, 980, 249]
+      Position		      [975, 236, 980, 274]
       ZOrder		      -13
       BackgroundColor	      "black"
       ShowName		      off
@@ -4558,7 +4550,7 @@ Model {
       BlockType		      From
       Name		      "From"
       SID		      "169"
-      Position		      [35, 369, 60, 391]
+      Position		      [35, 404, 60, 426]
       ZOrder		      -14
       BackgroundColor	      "red"
       ShowName		      off
@@ -4568,7 +4560,7 @@ Model {
       BlockType		      From
       Name		      "From1"
       SID		      "329"
-      Position		      [470, 394, 495, 416]
+      Position		      [470, 419, 495, 441]
       ZOrder		      -15
       BackgroundColor	      "red"
       ShowName		      off
@@ -4579,7 +4571,7 @@ Model {
       BlockType		      From
       Name		      "From2"
       SID		      "354"
-      Position		      [1015, 104, 1040, 126]
+      Position		      [1015, 129, 1040, 151]
       ZOrder		      -16
       BackgroundColor	      "red"
       ShowName		      off
@@ -4590,7 +4582,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto"
       SID		      "170"
-      Position		      [1035, 300, 1065, 320]
+      Position		      [1035, 325, 1065, 345]
       ZOrder		      -17
       BackgroundColor	      "red"
       ShowName		      off
@@ -4599,7 +4591,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto1"
       SID		      "328"
-      Position		      [870, 210, 900, 230]
+      Position		      [870, 235, 900, 255]
       ZOrder		      -18
       BackgroundColor	      "red"
       ShowName		      off
@@ -4609,7 +4601,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto2"
       SID		      "353"
-      Position		      [395, 270, 425, 290]
+      Position		      [395, 340, 425, 360]
       ZOrder		      -19
       BackgroundColor	      "red"
       ShowName		      off
@@ -4620,7 +4612,7 @@ Model {
       Name		      "MATLAB Fcn"
       SID		      "333"
       Ports		      [1]
-      Position		      [1100, 340, 1160, 370]
+      Position		      [1100, 365, 1160, 395]
       ZOrder		      -20
       MATLABFcn		      "show_map_kai"
       OutputDimensions	      "0"
@@ -4629,7 +4621,7 @@ Model {
       BlockType		      ManualSwitch
       Name		      "Manual Switch"
       SID		      "171"
-      Position		      [635, 347, 665, 383]
+      Position		      [635, 372, 665, 408]
       ZOrder		      -21
       ShowName		      off
       CurrentSetting	      "0"
@@ -4638,7 +4630,7 @@ Model {
       BlockType		      ManualSwitch
       Name		      "Manual Switch1"
       SID		      "172"
-      Position		      [645, 252, 675, 288]
+      Position		      [645, 277, 675, 313]
       ZOrder		      -22
       ShowName		      off
       CurrentSetting	      "0"
@@ -4647,7 +4639,7 @@ Model {
       BlockType		      ManualSwitch
       Name		      "Manual Switch2"
       SID		      "173"
-      Position		      [640, 157, 670, 193]
+      Position		      [640, 182, 670, 218]
       ZOrder		      -23
       ShowName		      off
       CurrentSetting	      "0"
@@ -4656,7 +4648,7 @@ Model {
       BlockType		      ManualSwitch
       Name		      "Manual Switch3"
       SID		      "174"
-      Position		      [645, 62, 675, 98]
+      Position		      [645, 87, 675, 123]
       ZOrder		      -24
       ShowName		      off
       CurrentSetting	      "0"
@@ -4666,7 +4658,7 @@ Model {
       Name		      "Mux"
       SID		      "355"
       Ports		      [2, 1]
-      Position		      [1190, 84, 1195, 206]
+      Position		      [1190, 109, 1195, 231]
       ZOrder		      -12
       ShowName		      off
       Inputs		      "2"
@@ -4677,7 +4669,7 @@ Model {
       Name		      "Mux1"
       SID		      "175"
       Ports		      [3, 1]
-      Position		      [1010, 283, 1015, 317]
+      Position		      [1010, 308, 1015, 342]
       ZOrder		      -26
       ShowName		      off
       Inputs		      "[1 1 3]"
@@ -4688,7 +4680,7 @@ Model {
       Name		      "Mux6"
       SID		      "176"
       Ports		      [6, 1]
-      Position		      [995, 324, 1000, 386]
+      Position		      [995, 349, 1000, 411]
       ZOrder		      -27
       ShowName		      off
       Inputs		      "6"
@@ -4698,7 +4690,7 @@ Model {
       BlockType		      RateTransition
       Name		      "Rate Transition"
       SID		      "177"
-      Position		      [1035, 337, 1065, 373]
+      Position		      [1035, 362, 1065, 398]
       ZOrder		      -28
       ShowName		      off
       OutPortSampleTime	      "10"
@@ -4707,7 +4699,7 @@ Model {
       BlockType		      Stop
       Name		      "Stop Simulation"
       SID		      "361"
-      Position		      [655, 527, 690, 563]
+      Position		      [655, 552, 690, 588]
       ZOrder		      3
     }
     Block {
@@ -4715,11 +4707,11 @@ Model {
       Name		      "Vt"
       SID		      "326"
       Ports		      [1]
-      Position		      [910, 41, 930, 69]
+      Position		      [910, 66, 930, 94]
       ZOrder		      -29
       Floating		      off
-      Location		      [381, 455, 786, 796]
-      Open		      off
+      Location		      [1396, 741, 1877, 1098]
+      Open		      on
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
@@ -4736,8 +4728,8 @@ Model {
 	MarkerStyles		"none|none|none|none|none|none"
       }
       TimeRange		      "50"
-      YMin		      "109.75"
-      YMax		      "110.3"
+      YMin		      "131.75"
+      YMax		      "132.6"
       SaveName		      "ScopeData8"
       DataFormat	      "StructureWithTime"
       SampleTime	      "0"
@@ -4747,7 +4739,7 @@ Model {
       Name		      "alpha"
       SID		      "179"
       Ports		      [1]
-      Position		      [910, 96, 930, 124]
+      Position		      [910, 121, 930, 149]
       ZOrder		      -30
       Floating		      off
       Location		      [1406, 237, 1735, 486]
@@ -4779,11 +4771,11 @@ Model {
       Name		      "alt"
       SID		      "327"
       Ports		      [1]
-      Position		      [930, 397, 960, 433]
+      Position		      [930, 422, 960, 458]
       ZOrder		      -31
       Floating		      off
-      Location		      [1100, 526, 1894, 1064]
-      Open		      off
+      Location		      [664, 184, 1292, 661]
+      Open		      on
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
@@ -4800,8 +4792,8 @@ Model {
 	MarkerStyles		"none|none|none|none|none|none"
       }
       TimeRange		      "50"
-      YMin		      "7499"
-      YMax		      "7506"
+      YMin		      "999.5"
+      YMax		      "1004.5"
       SaveName		      "ScopeData14"
       DataFormat	      "StructureWithTime"
       SampleTime	      "0"
@@ -4810,7 +4802,7 @@ Model {
       BlockType		      UniformRandomNumber
       Name		      "alt_comm"
       SID		      "180"
-      Position		      [350, 149, 380, 181]
+      Position		      [210, 99, 240, 131]
       ZOrder		      -32
       Minimum		      "1000"
       Maximum		      "1500"
@@ -4822,7 +4814,7 @@ Model {
       Name		      "beta"
       SID		      "181"
       Ports		      [1]
-      Position		      [910, 152, 930, 178]
+      Position		      [910, 177, 930, 203]
       ZOrder		      -33
       Floating		      off
       Location		      [921, 468, 1364, 799]
@@ -4844,7 +4836,7 @@ Model {
       Name		      "elevator step"
       SID		      "304"
       Ports		      [0, 1]
-      Position		      [695, 662, 780, 708]
+      Position		      [695, 702, 780, 748]
       ZOrder		      -34
       BlockMirror	      on
       BackgroundColor	      "cyan"
@@ -4997,15 +4989,15 @@ Model {
       BlockType		      SubSystem
       Name		      "my_guid"
       SID		      "338"
-      Ports		      [4, 4]
-      Position		      [180, 295, 295, 430]
+      Ports		      [4, 6]
+      Position		      [160, 327, 290, 468]
       ZOrder		      -35
       BackgroundColor	      "green"
       NamePlacement	      "alternate"
       RequestExecContextInheritance off
       System {
 	Name			"my_guid"
-	Location		[114, 49, 1534, 1074]
+	Location		[186, 0, 1729, 1160]
 	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5022,7 +5014,7 @@ Model {
 	  BlockType		  Inport
 	  Name			  "Velocity"
 	  SID			  "350"
-	  Position		  [40, 218, 70, 232]
+	  Position		  [40, 203, 70, 217]
 	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
@@ -5030,7 +5022,7 @@ Model {
 	  BlockType		  Inport
 	  Name			  "Psi"
 	  SID			  "339"
-	  Position		  [40, 183, 70, 197]
+	  Position		  [40, 168, 70, 182]
 	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -5039,7 +5031,7 @@ Model {
 	  BlockType		  Inport
 	  Name			  "pN"
 	  SID			  "340"
-	  Position		  [40, 148, 70, 162]
+	  Position		  [40, 133, 70, 147]
 	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -5048,7 +5040,7 @@ Model {
 	  BlockType		  Inport
 	  Name			  "pE"
 	  SID			  "341"
-	  Position		  [40, 113, 70, 127]
+	  Position		  [40, 98, 70, 112]
 	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -5057,19 +5049,19 @@ Model {
 	  BlockType		  Demux
 	  Name			  "Demux2"
 	  SID			  "342"
-	  Ports			  [1, 5]
-	  Position		  [365, 74, 370, 266]
+	  Ports			  [1, 7]
+	  Position		  [480, 61, 485, 329]
 	  ZOrder		  -5
 	  BackgroundColor	  "black"
 	  ShowName		  off
-	  Outputs		  "5"
+	  Outputs		  "7"
 	  DisplayOption		  "bar"
 	}
 	Block {
 	  BlockType		  Memory
 	  Name			  "Memory"
 	  SID			  "343"
-	  Position		  [255, 25, 285, 55]
+	  Position		  [370, 5, 400, 35]
 	  ZOrder		  -6
 	  BlockMirror		  on
 	  ShowName		  off
@@ -5079,27 +5071,47 @@ Model {
 	  BlockType		  Memory
 	  Name			  "Memory1"
 	  SID			  "358"
-	  Position		  [235, 310, 265, 340]
+	  Position		  [350, 475, 380, 505]
 	  ZOrder		  2
 	  BlockMirror		  on
 	  ShowName		  off
 	}
 	Block {
+	  BlockType		  Memory
+	  Name			  "Memory2"
+	  SID			  "366"
+	  Position		  [350, 355, 380, 385]
+	  ZOrder		  8
+	  BlockMirror		  on
+	  ShowName		  off
+	  X0			  "118.1"
+	}
+	Block {
+	  BlockType		  Memory
+	  Name			  "Memory3"
+	  SID			  "368"
+	  Position		  [350, 415, 380, 445]
+	  ZOrder		  10
+	  BlockMirror		  on
+	  ShowName		  off
+	  X0			  "100"
+	}
+	Block {
 	  BlockType		  Mux
 	  Name			  "Mux6"
 	  SID			  "344"
-	  Ports			  [6, 1]
-	  Position		  [120, 70, 125, 275]
+	  Ports			  [8, 1]
+	  Position		  [235, 59, 240, 326]
 	  ZOrder		  -7
 	  ShowName		  off
-	  Inputs		  "6"
+	  Inputs		  "8"
 	  DisplayOption		  "bar"
 	}
 	Block {
 	  BlockType		  RateTransition
 	  Name			  "Rate Transition"
 	  SID			  "345"
-	  Position		  [175, 157, 210, 193]
+	  Position		  [290, 177, 325, 213]
 	  ZOrder		  -8
 	  ShowName		  off
 	  OutPortSampleTime	  "0.1"
@@ -5109,52 +5121,69 @@ Model {
 	  Name			  "call_my_guid"
 	  SID			  "346"
 	  Ports			  [1, 1]
-	  Position		  [245, 160, 325, 190]
+	  Position		  [360, 180, 440, 210]
 	  ZOrder		  -9
 	  MATLABFcn		  "my_guid"
-	  OutputDimensions	  "5"
+	  OutputDimensions	  "7"
 	  SampleTime		  ".5"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "velocity command"
+	  SID			  "364"
+	  Position		  [650, 228, 680, 242]
+	  ZOrder		  5
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "alt command"
+	  SID			  "367"
+	  Position		  [650, 268, 680, 282]
+	  ZOrder		  9
+	  Port			  "2"
+	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "phi_comm"
 	  SID			  "347"
-	  Position		  [445, 123, 475, 137]
+	  Position		  [650, 108, 680, 122]
 	  ZOrder		  -10
+	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "pE_tar"
 	  SID			  "348"
-	  Position		  [450, 163, 480, 177]
+	  Position		  [650, 148, 680, 162]
 	  ZOrder		  -11
-	  Port			  "2"
+	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "pN_tar"
 	  SID			  "349"
-	  Position		  [455, 203, 485, 217]
+	  Position		  [650, 188, 680, 202]
 	  ZOrder		  -12
-	  Port			  "3"
+	  Port			  "5"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "state"
 	  SID			  "359"
-	  Position		  [455, 243, 485, 257]
-	  ZOrder		  3
-	  Port			  "4"
+	  Position		  [650, 308, 680, 322]
+	  ZOrder		  7
+	  Port			  "6"
 	  IconDisplay		  "Port number"
 	}
 	Line {
 	  ZOrder		  1
 	  SrcBlock		  "call_my_guid"
 	  SrcPort		  1
-	  Points		  [15, 0; 0, -5]
 	  DstBlock		  "Demux2"
 	  DstPort		  1
 	}
@@ -5183,6 +5212,7 @@ Model {
 	  ZOrder		  5
 	  SrcBlock		  "pE"
 	  SrcPort		  1
+	  Points		  [145, 0]
 	  DstBlock		  "Mux6"
 	  DstPort		  2
 	}
@@ -5190,6 +5220,7 @@ Model {
 	  ZOrder		  6
 	  SrcBlock		  "pN"
 	  SrcPort		  1
+	  Points		  [145, 0]
 	  DstBlock		  "Mux6"
 	  DstPort		  3
 	}
@@ -5197,6 +5228,7 @@ Model {
 	  ZOrder		  7
 	  SrcBlock		  "Psi"
 	  SrcPort		  1
+	  Points		  [145, 0]
 	  DstBlock		  "Mux6"
 	  DstPort		  4
 	}
@@ -5204,7 +5236,7 @@ Model {
 	  ZOrder		  8
 	  SrcBlock		  "Memory"
 	  SrcPort		  1
-	  Points		  [-155, 0; 0, 45]
+	  Points		  [-155, 0; 0, 50]
 	  DstBlock		  "Mux6"
 	  DstPort		  1
 	}
@@ -5226,7 +5258,7 @@ Model {
 	  ZOrder		  11
 	  SrcBlock		  "Demux2"
 	  SrcPort		  1
-	  Points		  [10, 0; 0, -50]
+	  Points		  [10, 0; 0, -55]
 	  DstBlock		  "Memory"
 	  DstPort		  1
 	}
@@ -5234,33 +5266,84 @@ Model {
 	  ZOrder		  12
 	  SrcBlock		  "Velocity"
 	  SrcPort		  1
+	  Points		  [145, 0]
 	  DstBlock		  "Mux6"
 	  DstPort		  5
 	}
 	Line {
-	  ZOrder		  13
+	  ZOrder		  21
 	  SrcBlock		  "Demux2"
 	  SrcPort		  5
-	  Points		  [9, 0]
+	  Points		  [22, 0]
 	  Branch {
-	    ZOrder		    16
-	    DstBlock		    "state"
+	    ZOrder		    28
+	    Points		    [0, 135]
+	    DstBlock		    "Memory2"
 	    DstPort		    1
 	  }
 	  Branch {
-	    ZOrder		    15
-	    Points		    [0, 75]
-	    DstBlock		    "Memory1"
+	    ZOrder		    27
+	    DstBlock		    "velocity command"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  ZOrder		  14
+	  ZOrder		  36
 	  SrcBlock		  "Memory1"
 	  SrcPort		  1
-	  Points		  [-125, 0]
+	  Points		  [-124, 0; 0, -175]
+	  DstBlock		  "Mux6"
+	  DstPort		  8
+	}
+	Line {
+	  ZOrder		  26
+	  SrcBlock		  "Memory2"
+	  SrcPort		  1
+	  Points		  [-156, 0; 0, -125]
 	  DstBlock		  "Mux6"
 	  DstPort		  6
+	}
+	Line {
+	  ZOrder		  30
+	  SrcBlock		  "Demux2"
+	  SrcPort		  7
+	  Points		  [89, 0]
+	  Branch {
+	    ZOrder		    32
+	    Points		    [0, 175]
+	    DstBlock		    "Memory1"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    31
+	    DstBlock		    "state"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  ZOrder		  33
+	  SrcBlock		  "Demux2"
+	  SrcPort		  6
+	  Points		  [48, 0]
+	  Branch {
+	    ZOrder		    35
+	    Points		    [0, 155]
+	    DstBlock		    "Memory3"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    34
+	    DstBlock		    "alt command"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  ZOrder		  37
+	  SrcBlock		  "Memory3"
+	  SrcPort		  1
+	  Points		  [-138, 0; 0, -150]
+	  DstBlock		  "Mux6"
+	  DstPort		  7
 	}
       }
     }
@@ -5269,7 +5352,7 @@ Model {
       Name		      "phi"
       SID		      "182"
       Ports		      [1]
-      Position		      [1225, 129, 1255, 161]
+      Position		      [1225, 154, 1255, 186]
       ZOrder		      -36
       Floating		      off
       Location		      [470, 584, 1766, 1022]
@@ -5300,7 +5383,7 @@ Model {
       BlockType		      UniformRandomNumber
       Name		      "phi_comm"
       SID		      "183"
-      Position		      [350, 204, 380, 236]
+      Position		      [210, 154, 240, 186]
       ZOrder		      -37
       Minimum		      "-.5"
       Maximum		      ".5"
@@ -5312,7 +5395,7 @@ Model {
       Name		      "psi"
       SID		      "184"
       Ports		      [1]
-      Position		      [1095, 244, 1125, 276]
+      Position		      [1095, 269, 1125, 301]
       ZOrder		      -38
       Floating		      off
       Location		      [424, 121, 917, 538]
@@ -5344,7 +5427,7 @@ Model {
       Name		      "q2eul"
       SID		      "185"
       Ports		      [1, 1]
-      Position		      [850, 262, 915, 288]
+      Position		      [850, 287, 915, 313]
       ZOrder		      -39
       RequestExecContextInheritance off
       System {
@@ -5712,7 +5795,7 @@ Model {
       BlockType		      Gain
       Name		      "rad2deg"
       SID		      "205"
-      Position		      [845, 93, 885, 127]
+      Position		      [845, 118, 885, 152]
       ZOrder		      -40
       ShowName		      off
       Gain		      "180/pi"
@@ -5724,7 +5807,7 @@ Model {
       BlockType		      Gain
       Name		      "rad2deg1"
       SID		      "206"
-      Position		      [1025, 245, 1080, 275]
+      Position		      [1025, 270, 1080, 300]
       ZOrder		      -41
       ShowName		      off
       Gain		      "180/pi"
@@ -5736,7 +5819,7 @@ Model {
       BlockType		      Gain
       Name		      "rad2deg2"
       SID		      "356"
-      Position		      [1080, 98, 1140, 132]
+      Position		      [1080, 123, 1140, 157]
       ZOrder		      -42
       ShowName		      off
       Gain		      "180/pi"
@@ -5748,7 +5831,7 @@ Model {
       BlockType		      Gain
       Name		      "rad2deg3"
       SID		      "207"
-      Position		      [845, 146, 885, 184]
+      Position		      [845, 171, 885, 209]
       ZOrder		      -43
       ShowName		      off
       Gain		      "180/pi"
@@ -5760,7 +5843,7 @@ Model {
       BlockType		      Gain
       Name		      "rad2deg4"
       SID		      "208"
-      Position		      [1025, 158, 1085, 192]
+      Position		      [1025, 183, 1085, 217]
       ZOrder		      -44
       ShowName		      off
       Gain		      "180/pi"
@@ -5772,7 +5855,7 @@ Model {
       BlockType		      Gain
       Name		      "rad2deg5"
       SID		      "209"
-      Position		      [1025, 198, 1085, 232]
+      Position		      [1025, 223, 1085, 257]
       ZOrder		      -45
       ShowName		      off
       Gain		      "180/pi"
@@ -5785,7 +5868,7 @@ Model {
       Name		      "rudder kick"
       SID		      "278"
       Ports		      [0, 1]
-      Position		      [515, 625, 605, 665]
+      Position		      [690, 625, 780, 665]
       ZOrder		      -46
       BackgroundColor	      "cyan"
       RequestExecContextInheritance off
@@ -5972,10 +6055,42 @@ Model {
     }
     Block {
       BlockType		      Scope
+      Name		      "state"
+      SID		      "362"
+      Ports		      [1]
+      Position		      [445, 637, 475, 673]
+      ZOrder		      4
+      Floating		      off
+      Location		      [641, 739, 1341, 1137]
+      Open		      on
+      NumInputPorts	      "1"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+      }
+      List {
+	ListType		ScopeGraphics
+	FigureColor		"[0.5 0.5 0.5]"
+	AxesColor		"[0 0 0]"
+	AxesTickColor		"[1 1 1]"
+	LineColors		"[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	LineStyles		"-|-|-|-|-|-"
+	LineWidths		"[0.5 0.5 0.5 0.5 0.5 0.5]"
+	MarkerStyles		"none|none|none|none|none|none"
+      }
+      TimeRange		      "50"
+      YMin		      "2"
+      YMax		      "2"
+      SaveName		      "ScopeData15"
+      DataFormat	      "StructureWithTime"
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
       Name		      "theta"
       SID		      "211"
       Ports		      [1]
-      Position		      [1130, 199, 1160, 231]
+      Position		      [1130, 224, 1160, 256]
       ZOrder		      -47
       Floating		      off
       Location		      [1469, 531, 1793, 819]
@@ -6005,16 +6120,48 @@ Model {
       BlockType		      Constant
       Name		      "throttle %"
       SID		      "212"
-      Position		      [635, 305, 665, 335]
+      Position		      [635, 330, 665, 360]
       ZOrder		      -48
       BlockMirror	      on
       Value		      "56"
     }
     Block {
+      BlockType		      Scope
+      Name		      "velocity comm"
+      SID		      "365"
+      Ports		      [1]
+      Position		      [380, 97, 410, 133]
+      ZOrder		      5
+      Floating		      off
+      Location		      [1318, 202, 1916, 671]
+      Open		      on
+      NumInputPorts	      "1"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+      }
+      List {
+	ListType		ScopeGraphics
+	FigureColor		"[0.5 0.5 0.5]"
+	AxesColor		"[0 0 0]"
+	AxesTickColor		"[1 1 1]"
+	LineColors		"[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	LineStyles		"-|-|-|-|-|-"
+	LineWidths		"[0.5 0.5 0.5 0.5 0.5 0.5]"
+	MarkerStyles		"none|none|none|none|none|none"
+      }
+      TimeRange		      "50"
+      YMin		      "100"
+      YMax		      "100"
+      SaveName		      "ScopeData16"
+      DataFormat	      "StructureWithTime"
+      SampleTime	      "0"
+    }
+    Block {
       BlockType		      UniformRandomNumber
       Name		      "vt comm"
       SID		      "213"
-      Position		      [350, 89, 380, 121]
+      Position		      [210, 39, 240, 71]
       ZOrder		      -49
       Minimum		      "100"
       Maximum		      "130"
@@ -6026,7 +6173,7 @@ Model {
       Name		      "waypoint guid"
       SID		      "214"
       Ports		      [3, 3]
-      Position		      [180, 564, 295, 696]
+      Position		      [170, 589, 285, 721]
       ZOrder		      -50
       BackgroundColor	      "green"
       RequestExecContextInheritance off
@@ -6246,16 +6393,16 @@ Model {
       ZOrder		      3
       SrcBlock		      "Aircraft Dynamics"
       SrcPort		      1
-      Points		      [0, 0]
+      Points		      [25, 0]
       Branch {
 	ZOrder			4
-	Points			[0, -25; -320, 0]
+	Points			[0, -33; -345, 0]
 	DstBlock		"Autopilot"
 	DstPort			1
       }
       Branch {
 	ZOrder			5
-	Points			[65, 0]
+	Points			[40, 0]
 	Branch {
 	  ZOrder		  6
 	  DstBlock		  "Vt"
@@ -6362,7 +6509,7 @@ Model {
       Points		      [5, 0; 0, -15]
       Branch {
 	ZOrder			23
-	Points			[0, -185; -520, 0; 0, 135]
+	Points			[0, -213; -520, 0; 0, 163]
 	DstBlock		"Autopilot"
 	DstPort			3
       }
@@ -6377,7 +6524,7 @@ Model {
       ZOrder		      25
       SrcBlock		      "Demux3"
       SrcPort		      1
-      Points		      [100, 0; 0, -185; -455, 0; 0, 80]
+      Points		      [100, 0; 0, -201; -455, 0; 0, 96]
       DstBlock		      "Autopilot"
       DstPort		      2
     }
@@ -6443,16 +6590,16 @@ Model {
     Line {
       ZOrder		      35
       SrcBlock		      "my_guid"
-      SrcPort		      2
-      Points		      [104, 0; 0, 110; 566, 0; 0, -95]
+      SrcPort		      4
+      Points		      [109, 0; 0, 70; 566, 0; 0, -95]
       DstBlock		      "Mux6"
       DstPort		      4
     }
     Line {
       ZOrder		      36
       SrcBlock		      "my_guid"
-      SrcPort		      3
-      Points		      [55, 0; 0, 100; 625, 0]
+      SrcPort		      5
+      Points		      [80, 0; 0, 70; 605, 0]
       DstBlock		      "Mux6"
       DstPort		      5
     }
@@ -6557,9 +6704,10 @@ Model {
       DstPort		      1
     }
     Line {
-      ZOrder		      51
-      SrcBlock		      "Constant4"
-      SrcPort		      1
+      ZOrder		      137
+      SrcBlock		      "my_guid"
+      SrcPort		      2
+      Points		      [49, 0; 0, -80]
       DstBlock		      "Autopilot"
       DstPort		      5
     }
@@ -6596,26 +6744,36 @@ Model {
     Line {
       ZOrder		      56
       SrcBlock		      "my_guid"
-      SrcPort		      1
-      Points		      [80, 0; 0, -5]
+      SrcPort		      3
+      Points		      [64, 0; 0, -35]
       Branch {
-	ZOrder			74
-	Points			[0, -1; -1, 0; 0, -24]
-	DstBlock		"Goto2"
-	DstPort			1
-      }
-      Branch {
-	ZOrder			72
+	ZOrder			134
+	Points			[0, -20]
 	DstBlock		"Autopilot"
 	DstPort			6
       }
+      Branch {
+	ZOrder			74
+	DstBlock		"Goto2"
+	DstPort			1
+      }
     }
     Line {
-      ZOrder		      59
-      SrcBlock		      "Constant5"
+      ZOrder		      128
+      SrcBlock		      "my_guid"
       SrcPort		      1
-      DstBlock		      "Autopilot"
-      DstPort		      4
+      Points		      [30, 0; 0, -105; 30, 0]
+      Branch {
+	ZOrder			133
+	Points			[0, -115]
+	DstBlock		"velocity comm"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			132
+	DstBlock		"Autopilot"
+	DstPort			4
+      }
     }
     Line {
       ZOrder		      60
@@ -6675,12 +6833,21 @@ Model {
       DstPort		      1
     }
     Line {
-      ZOrder		      76
+      ZOrder		      131
       SrcBlock		      "my_guid"
-      SrcPort		      4
-      Points		      [82, 0; 0, 130]
-      DstBlock		      "Check Guid State"
-      DstPort		      1
+      SrcPort		      6
+      Points		      [50, 0; 0, 110; 66, 0]
+      Branch {
+	ZOrder			127
+	Points			[0, 85]
+	DstBlock		"state"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			126
+	DstBlock		"Check Guid State"
+	DstPort			1
+      }
     }
     Line {
       ZOrder		      77

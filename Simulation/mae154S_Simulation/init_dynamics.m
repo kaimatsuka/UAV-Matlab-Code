@@ -27,10 +27,11 @@ rho = 0.002379;
 % need to initialize 6DOF block and aero coef data
 %%%
 %initial position in inertial axes [Xe, Ye, Ze]
-Posini = [0 0 -7500];
+Posini = [0 0 -100];
 
 %initial velocity in body axes [U, v, w] - relative to wind i think?
 Velini = [118.1 0 0];    % 65.3 knots  - zero elevator trim from Bray pg 35
+V_init = norm(Velini);
 
 %initial Euler orientation [roll, pitch, yaw]
 % Eulini = [0 6.2*pi/180 0];

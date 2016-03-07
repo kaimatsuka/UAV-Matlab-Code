@@ -97,7 +97,6 @@ else
     N_heavy = zeros(length(edges));
 end
 
-
 if idx3(1) ~= -1
     fail_data = data(idx3);
     N_fail = histc(fail_data, edges);
@@ -106,16 +105,21 @@ else
     N_fail = zeros(length(edges));
 end
 
-N_total = [N_light; N_heavy; N_fail];
+if idx1(1) ==-1 && idx2(1)==-1
+    N_total = [N_fail];
+    color = {'r'};
+    
+elseif idx3(1) == -1
+    N_total = [N_light; N_heavy];
+    color = {'y';'b'};
+else
+    
+    N_total = [N_light; N_heavy; N_fail];
+    color = {'y';'b';'r'};
+end
 
 axis_name = linspace(max_closest,min_closest,length(N_light)); % fix last arg
 axis_name = axis_name+(axis_name(1)-axis_name(2))/2;
 h_bar = barh(axis_name,N_total',1,'stacked');
-set(h_bar,{'FaceColor'},{'y';'b';'r'});
-% 
-% P=findobj(gca,'type','patch');
-% C=['y','y','r','r','b','b',]; 
-% 
-% for n=1:length(6) 
-%     set(P(end-n+1),'facecolor',C(n));
-% end
+set(h_bar,{'FaceColor'},color);
+
