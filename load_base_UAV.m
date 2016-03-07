@@ -37,7 +37,7 @@ fuse.D = 1.0833;  % fuselage max depth
 % Horizontal Tail ---------------------------------------------------------
 
 % primary
-htail.A = 5;    % aspect ratio
+htail.A = 3.9;    % aspect ratio
 htail.S = 2.3077+5; % area (ft^2)
 htail.lam = 1; % taper ratio of horizontal tail (btw 0 and 1 inclusive)
 htail.lam_q = 0;  % horizontal tail sweep angle (deg)

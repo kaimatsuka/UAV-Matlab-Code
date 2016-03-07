@@ -18,36 +18,36 @@
 % Wing --------------------------------------------------------------------
 
     wing.sd_A     = 7.5;  % wing aspect ratio variation std dev 
-    wing.sd_S     = 15;   % wing area variation (ft^2)
-    wing.sd_lam   = 0; % wing taper ratio variation(n/a)
+    wing.sd_S     = 14.2;   % wing area variation (ft^2)
+    wing.sd_lam   = 0.5*0; % wing taper ratio variation(n/a)
     wing.sd_lam_q = 0;   % wing quarter chord sweep variation (deg)
-    wing.sd_h     = 1;   % head to 1/4 chord distance variation (ft)
+    wing.sd_h     = 0.1*0;   % head to 1/4 chord distance variation (ft)
 
 
 % Fuselage ----------------------------------------------------------------
 
-    fuse.sd_L     = 6; % fuselage max length variation (ft)
+    fuse.sd_L     = 8*0; % fuselage max length variation (ft)
     fuse.sd_W     = 0; % fuselage max width variation (ft)
-    fuse.sd_D     = 0; % fuselage max depth variation (ft)
+    fuse.sd_D     = 0.5; % fuselage max depth variation (ft)
 
 % Horizontal Tail ---------------------------------------------------------
 
     %primary
-    htail.sd_S       = 5; % htail area variation (ft^2)
-    htail.sd_A       = 2; % htail aspect ratio variation std dev
-    htail.sd_lam     = 0.5; % htail taper ratio variation
+    htail.sd_S       = 0; % htail area variation (ft^2)
+    htail.sd_A       = 5; % htail aspect ratio variation std dev
+    htail.sd_lam     = 0; % htail taper ratio variation
     htail.sd_lam_q   = 0; % htail quarter chord sweep variation 
     % htail.sd_lam_max = 0; % htail sweep of maximum thickness line variation
-    htail.sd_h       = 1; % htail dist from head to 1/4 chord of variation (ft)
+    htail.sd_h       = 0.15; % htail dist from head to 1/4 chord of variation (ft)
 
 % Vertical Tail -----------------------------------------------------------
 
-    vtail.sd_S       = 3; % vtail area variation (ft^2)
-    vtail.sd_A       = 1; % vtail aspect ratio variation 
-    vtail.sd_lam     = 0.5; % vtail taper ratio variation
+    vtail.sd_S       = 10; % vtail area variation (ft^2)
+    vtail.sd_A       = 5; % vtail aspect ratio variation 
+    vtail.sd_lam     = 0; % vtail taper ratio variation
     vtail.sd_lam_q   = 0; % vtail quarter chord sweep variation
     % vtail.sd_lam_max = 0; % vtail sweep of maximum thickness line variation
-    vtail.sd_h       = 1; % vtail htail interference factor variation
+    vtail.sd_h       = 0.15; % vtail htail interference factor variation
     
 % Fuel --------------------------------------------------------------------
 

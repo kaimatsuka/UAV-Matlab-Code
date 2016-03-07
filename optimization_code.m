@@ -37,7 +37,7 @@ load_variation_parameters
 
 
 % ----- Initialize Counter Variables -----
-NUM_ITERATION = 10000;
+NUM_ITERATION = 1000;
 NUM_SUCCESS = 0;
 NUM_FAIL = 0;
 NUM_VOLUMEFAILS = 0;
@@ -155,46 +155,46 @@ for jj = 1:NUM_ITERATION
     % ----- CALCULATE LIFT & DRAG -----
     if 0
         v_vec = linspace(V_stall,V_max,100);
-        DRAG.alt1000.empty = calc_drag_fn(v_vec,atmos(1).altitude,WEIGHT.total-WEIGHT.fuel,...
+        DRAG_1000_empty = calc_drag_fn(v_vec,atmos(1).altitude,WEIGHT.total-WEIGHT.fuel,...
                         wing,airfoilw, airfoilh,fuse,htail,vtail,stab.x_cg_empty,stab.static_margin_empty);
-        DRAG.alt1000.full = calc_drag_fn(v_vec,atmos(1).altitude,WEIGHT.total,...
+        DRAG_1000_full = calc_drag_fn(v_vec,atmos(1).altitude,WEIGHT.total,...
                         wing,airfoilw, airfoilh,fuse,htail,vtail,stab.x_cg_full,stab.static_margin_full);   
-        DRAG.alt7500.empty = calc_drag_fn(v_vec,atmos(2).altitude,WEIGHT.total-WEIGHT.fuel,...
+        DRAG_7500_empty = calc_drag_fn(v_vec,atmos(2).altitude,WEIGHT.total-WEIGHT.fuel,...
                         wing,airfoilw,airfoilh, fuse,htail,vtail,stab.x_cg_empty,stab.static_margin_empty);
-        DRAG.alt7500.full = calc_drag_fn(v_vec,atmos(2).altitude,WEIGHT.total,...
+        DRAG_7500_full = calc_drag_fn(v_vec,atmos(2).altitude,WEIGHT.total,...
                         wing,airfoilw,airfoilh, fuse,htail,vtail,stab.x_cg_full,stab.static_margin_full);
        
                     
         figure(1)
-        plot(DRAG.alt1000.empty.v, DRAG.alt1000.empty.D_t,'b'); hold on, grid on
-        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.D_t,'-b');
-        plot(DRAG.alt7500.empty.v, DRAG.alt7500.empty.D_t,'r');
-        plot(DRAG.alt7500.full.v, DRAG.alt7500.full.D_t,'-r');
+        plot(DRAG_1000_empty.v, DRAG_1000_empty.D_t,'b'); hold on, grid on
+        plot(DRAG_1000_full.v, DRAG_1000_full.D_t,'-b');
+        plot(DRAG_7500_empty.v, DRAG_7500_empty.D_t,'r');
+        plot(DRAG_7500_full.v, DRAG_7500_full.D_t,'-r');
         legend('1000 ft Empty','1000 ft Full', '7500 ft Empty', '7500 ft Full');
         return 
     end 
     
-    DRAG.alt1000.empty = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total-WEIGHT.fuel,...
+    DRAG_1000_empty = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total-WEIGHT.fuel,...
                         wing,airfoilw, airfoilh,fuse,htail,vtail,stab.x_cg_empty,stab.static_margin_empty);
-    DRAG.alt1000.full = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total,...
+    DRAG_1000_full = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total,...
                         wing,airfoilw, airfoilh,fuse,htail,vtail,stab.x_cg_full,stab.static_margin_full);
-    DRAG.alt7500.empty = calc_drag_fn([V_cruise V_max],atmos(2).altitude,...
+    DRAG_7500_empty = calc_drag_fn([V_cruise V_max],atmos(2).altitude,...
         WEIGHT.total-WEIGHT.fuel,wing,airfoilw,airfoilh, fuse,htail,vtail,stab.x_cg_empty,stab.static_margin_empty);
-    DRAG.alt7500.full = calc_drag_fn([V_cruise V_max],atmos(2).altitude,...
+    DRAG_7500_full = calc_drag_fn([V_cruise V_max],atmos(2).altitude,...
         WEIGHT.total,wing,airfoilw,airfoilh, fuse,htail,vtail,stab.x_cg_full,stab.static_margin_full);
     
     % De-reference Lift from DRAG Structure
-    CL_max      = DRAG.alt1000.full.C_L(1);  % at 1000 ft
-    CL_loiter   = DRAG.alt1000.full.C_L(2);  % at 1000 ft
-    CL_cruise   = DRAG.alt7500.full.C_L(1);  % at 7500 ft
-    CL_mxspd    = DRAG.alt7500.full.C_L(2);  % at 7500 ft
+    CL_max      = DRAG_1000_full.C_L(1);  % at 1000 ft
+    CL_loiter   = DRAG_1000_full.C_L(2);  % at 1000 ft
+    CL_cruise   = DRAG_7500_full.C_L(1);  % at 7500 ft
+    CL_mxspd    = DRAG_7500_full.C_L(2);  % at 7500 ft
     CL_VEC      = [CL_max CL_loiter CL_cruise CL_mxspd];
     
     
     % ----- CALCULATE ENDURANCE -----
     % Determine how much fuel  burned for climb, cruise, and loiter
     % CLIMBING 
-    P_eng_reqd  = [DRAG.alt1000.full.P_t DRAG.alt7500.full.P_t]/prop.eta_p;
+    P_eng_reqd  = [DRAG_1000_full.P_t DRAG_7500_full.P_t]/prop.eta_p;
     P_eng_avail = ones(1,4)*engn.HP*prop.eta_p;
     P_excess = (P_eng_avail - P_eng_reqd)*hp2lbfts;    % lbf ft/s
     energy(1) =  ((0.5*WEIGHT.total*V_launch^2)/g)+(WEIGHT.total*5); %lbf ft
@@ -204,10 +204,10 @@ for jj = 1:NUM_ITERATION
     W_final(1) = WEIGHT.total - W_fuel(1);
     % CRUISING
     [W_final(2), W_fuel(2)] = endu2W_fuel(W_final(1),prop.eta_p,E_max,...
-                            fuel.cp, CL_loiter, DRAG.alt1000.full.C_Dt(2), atmos(1).rho, wing.S);
+                            fuel.cp, CL_loiter, DRAG_1000_full.C_Dt(2), atmos(1).rho, wing.S);
     % LOITERING
     [W_final(3), W_fuel(3)] = endu2W_fuel(W_final(2),prop.eta_p,E_min,...
-                            fuel.cp, CL_cruise, DRAG.alt7500.full.C_Dt(1), atmos(2).rho, wing.S);
+                            fuel.cp, CL_cruise, DRAG_7500_full.C_Dt(1), atmos(2).rho, wing.S);
     % TOTAL FUEL BURNED
      W_fuel_total = sum(W_fuel);
      
@@ -217,26 +217,26 @@ for jj = 1:NUM_ITERATION
     loadfact.maxLC_loiter = 0.5*atmos(1).rho*V_loiter^2*(CL_max/(WEIGHT.total/wing.S));
     T_avail = (engn.HP/V_stall)*hp2lbfts;
     % Thrust Constrained Load Factor
-    loadfact.maxTC = max(CL_VEC./[DRAG.alt1000.full.C_Dt DRAG.alt7500.full.C_Dt])*(T_avail/WEIGHT.total);
+    loadfact.maxTC = max(CL_VEC./[DRAG_1000_full.C_Dt DRAG_7500_full.C_Dt])*(T_avail/WEIGHT.total);
     
     
     % ----- CALCULATE STABILITY DERIVATIVES -----
-    SDERIV.alt1000.full = calc_stability_derivatives(atmos(1).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
-        htail,airfoilh,vtail,airfoilv,DRAG.alt1000.full,stab.x_cg_full,stab.z_cg_full,stab.static_margin_full);
-    SDERIV.alt1000.empty = calc_stability_derivatives(atmos(1).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
-        htail,airfoilh,vtail,airfoilv,DRAG.alt1000.full,stab.x_cg_empty,stab.z_cg_empty, stab.static_margin_empty);
-    SDERIV.alt7500.full = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_cruise,wing,airfoilw,...
-        htail,airfoilh,vtail,airfoilv,DRAG.alt7500.full,stab.x_cg_full,stab.z_cg_full, stab.static_margin_full);
-    SDERIV.alt7500.empty = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
-        htail,airfoilh,vtail,airfoilv,DRAG.alt7500.empty,stab.x_cg_empty,stab.z_cg_empty,stab.static_margin_empty);
+    SDERIV.alt1000_full = calc_stability_derivatives(atmos(1).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
+        htail,airfoilh,vtail,airfoilv,DRAG_1000_full,stab.x_cg_full,stab.z_cg_full,stab.static_margin_full);
+    SDERIV.alt1000_empty = calc_stability_derivatives(atmos(1).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
+        htail,airfoilh,vtail,airfoilv,DRAG_1000_full,stab.x_cg_empty,stab.z_cg_empty, stab.static_margin_empty);
+    SDERIV.alt7500_full = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_cruise,wing,airfoilw,...
+        htail,airfoilh,vtail,airfoilv,DRAG_7500_full,stab.x_cg_full,stab.z_cg_full, stab.static_margin_full);
+    SDERIV.alt7500_empty = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
+        htail,airfoilh,vtail,airfoilv,DRAG_7500_empty,stab.x_cg_empty,stab.z_cg_empty,stab.static_margin_empty);
     
     % ----- CALCULATE SURFACE CONTROL DEFLECTION -----
-    d_a = DRAG.alt7500.full.C_L/SDERIV.alt7500.full.CL_a*180/pi;
+    d_a = DRAG_7500_full.C_L/SDERIV.alt7500_full.CL_a*180/pi;
     
-    d_r = DRAG.alt7500.full.C_L/SDERIV.alt7500.full.CL_de*180/pi;
+    d_r = DRAG_7500_full.C_L/SDERIV.alt7500_full.CL_de*180/pi;
     
-    d_e = (-SDERIV.alt7500.full.Cm0*SDERIV.alt7500.full.CL_a+ SDERIV.alt7500.full.Cm_a*DRAG.alt7500.full.C_L)/...
-          (SDERIV.alt7500.full.CL_a*SDERIV.alt7500.full.Cm_de - SDERIV.alt7500.full.Cm_a*SDERIV.alt7500.full.CL_de)*180/pi;
+    d_e = (-SDERIV.alt7500_full.Cm0*SDERIV.alt7500_full.CL_a+ SDERIV.alt7500_full.Cm_a*DRAG_7500_full.C_L)/...
+          (SDERIV.alt7500_full.CL_a*SDERIV.alt7500_full.Cm_de - SDERIV.alt7500_full.Cm_a*SDERIV.alt7500_full.CL_de)*180/pi;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                     
@@ -308,10 +308,10 @@ for jj = 1:NUM_ITERATION
     end
     
     %---------- Determine if UAV stability derivatives correct sign -------
-    if (check_sderivs(SDERIV.alt1000.full)  == 0 || ...
-        check_sderivs(SDERIV.alt1000.empty) == 0 || ...
-        check_sderivs(SDERIV.alt7500.full)  == 0 || ...
-        check_sderivs(SDERIV.alt7500.empty) == 0)
+    if (check_sderivs(SDERIV.alt1000_full)  == 0 || ...
+        check_sderivs(SDERIV.alt1000_empty) == 0 || ...
+        check_sderivs(SDERIV.alt7500_full)  == 0 || ...
+        check_sderivs(SDERIV.alt7500_empty) == 0)
             NUM_SDERIVFAILS = NUM_SDERIVFAILS + 1;
             FAIL_FLG = FAIL_FLG + 1;
             status(FAIL_FLG) = cellstr('Stability Derivative Fail');
@@ -324,7 +324,7 @@ for jj = 1:NUM_ITERATION
         status(1) = cellstr('Passed Req Check!');
         UAVsuccess(NUM_SUCCESS) = saveUAV(wing, airfoilw, fuse, htail, ...
                                 airfoilh, vtail, airfoilv, engn, fsys, fuel, prop,...
-                                payld, DRAG, stab, SDERIV, loadfact, sfcl, WEIGHT, status,jj);
+                                payld, stab, SDERIV, loadfact, sfcl, WEIGHT, status,jj);
     else
         NUM_FAIL = NUM_FAIL + 1;
         UAVfail_ind(NUM_FAIL) = jj;
@@ -332,7 +332,7 @@ for jj = 1:NUM_ITERATION
     
     UAVall(jj) = saveUAV(wing, airfoilw, fuse, htail, airfoilh,...
                     vtail, airfoilv, engn, fsys, fuel, prop, payld,...
-                    DRAG, stab, SDERIV, loadfact, sfcl, WEIGHT, status,jj);
+                    stab, SDERIV, loadfact, sfcl, WEIGHT, status,jj);
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
