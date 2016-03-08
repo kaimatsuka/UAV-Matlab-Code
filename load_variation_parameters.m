@@ -35,7 +35,7 @@
     %primary
     htail.sd_S       = 5; % htail area variation (ft^2)
     htail.sd_A       = 2; % htail aspect ratio variation std dev
-    htail.sd_lam     = 0.5; % htail taper ratio variation
+    htail.sd_lam     = 0; % htail taper ratio variation
     htail.sd_lam_q   = 0; % htail quarter chord sweep variation 
     % htail.sd_lam_max = 0; % htail sweep of maximum thickness line variation
     htail.sd_h       = 1; % htail dist from head to 1/4 chord of variation (ft)

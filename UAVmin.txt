@@ -1,0 +1,212 @@
+-----------GEOMETRIC PROPERTIES----------
+-----WING PROPERTIES-----
+Airfoil = naca2418
+Wing Area (S) = 3.8606 ft
+Aspect Ratio (A) = 8.0507 ft
+Taper Ratio (lam) = 0.5000
+Wing Quarter Chord Sweep (deg) (lam_q) = 0.0000
+Distance from Nose to Quarter Chord Pt (h_q) = 3.0208
+Distance from Nose to Root Leading Edge (h_LE) = 2.8477 ft
+Oswald Efficiency (e) = 0.8000
+Wing Span (b) = 5.5750 ft
+Chord Length (c) = 0.6925 ft
+Thickness (t) = 0.1246 ft
+Maximum Thickness Ratio (t/c) = 0.1800
+Maximum Thickness Location (mtl) = 0.3000
+Wing Root Chord Length (c_r) = 0.9233 ft
+Wing Tip Chord Length (c_t) = 0.4617 ft
+Max Thickness at Root (t_r) = 0.1662 ft
+Max Thickness at Tip (t_t) = 0.0831 ft
+X-Center of Gravity (x_cg) = 3.0785 ft
+Z-Center of Gravity (z_cg) = 0.6040 ft 
+CL_max = 1.5639
+Lift Curve Slope (a_w) = 4.8965 (1/rad)
+
+-----FUSELAGE PROPERTIES-----
+Fuselage Length (L) = 6.9901 ft
+Fuselage Diameter (D) = 1.0833 ft
+X-Center of Gravity (x_cg) = 3.4950 ft
+Z-Center of Gravity (z_cg) = 0.5417 ft
+
+-----HORIZONTAL TAIL PROPERTIES-----
+Airfoil = naca0024
+Horizontal Tail Area (S) = 2.4477 ft
+Aspect Ratio (A) = 3.1977 ft
+Taper Ratio (lam) = 1.0000
+Horizontal Tail Quarter Chord Sweep (deg) (lam_q) = 0.0000
+Distance from Nose to Quarter Chord Pt (h) = 5.7751
+Distance from Nose to Root Leading Edge (h_LE) = 5.5563 ft
+Oswald Efficiency (e) = 0.8000
+Horizontal Tail Span (b) = 2.7977 ft
+Chord Length (c) = 0.8749 ft
+Thickness (t) = 0.2100 ft
+Maximum Thickness Ratio (t/c) = 0.2400
+Maximum Thickness Location (mtl) = 0.3000
+Horizontal Tail Root Chord Length (c_r) = 0.8749 ft
+Horizontal Tail Tip Chord Length (c_t) = 0.8749 ft
+Max Thickness at Root (t_r) = 0.2100 ft
+Max Thickness at Tip (t_t) = 0.2100 ft
+X-Center of Gravity (x_cg) = 5.7751 ft
+Z-Center of Gravity (z_cg) = 0.6040 ft 
+CL_max = 1.5639
+Lift Curve Slope (a_t) = 3.2729 (1/rad)
+
+-----VERTICAL TAIL PROPERTIES-----
+Airfoil = naca0024
+Horizontal Tail Area (S) = 0.7305 ft
+Aspect Ratio (A) = 2.1420 ft
+Taper Ratio (lam) = 0.9174
+Horizontal Tail Quarter Chord Sweep (deg) (lam_q) = 0.0000
+Distance from Nose to Quarter Chord Pt (h) = 6.5393
+Distance from Nose to Root Leading Edge (h_LE) = 6.3933 ft
+Oswald Efficiency (e) = 0.8000
+Horizontal Tail Span (b) = 1.2509 ft
+Chord Length (c) = 0.5840 ft
+Thickness (t) = 0.1402 ft
+Maximum Thickness Ratio (t/c) = 0.2400
+Maximum Thickness Location (mtl) = 0.3000
+Horizontal Tail Root Chord Length (c_r) = 0.6092 ft
+Horizontal Tail Tip Chord Length (c_t) = 0.5588 ft
+Max Thickness at Root (t_r) = 0.1462 ft
+Max Thickness at Tip (t_t) = 0.1341 ft
+X-Center of Gravity (x_cg) = 6.5393 ft
+Z-Center of Gravity (z_cg) = 1.3753 ft 
+CL_max = 0.6577
+Lift Curve Slope (a_t) = 3.3646 (1/rad)
+
+-----ENGINE PROPERTIES-----
+Engine Name =   RCG 20cc
+Power (HP) = 1.7600
+RPM = 9800.0000 
+Engine Weight (lb) = 2.0000 
+X-Center of Gravity (x_cg) = 6.6406 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+
+-----PROPELLER PROPERTIES-----
+Diameter = 0.8207 ftPitch = 6.0399 degX-Center of Gravity (x_cg) = 7.1648 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+
+-----FUEL & FUEL SYSTEM-----
+Fuel Weight = 2.5077 lb
+Fuel System Weight = 0.3373 lb
+Fuel System Diameter = 0.6500 ft
+Fuel System Length = 0.1663 ft
+X-Center of Gravity (x_cg) = 3.4950 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+
+-----PAYLOAD SPECS-----
+Total Weight = 16.0800 lbs
+--EO/IR Sensor
+Weight = 12.5700 lbs
+X-Center of Gravity (x_cg) = 1.7000 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+--LiDAR Sensor
+Weight = 1.0000 lbs
+X-Center of Gravity (x_cg) = 0.5724 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+--SAR Sensor
+Weight = 2.0000 lbs
+X-Center of Gravity (x_cg) = 2.5164 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+--Wave Relay
+Weight = 0.2500 lbs
+X-Center of Gravity (x_cg) = 0.3816 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+--IMU
+Weight = 0.1100 lbs
+X-Center of Gravity (x_cg) = 0.3816 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+--SAR Sensor
+Weight = 2.0000 lbs
+X-Center of Gravity (x_cg) = 2.5164 ft 
+Z-Center of Gravity (z_cg) = 0.5417 ft 
+--Antenna
+Weight = 0.1500 lbs
+X-Center of Gravity (x_cg) = 0.3816 ft 
+Z-Center of Gravity (z_cg) = 0.0000 ft 
+
+-----------WEIGHT PROPERTIES----------
+Total Weight = 28.5115 lbs
+  Wing = 1.2937 lbs
+  Fuselage = 3.3296 lbs
+  Horizontal Tail = 1.0054 lbs
+  Vertical Tail = 0.4822 lbs
+  Fuel System = 1.3101 lbs
+  Engine = 2.2000 lbs
+  Avionics/Payload = 16.0800 lbs
+  Fuel = 2.5077 lbs
+  Propeller = 0.1713 lbs
+
+-----------LIFT/DRAG/POWER PROPERTIES----------
+--Condition: Altitude 1000ft, Fuel: Full
+Speed (ft/s):          66.0000 (Stall)      73.3333 (Loiter)
+Lift Coeff (C_L):       1.4688               1.1898
+  C_Lw:                 0.6200               0.5016
+  C_Lh:                 0.8488               0.6881
+Drag Coeff (C_D):       0.2768               0.1894
+  C_Dp:                 0.0639               0.0633
+  C_Di:                 0.1066               0.0700
+  C_Dairf:              0.0440               0.0224
+  C_Dtrim:              0.0622               0.0337
+Moment AC (Cm_ac):      0.0033              -0.0104
+Trim Angle (i_t):      -0.1614              -0.1296
+Total Drag (lbf):       5.3725               4.5378
+  Parasite (lbf):       1.2413               1.5163
+  Induced (lbf):        2.0698               1.6765
+  Airfoil (lbf):        0.8549               0.5379
+  Trim (lbf):           1.2065               0.8072
+Power Reqd (HP):        0.7092               0.6655
+--Condition: Altitude 1000ft, Fuel: Empty
+Speed (ft/s):          66.0000 (Stall)      73.3333 (Loiter)
+Lift Coeff (C_L):       1.3396               1.0851
+  C_Lw:                 0.5534               0.4483
+  C_Lh:                 0.7863               0.6368
+Drag Coeff (C_D):       0.2363               0.1682
+  C_Dp:                 0.0639               0.0633
+  C_Di:                 0.0887               0.0582
+  C_Dairf:              0.0315               0.0184
+  C_Dtrim:              0.0522               0.0283
+Moment AC (Cm_ac):     -0.0012              -0.0185
+Trim Angle (i_t):      -0.1524              -0.1219
+Total Drag (lbf):       4.5874               4.0303
+  Parasite (lbf):       1.2413               1.5163
+  Induced (lbf):        1.7217               1.3946
+  Airfoil (lbf):        0.6110               0.4420
+  Trim (lbf):           1.0134               0.6775
+Power Reqd (HP):        0.6055               0.5911
+--Condition: Altitude 7500ft, Fuel: Full
+Speed (ft/s):         132.0000 (Stall)     139.3333 (Loiter)
+Lift Coeff (C_L):       0.4468               0.4010
+  C_Lw:                 0.1851               0.1655
+  C_Lh:                 0.2617               0.2355
+Drag Coeff (C_D):       0.0840               0.0809
+  C_Dp:                 0.0620               0.0617
+  C_Di:                 0.0099               0.0079
+  C_Dairf:              0.0100               0.0097
+  C_Dtrim:              0.0020               0.0015
+Moment AC (Cm_ac):     -0.0402              -0.0415
+Trim Angle (i_t):      -0.0454              -0.0403
+Total Drag (lbf):       5.3579               5.7492
+  Parasite (lbf):       3.9590               4.3890
+  Induced (lbf):        0.6295               0.5650
+  Airfoil (lbf):        0.6413               0.6909
+  Trim (lbf):           0.1280               0.1043
+Power Reqd (HP):        1.4145               1.6021
+--Condition: Altitude 7500ft, Fuel: Empty
+Speed (ft/s):         132.0000 (Stall)     139.3333 (Loiter)
+Lift Coeff (C_L):       0.4075               0.3657
+  C_Lw:                 0.1645               0.1470
+  C_Lh:                 0.2430               0.2187
+Drag Coeff (C_D):       0.0817               0.0791
+  C_Dp:                 0.0620               0.0617
+  C_Di:                 0.0082               0.0066
+  C_Dairf:              0.0098               0.0095
+  C_Dtrim:              0.0017               0.0012
+Moment AC (Cm_ac):     -0.0413              -0.0428
+Trim Angle (i_t):      -0.0428              -0.0380
+Total Drag (lbf):       5.2138               5.6250
+  Parasite (lbf):       3.9590               4.3890
+  Induced (lbf):        0.5237               0.4700
+  Airfoil (lbf):        0.6234               0.6782
+  Trim (lbf):           0.1078               0.0878
+Power Reqd (HP):        1.3764               1.5675
