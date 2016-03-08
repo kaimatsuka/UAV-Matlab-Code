@@ -15,7 +15,7 @@ VARY_HTAIL = 1;
 VARY_VTAIL = 1;
 VARY_FUEL  = 1;
 VARY_ENGN  = 1;
-VARY_PROP  = 0;
+VARY_PROP  = 1;
 VARY_SFCL  = 0;
 VARY_CG    = 0;
 
@@ -81,7 +81,7 @@ if VARY_HTAIL
     % ^^ This value is derived parameter
 
     % randomly pick airfoil
-    airfoilh.ind = randi(12); % randomly select airfoil
+    airfoilh.ind = randi(2); % randomly select airfoil
 else
     % primary
     htail.A     = baseUAV.htail.A;
@@ -107,7 +107,7 @@ if VARY_VTAIL
     vtail.h = check_allowable(baseUAV.vtail.h,(rand-0.5)*vtail.sd_h,1.05*wing.h_q,fuse.L); % dist from head to 1/4 chord of vertical tail (ft)
 
     % randomly pick airfoil
-    airfoilv.ind = randi(12); % randomly select airfoil
+    airfoilv.ind = randi(2); % randomly select airfoil
 else
     % primay
     vtail.S = baseUAV.vtail.S;
