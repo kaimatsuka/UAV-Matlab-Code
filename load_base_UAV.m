@@ -60,7 +60,7 @@ airfoilv.ind = 1;
 
 % Fuel --------------------------------------------------------------------
 
-fuel.W = 6; %[lb] fuel weight (calculated using test_fuel.m file)
+fuel.W = 15; %[lb] fuel weight (calculated using test_fuel.m file)
 
 % Fuel System -------------------------------------------------------------
 
