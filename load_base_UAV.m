@@ -71,9 +71,9 @@ fuel.W = 6; %[lb] fuel weight (calculated using test_fuel.m file)
 engn.ind = 1; % choose 1 (out of 9) as base engine
 
 % Propeller ---------------------------------------------------------------
-
-prop.D = 1.62;   % propeller diameter (ft)
-prop.pitch = 15; % propeller pitch (ft)
+% 
+% prop.D = 2;   % propeller diameter (ft)
+% prop.pitch = 15; % propeller pitch (ft)
 
 % Electronics/Payloads ----------------------------------------------------
 
@@ -117,7 +117,7 @@ baseUAV.fuse  = fuse;
 baseUAV.engn  = engn;
 baseUAV.fsys  = fsys;
 baseUAV.fuel  = fuel;
-baseUAV.prop  = prop;
+% baseUAV.prop  = prop;
 baseUAV.payld = payld;
 baseUAV.sfcl  = sfcl;
 baseUAV.airfoilw = airfoilw;

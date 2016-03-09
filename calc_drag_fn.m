@@ -145,35 +145,36 @@ Q_vec     = [wing.Q; fuse.Q; htail.Q; vtail.Q]; %interference factor vector
 C_f_vec   = [wing.c_f; fuse.c_f; htail.c_f; vtail.c_f]; %skin friction vector
 S_wet_vec = [wing.S_wet; fuse.S_wet; htail.S_wet; vtail.S_wet]; %wet area vector
 
-% Compute drag coefficients
+% Compute lift coefficients
 DRAG.C_L     = CL; % Calculated above
 DRAG.C_Lh    = (a_t*(((alpha + i_w)*(1-eps_a))-(i_t-i_w)-alpha_0))*(htail.S/wing.S); % lift coefficient contribution of tail
 DRAG.C_Lw    = DRAG.C_L - DRAG.C_Lh; % lift coefficient contribution from wing
+
+% Compute drag coefficients
 DRAG.C_Dp    = C_Dpi(K_vec,Q_vec,C_f_vec,S_wet_vec,wing.S,C_Dmisc,C_DLP); %parasite dragcoefficient equation
-DRAG.C_Di    = wing.K_i*DRAG.C_L.^2; %induced drag coefficient equation
+DRAG.C_Diw   = DRAG.C_Lw.*DRAG.C_Lw.*wing.K; % drag contribution of wing
+DRAG.C_Dih   = DRAG.C_Lh.*DRAG.C_Lh.*htail.K*htail.S/wing.S; % drag contribution of tail
 DRAG.C_Dairf = interp1(airfoilw.CL, airfoilw.Cd, DRAG.C_L); % airfoil produced drag
-% DRAG.C_Dt    = DRAG.C_Dp + DRAG.C_Di + DRAG.C_Dairf;
 
-% DRAG.C_Lw    = TRIM.CL_w;
-% DRAG.C_Lh    = TRIM.CL_t; 
+DRAG.C_Dt = DRAG.C_Dp + DRAG.C_Diw+DRAG.C_Dih+DRAG.C_Dairf;
 
+% Compute drag
 DRAG.D_p    = DRAG.C_Dp*0.5*rho.*v_drag.^2*wing.S;
-DRAG.D_i    = DRAG.C_Di*0.5*rho.*v_drag.^2*wing.S;
+DRAG.D_iw   = DRAG.C_Diw*0.5*rho.*v_drag.^2*wing.S;
+DRAG.D_ih   = DRAG.C_Dih*0.5*rho.*v_drag.^2*wing.S;
 DRAG.D_airf = DRAG.C_Dairf*0.5*rho.*v_drag.^2*wing.S;
-DRAG.D_w    = DRAG.C_Lh.*DRAG.C_Lh.*wing.K; % drag contribution of wing
-DRAG.D_h    = DRAG.C_Lw.*DRAG.C_Lw.*htail.K*htail.S/wing.S; % drag contribution of tail
-DRAG.D_t    = DRAG.D_p+DRAG.D_i+DRAG.D_airf+DRAG.D_h+DRAG.D_w;
 
+DRAG.D_t    = DRAG.D_p+DRAG.D_iw+DRAG.D_ih+DRAG.D_airf;
+
+% Save incidence angle and 
 DRAG.i_t   = i_t;
 DRAG.Cm_ac = Cm_ac;
-
-DRAG.C_Dt  = (2*DRAG.D_t)./(rho*v_drag.^2*wing.S);
-
 DRAG.v = v_drag;
 
 %POWER---------------------------------------------------------------------
 
 DRAG.P_p    = DRAG.D_p.*v_drag*lbfts2hp;
-DRAG.P_i    = DRAG.D_i.*v_drag*lbfts2hp;
+DRAG.P_iw   = DRAG.D_iw.*v_drag*lbfts2hp;
+DRAG.P_ih   = DRAG.D_ih.*v_drag*lbfts2hp;
 DRAG.P_airf = DRAG.D_airf.*v_drag*lbfts2hp;
 DRAG.P_t    = DRAG.D_t.*v_drag*lbfts2hp;

@@ -168,16 +168,17 @@ fprintf(fileID,'  C_Lw:             %10.4f           %10.4f\n',UAVstruct.drag.al
 fprintf(fileID,'  C_Lh:             %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Lh);
 fprintf(fileID,'Drag Coeff (C_D):   %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Dt);
 fprintf(fileID,'  C_Dp:             %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Dp);
-fprintf(fileID,'  C_Di:             %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Di);
+fprintf(fileID,'  C_Diw:            %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Diw);
+fprintf(fileID,'  C_Dih:            %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Dih);
 fprintf(fileID,'  C_Dairf:          %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Dairf);
-fprintf(fileID,'  C_Dtrim:          %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Dt-UAVstruct.drag.alt1000.full.C_Dp-UAVstruct.drag.alt1000.full.C_Di-UAVstruct.drag.alt1000.full.C_Dairf);
+fprintf(fileID,'  C_Dtrim:          %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.C_Dt-UAVstruct.drag.alt1000.full.C_Dp-UAVstruct.drag.alt1000.full.C_Diw-UAVstruct.drag.alt1000.full.C_Dairf);
 fprintf(fileID,'Moment AC (Cm_ac):  %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.Cm_ac);
 fprintf(fileID,'Trim Angle (i_t):   %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.i_t);
 fprintf(fileID,'Total Drag (lbf):   %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.D_t);
 fprintf(fileID,'  Parasite (lbf):   %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.D_p);
-fprintf(fileID,'  Induced (lbf):    %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.D_i);
+fprintf(fileID,'  Induced (lbf):    %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.D_iw);
 fprintf(fileID,'  Airfoil (lbf):    %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.D_airf);
-fprintf(fileID,'  Trim (lbf):       %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.D_t-UAVstruct.drag.alt1000.full.D_p-UAVstruct.drag.alt1000.full.D_i-UAVstruct.drag.alt1000.full.D_airf);
+fprintf(fileID,'  Trim (lbf):       %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.D_t-UAVstruct.drag.alt1000.full.D_p-UAVstruct.drag.alt1000.full.D_iw-UAVstruct.drag.alt1000.full.D_airf);
 fprintf(fileID,'Power Reqd (HP):    %10.4f           %10.4f\n',UAVstruct.drag.alt1000.full.P_t);
 
 fprintf(fileID,'\n--Condition: Altitude 1000ft, Fuel: Empty\n');

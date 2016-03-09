@@ -1,18 +1,44 @@
 % All inputs for the Pioneer UAV dynamics should be done here. AKA all
 % constant block values need to be declared here.
 
-weight = 420;     % [lbsf]        Bray pg 33
-I_xx = 34.832;    % [slug-ft^2] IAI, MSS notes
-I_yy = 67.08;     % [slug-ft^2] IAI, MSS notes
-I_zz = 82.22;     % [slug-ft^2] IAI, MSS notes
-I_xz = -4.902;    % [slug-ft^2] IAI, MSS notes
+Disaster_UAV = 0; % 0 for disaster UAV, 1 for pioneer
 
-bw   =  16.90;    % [ft]        Bray pg 31
-cbar =  1.80;     % [ft]        Bray pg 31
-Sw   =  30.42;    % [ft^2]      Bray pg 31
+if Disaster_UAV
+    
+    weight = 28.5;     % [lbsf]        Bray pg 33
+    I_xx = 2.1;    % [slug-ft^2] IAI, MSS notes
+    I_yy = 10.98;     % [slug-ft^2] IAI, MSS notes
+    I_zz = 13.55;     % [slug-ft^2] IAI, MSS notes
+    I_xz = -0.455;    % [slug-ft^2] IAI, MSS notes
 
-thrust_bx = 89.8;     % [lb] - body x thrust  from Bray pg 78/80 thrust avail for 65.3 knots at sea lvl
-He=0;   % Engine moment
+    bw   =  5.575;    % [ft]        Bray pg 31
+    cbar =  0.6925;     % [ft]        Bray pg 31
+    Sw   =  3.8606;    % [ft^2]      Bray pg 31
+
+    thrust_bx = 1000; % [lb] - body x thrust  from Bray pg 78/80 thrust avail for 65.3 knots at sea lvl
+    He=0;   % Engine moment
+
+    %initial velocity in body axes [U, v, w] - relative to wind i think?
+    Velini = [100 0 0];
+else
+    
+    weight = 420;     % [lbsf]        Bray pg 33
+    I_xx = 34.832;    % [slug-ft^2] IAI, MSS notes
+    I_yy = 67.08;     % [slug-ft^2] IAI, MSS notes
+    I_zz = 82.22;     % [slug-ft^2] IAI, MSS notes
+    I_xz = -4.902;    % [slug-ft^2] IAI, MSS notes
+
+    bw   =  16.90;    % [ft]        Bray pg 31
+    cbar =  1.80;     % [ft]        Bray pg 31
+    Sw   =  30.42;    % [ft^2]      Bray pg 31
+
+    thrust_bx = 89.8;     % [lb] - body x thrust  from Bray pg 78/80 thrust avail for 65.3 knots at sea lvl
+    He=0;   % Engine moment
+
+    %initial velocity in body axes [U, v, w] - relative to wind i think?
+    Velini = [118.1 0 0];    % 65.3 knots  - zero elevator trim from Bray pg 35
+
+end
 
 % gravity acceleration
 grav = 32.17405;
@@ -29,9 +55,7 @@ rho = 0.002379;
 %initial position in inertial axes [Xe, Ye, Ze]
 Posini = [0 0 -100];
 
-%initial velocity in body axes [U, v, w] - relative to wind i think?
-Velini = [118.1 0 0];    % 65.3 knots  - zero elevator trim from Bray pg 35
-V_init = norm(Velini);
+
 
 %initial Euler orientation [roll, pitch, yaw]
 % Eulini = [0 6.2*pi/180 0];

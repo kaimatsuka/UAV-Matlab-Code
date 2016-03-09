@@ -16,11 +16,12 @@
 %  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-eng_data = xlsread('Engine Directory.xlsx','EngInfo','B4:L12');
+eng_data = xlsread('Engine Directory.xlsx','EngInfo','B4:L14');
 eng_names = cellstr(['RCG 15cc  ';'RCG 20cc  ';'RCG 26cc  ';'RCG 30cc  ';...
-    'RCG 30cc_t';'RCG 55cc  ';'RCG 61cc  ';'NGH GT35  ';'NGH GT35R ']);
+    'RCG 30cc_t';'RCG 55cc  ';'RCG 61cc  ';'NGH GT35  ';'NGH GT35R ';...
+    'TR-111    ';'JC-120    ']);
 
-for i = 1:9
+for i = 1:11
     engines(i).name     = eng_names(i); % engine names
     engines(i).P_max    = eng_data(i,1); % engine max power (hp)
     engines(i).eff      = eng_data(i,2); % engine efficiency

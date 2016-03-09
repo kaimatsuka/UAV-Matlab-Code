@@ -136,20 +136,21 @@ end
 
 if VARY_ENGN
     %Randomly select engines from engine directory
-    engn.ind = randi(9); % index of engines
+    engn.ind = randi(11); % index of engines
+%     engn.ind = 3+randi(8); % index of engines
 else
-    engn.ind = 6;
+    engn.ind = 11;
 end
 
 % Propeller ---------------------------------------------------------------
-
-if VARY_PROP
-    prop.D     = check_allowable(baseUAV.prop.D,(rand-0.5)*prop.sd_D,0,9999); %[ft]
-    prop.pitch = check_allowable(baseUAV.prop.pitch,(rand-0.5)*prop.sd_pitch,0,9999); %[ft]
-else
-    prop.D     = baseUAV.prop.D;
-    prop.pitch = baseUAV.prop.pitch;
-end
+% 
+% if VARY_PROP
+%     prop.D     = check_allowable(baseUAV.prop.D,(rand-0.5)*prop.sd_D,0,9999); %[ft]
+%     prop.pitch = check_allowable(baseUAV.prop.pitch,(rand-0.5)*prop.sd_pitch,0,9999); %[ft]
+% else
+%     prop.D     = baseUAV.prop.D;
+%     prop.pitch = baseUAV.prop.pitch;
+% end
 
 % Electronics/Payloads ----------------------------------------------------
 

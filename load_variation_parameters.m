@@ -17,12 +17,11 @@
 
 % Wing --------------------------------------------------------------------
 
-    wing.sd_A     = 7.5;  % wing aspect ratio variation std dev 
+    wing.sd_A     = 6;  % wing aspect ratio variation std dev 
     wing.sd_S     = 15;   % wing area variation (ft^2)
     wing.sd_lam   = 0; % wing taper ratio variation(n/a)
     wing.sd_lam_q = 0;   % wing quarter chord sweep variation (deg)
     wing.sd_h     = 1;   % head to 1/4 chord distance variation (ft)
-
 
 % Fuselage ----------------------------------------------------------------
 
@@ -65,10 +64,10 @@
     sfcl.elev.sd_c  = 0.05;
     
 % Propeller ---------------------------------------------------------------
-
-    prop.sd_h     = 0;   % propeller location (ft)
-    prop.sd_D     = 1.6; % propeller diameter variation (ft)
-    prop.sd_pitch = 10;  % propeller pitch (ft)
+% 
+%     prop.sd_h     = 0;   % propeller location (ft)
+%     prop.sd_D     = 5; % propeller diameter variation (ft)
+%     prop.sd_pitch = 0;  % propeller pitch (ft)
 
 % CG locations ------------------------------------------------------------
 

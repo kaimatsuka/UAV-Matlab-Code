@@ -7,8 +7,8 @@ alt   = in(3);
 tar_E = in(4);
 tar_N = in(5);
 t     = in(6);
+speed = in(7);
 
-plot(pe,pn,'.b'), hold on
 
 if t==0
     %conversion
@@ -39,11 +39,26 @@ if t==0
     hold on
 end
 
+figure(1)
 plot(tar_E,tar_N,'xr')
+hold on, grid on
+plot(pe,pn,'.b'), 
 xlabel('pE')
 ylabel('pN')
 axis equal
-grid on
+
+figure(2)
+subplot(2,1,1)
+plot(t,alt,'.b')
+xlabel('time(sec)');
+ylabel('altitude (ft)');
+grid on; hold on;
+subplot(2,1,2)
+plot(t,speed,'.b')
+xlabel('time(sec)');
+ylabel('speed (ft/s)');
+grid on; hold on;
+
 
 %{
 

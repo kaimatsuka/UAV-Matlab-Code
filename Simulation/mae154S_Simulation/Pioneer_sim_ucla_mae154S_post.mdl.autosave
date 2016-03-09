@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.179"
+    ComputedModelVersion    "1.171"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -29,7 +29,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [19.0, 44.0, 1226.0, 860.0]
+      Location		      [17.0, 245.0, 1226.0, 860.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -69,7 +69,7 @@ Model {
 	}
 	Object {
 	  $ObjectID		  7
-	  IsActive		  [1]
+	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "62"
 	  Extents		  [1176.0, 683.0]
@@ -78,7 +78,7 @@ Model {
 	}
 	Object {
 	  $ObjectID		  8
-	  IsActive		  [0]
+	  IsActive		  [1]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "1"
 	  Extents		  [1176.0, 683.0]
@@ -95,9 +95,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "matsuka"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Mar 08 17:03:37 2016"
-  RTWModifiedTimeStamp	  379357416
-  ModelVersionFormat	  "1.%<AutoIncrement:179>"
+  LastModifiedDate	  "Tue Mar 08 16:15:39 2016"
+  RTWModifiedTimeStamp	  379354548
+  ModelVersionFormat	  "1.%<AutoIncrement:171>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1954,7 +1954,7 @@ Model {
 	  BlockType		  Constant
 	  Name			  "Max Thrust"
 	  SID			  "45"
-	  Position		  [280, 17, 380, 43]
+	  Position		  [350, 15, 380, 45]
 	  ZOrder		  -9
 	  Value			  "[thrust_bx 0 0]"
 	}
@@ -2255,7 +2255,7 @@ Model {
 	  RequestExecContextInheritance	off
 	  System {
 	    Name		    "aero_coefs"
-	    Location		    [19, 44, 1245, 904]
+	    Location		    [17, 245, 1243, 1105]
 	    Open		    on
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2360,8 +2360,9 @@ Model {
 	      Name		      "get_coeffs(disaster_relief)"
 	      SID		      "369"
 	      Ports		      [1, 1]
-	      Position		      [300, 275, 380, 305]
-	      ZOrder		      10
+	      Position		      [340, 390, 420, 420]
+	      ZOrder		      6
+	      Commented		      "on"
 	      MATLABFcn		      "get_coeffs_from_optimization"
 	      OutputDimensions	      "6"
 	    }
@@ -2370,9 +2371,8 @@ Model {
 	      Name		      "get_coeffs(pioneer)"
 	      SID		      "71"
 	      Ports		      [1, 1]
-	      Position		      [315, 170, 395, 200]
-	      ZOrder		      11
-	      Commented		      "on"
+	      Position		      [300, 250, 380, 280]
+	      ZOrder		      5
 	      MATLABFcn		      "get_coeffs"
 	      OutputDimensions	      "6"
 	    }
@@ -2380,7 +2380,7 @@ Model {
 	      BlockType		      Outport
 	      Name		      "coefs"
 	      SID		      "73"
-	      Position		      [460, 283, 490, 297]
+	      Position		      [455, 258, 485, 272]
 	      ZOrder		      -11
 	      IconDisplay	      "Port number"
 	    }
@@ -2444,10 +2444,11 @@ Model {
 	      DstPort		      8
 	    }
 	    Line {
-	      ZOrder		      31
+	      ZOrder		      21
 	      SrcBlock		      "Mux"
 	      SrcPort		      1
-	      DstBlock		      "get_coeffs(disaster_relief)"
+	      Points		      [35, 0; 0, -25]
+	      DstBlock		      "get_coeffs(pioneer)"
 	      DstPort		      1
 	    }
 	    Line {
@@ -2458,8 +2459,8 @@ Model {
 	      DstPort		      6
 	    }
 	    Line {
-	      ZOrder		      32
-	      SrcBlock		      "get_coeffs(disaster_relief)"
+	      ZOrder		      22
+	      SrcBlock		      "get_coeffs(pioneer)"
 	      SrcPort		      1
 	      DstBlock		      "coefs"
 	      DstPort		      1
@@ -2481,8 +2482,8 @@ Model {
 	  Position		  [485, 14, 515, 46]
 	  ZOrder		  -15
 	  Floating		  off
-	  Location		  [1037, 775, 1992, 1260]
-	  Open			  on
+	  Location		  [157, 71, 1112, 556]
+	  Open			  off
 	  NumInputPorts		  "1"
 	  List {
 	    ListType		    AxesTitles
@@ -3441,7 +3442,7 @@ Model {
 	  RequestExecContextInheritance	off
 	  System {
 	    Name		    "altitude hold"
-	    Location		    [17, 245, 1243, 1105]
+	    Location		    [216, 0, 1897, 1160]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -3664,7 +3665,7 @@ Model {
 	      SID		      "134"
 	      Position		      [385, 25, 415, 55]
 	      ZOrder		      -19
-	      Value		      "56"
+	      Value		      "100"
 	    }
 	    Block {
 	      BlockType		      Scope

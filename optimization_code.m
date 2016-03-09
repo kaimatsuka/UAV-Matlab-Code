@@ -20,7 +20,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-clear all; close all; rng(1);
+clear all; close all; rng(2);
 
 % set path to all subfolders
 currentPath = pwd;
@@ -52,6 +52,7 @@ NUM_AILFAILS = 0;
 NUM_RUDDFAILS = 0;
 NUM_ELEVFAILS = 0;
 NUM_RCFAILS = 0;
+NUM_PROPFAILS = 0;
 
 
 % Atmos structure has all atmospheric properties for calculation
@@ -103,6 +104,9 @@ for jj = 1:NUM_ITERATION
            baseUAV = update_baseUAV(UAVsuccess(ind));
            calc_non_tunable_parameters;
            NUM_BASEUAVCHANGE = NUM_BASEUAVCHANGE + 1;
+       else
+           display('Converged!')
+           break
        end
     end
     
@@ -157,6 +161,48 @@ for jj = 1:NUM_ITERATION
     eta_p_vec = [prop.eta_p.v_stall prop.eta_p.loiter prop.eta_p.cruise prop.eta_p.v_max];
     
     % ----- CALCULATE LIFT & DRAG -----
+    if 0
+        v_vec = linspace(V_stall,V_max,100);
+        DRAG.alt1000.empty = calc_drag_fn(v_vec,atmos(1).altitude,WEIGHT.total-WEIGHT.fuel,...
+                        wing,airfoilw, airfoilh,fuse,htail,vtail,stab.x_cg_empty,stab.static_margin_empty);
+        DRAG.alt1000.full = calc_drag_fn(v_vec,atmos(1).altitude,WEIGHT.total,...
+                        wing,airfoilw, airfoilh,fuse,htail,vtail,stab.x_cg_full,stab.static_margin_full);   
+        DRAG.alt7500.empty = calc_drag_fn(v_vec,atmos(2).altitude,WEIGHT.total-WEIGHT.fuel,...
+                        wing,airfoilw,airfoilh, fuse,htail,vtail,stab.x_cg_empty,stab.static_margin_empty);
+        DRAG.alt7500.full = calc_drag_fn(v_vec,atmos(2).altitude,WEIGHT.total,...
+                        wing,airfoilw,airfoilh, fuse,htail,vtail,stab.x_cg_full,stab.static_margin_full);
+                    
+        figure()
+        plot(DRAG.alt1000.empty.v, DRAG.alt1000.full.C_Dp,'b'); hold on, grid on
+        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.C_Diw,'.b');
+        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.C_Dih,'r');
+        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.C_Dairf,'.r');
+        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.C_Dt,'c');
+        legend('CD_p','CD_{iw}','CD_{it}','CD_{aif}');
+        
+        figure()
+        plot(DRAG.alt1000.empty.v, DRAG.alt1000.full.D_p,'b'); hold on, grid on
+        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.D_iw,'.b');
+        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.D_ih,'r');
+        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.D_airf,'.r');
+        plot(DRAG.alt1000.full.v, DRAG.alt1000.full.D_t,'c');
+        legend('Dp','Diw','Dit','Daif','Dtot');
+        
+%         figure()
+%         plot(DRAG.alt1000.empty.v, DRAG.alt1000.full.D_t,'b'); hold on, grid on
+%         plot(DRAG.alt1000.full.v, DRAG.alt1000.full.D_ih,'-b');
+%         legend('total drag','drag due to horizontal tail');
+%         
+%         figure()
+%         C_L = DRAG.alt1000.full.C_Lw;
+%         alph = interp1(airfoilw.CL,airfoilw.alpha,C_L);
+%         plot(alph,DRAG.alt1000.full.C_Lh,'r'); hold on, grid on
+%         xlabel('alpha'),ylabel('CL_{tail}');
+        
+        return 
+    end 
+    
+    
     DRAG.alt1000.empty = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total-WEIGHT.fuel,...
                         wing,airfoilw, airfoilh,fuse,htail,vtail,stab.x_cg_empty,stab.static_margin_empty);
     DRAG.alt1000.full = calc_drag_fn([V_stall V_loiter],atmos(1).altitude,WEIGHT.total,...
@@ -175,12 +221,14 @@ for jj = 1:NUM_ITERATION
            
     % ---- CALCULATE RATE OF CLIMB -----
     RC.dt = atmos(2).altitude/RC_max;
-    RC.P_excess = (WEIGHT.total*(RC_max + ((V_cruise/g)*((V_cruise-V_launch)/RC.dt))))*lbfts2hp;
+    V_sq_ave = sqrt((V_cruise^2+V_launch^2)/2);
+    RC.P_excess = (WEIGHT.total*(RC_max + ((V_sq_ave/g)*((V_cruise-V_launch)/RC.dt))))*lbfts2hp;
     RC.P_reqd = max([DRAG.alt1000.empty.P_t DRAG.alt1000.full.P_t DRAG.alt7500.empty.P_t DRAG.alt7500.full.P_t]);
+    RC.P_reqd = max([DRAG.alt1000.full.P_t]);
     RC.P_avail = (RC.P_excess+RC.P_reqd)/prop.eta_p.cruise;
     
     % ----- CALCULATE ENDURANCE -----
-    % Determine how much fuel  burned for climb, cruise, and loiter
+    % Determine how much fuel burned for climb, cruise, and loiter
     % CLIMBING 
     P_eng_reqd  = [DRAG.alt1000.full.P_t DRAG.alt7500.full.P_t];
     P_eng_avail = ones(1,4)*engn.HP.*eta_p_vec;
@@ -284,6 +332,13 @@ for jj = 1:NUM_ITERATION
        status(FAIL_FLG) = cellstr('RC FAIL');
    end
    
+     %---------- Determine if enough power for rate of climb ---------------
+   if(isnan(prop.eta_p.v_stall) || isnan(prop.eta_p.loiter) || ...
+           isnan(prop.eta_p.cruise) || isnan(prop.eta_p.v_max))
+       NUM_PROPFAILS = NUM_PROPFAILS + 1;
+       FAIL_FLG = FAIL_FLG + 1;
+       status(FAIL_FLG) = cellstr('PROPELLER FAIL');
+   end
    %---------- Determine if we have enough fuel for mission ---------------
    if (W_fuel_total > WEIGHT.fuel)
         NUM_ENDUFAILS = NUM_ENDUFAILS + 1;
@@ -349,6 +404,7 @@ disp(['Number of Successful Aircraft: ' num2str(NUM_SUCCESS) ' out of ' num2str(
 disp(['  Number of C_Lmax Fails: ' num2str(NUM_CLFAILS)]);
 disp(['  Number of Endurance Fails: ' num2str(NUM_ENDUFAILS)]);
 disp(['  Number of Rate of Climb Fails: ' num2str(NUM_RCFAILS)]);
+disp(['  Number of Propeller Fails: ' num2str(NUM_PROPFAILS)]);
 disp(['  Number of Load Factor Fails: ' num2str(NUM_LOADFACTFAILS)]);
 disp(['  Number of Volume Fails: ' num2str(NUM_VOLUMEFAILS)]);
 disp(['  Number of Static Margin Fails: ' num2str(NUM_STATICMARGINFAILS)]);
@@ -366,9 +422,9 @@ if(NUM_SUCCESS > 0)
    UAV_light_ind = arrayfun(@(x) x.ind, UAVsuccess(ind_light));
    UAV_heavy_ind = arrayfun(@(x) x.ind, UAVsuccess(ind_heavy));
 
-    [val idx] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
+    [val, idx] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
     UAVmin = UAVsuccess(idx);
-    exportUAV_txt(UAVmin,'UAVmin.txt',airfoils,engines);
+%     exportUAV_txt(UAVmin,'UAVmin.txt',airfoils,engines);
     figure();
     plot_UAV(UAVsuccess(idx).wing, UAVsuccess(idx).htail, UAVsuccess(idx).vtail, UAVsuccess(idx).fuse, UAVsuccess(idx).prop);
     

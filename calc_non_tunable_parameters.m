@@ -129,6 +129,7 @@ fuel.V = fuel.V*gallon2ft3; %[ft^3] volume of fuel
 % Propeller ---------------------------------------------------------------
 
 prop.h = fuse.L; % beginning of prop is located at end of fuselge
+prop.D = V_stall/0.2716/(engn.rpm/60);
 
 % Fuel System -------------------------------------------------------------
 
