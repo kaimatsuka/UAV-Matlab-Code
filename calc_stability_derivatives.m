@@ -1,5 +1,5 @@
 function SDERIV = calc_stability_derivatives(rho, V_stall,V_max,V_cruise,wing,airfoilw,...
-    htail,airfoilh,vtail,airfoilv,DRAG,x_cg_total,z_cg_total, static_margin)
+    htail,airfoilh,vtail,airfoilv,sfcl,DRAG,x_cg_total,z_cg_total, static_margin)
 %% calc_stability_derivatives.m %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DESCRIPTION:
@@ -124,7 +124,8 @@ SDERIV.CY_r    =    vtail.S*a_v*l_v/(wing.S*wing.b); % McCormick Eqn 10.58
 SDERIV.CY_dr   =    vtail.S*a_v*tau_e/wing.S;   % McCormick Eqn 9.127
 
 % Roll Moment-(CONFIRMED CORRECT)------------------------------------------
-
+SDERIV.Cl_a    =   ((2*SDERIV.CL_a*tau_e)/(wing.S*wing.b))*wing.c*(sfcl.ail.b^2/2+2/3*...
+                   (wing.lam-1)/wing.b*sfcl.ail.b^3); % aileron design pdf
 SDERIV.Cl_p    =   -SDERIV.CL_a/12*(1+3*wing.lam)/(1+wing.lam); % mae 154s hw4
 SDERIV.Cl_beta =   0; % dihedral term, roll stability
 SDERIV.Cl_r    =   ((DRAG.C_L/6)*((1+(3*wing.lam))/(1+wing.lam)))+(SDERIV.CY_r*(vtail.z_cg-wing.z_cg)/wing.b);  % McCormick Eqn 9.128

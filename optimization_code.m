@@ -258,13 +258,13 @@ for jj = 1:NUM_ITERATION
     
     % ----- CALCULATE STABILITY DERIVATIVES -----
     SDERIV.alt1000.full = calc_stability_derivatives(atmos(1).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
-        htail,airfoilh,vtail,airfoilv,DRAG.alt1000.full,stab.x_cg_full,stab.z_cg_full,stab.static_margin_full);
+        htail,airfoilh,vtail,airfoilv,sfcl,DRAG.alt1000.full,stab.x_cg_full,stab.z_cg_full,stab.static_margin_full);
     SDERIV.alt1000.empty = calc_stability_derivatives(atmos(1).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
-        htail,airfoilh,vtail,airfoilv,DRAG.alt1000.full,stab.x_cg_empty,stab.z_cg_empty, stab.static_margin_empty);
+        htail,airfoilh,vtail,airfoilv,sfcl,DRAG.alt1000.full,stab.x_cg_empty,stab.z_cg_empty, stab.static_margin_empty);
     SDERIV.alt7500.full = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_cruise,wing,airfoilw,...
-        htail,airfoilh,vtail,airfoilv,DRAG.alt7500.full,stab.x_cg_full,stab.z_cg_full, stab.static_margin_full);
+        htail,airfoilh,vtail,airfoilv,sfcl,DRAG.alt7500.full,stab.x_cg_full,stab.z_cg_full, stab.static_margin_full);
     SDERIV.alt7500.empty = calc_stability_derivatives(atmos(2).rho,V_stall,V_max,V_loiter,wing,airfoilw,...
-        htail,airfoilh,vtail,airfoilv,DRAG.alt7500.empty,stab.x_cg_empty,stab.z_cg_empty,stab.static_margin_empty);
+        htail,airfoilh,vtail,airfoilv,sfcl,DRAG.alt7500.empty,stab.x_cg_empty,stab.z_cg_empty,stab.static_margin_empty);
     
     % ----- CALCULATE SURFACE CONTROL DEFLECTION -----
     d_a = DRAG.alt7500.full.C_L/SDERIV.alt7500.full.CL_a*180/pi;
