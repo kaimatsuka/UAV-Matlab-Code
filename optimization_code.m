@@ -38,7 +38,7 @@ load_propeller
 
 
 % ----- Initialize Counter Variables -----
-NUM_ITERATION = 10000;
+NUM_ITERATION = 50000;
 NUM_SUCCESS = 0;
 NUM_FAIL = 0;
 NUM_VOLUMEFAILS = 0;
@@ -98,15 +98,15 @@ for jj = 1:NUM_ITERATION
     % Every 2000 iterations, take the lowest successful aircraft weight and
     % if lightwest Monte Carlo AC lighter than base UAV, set that as the
     % new base UAV and optimize for that aircraft
-    if (mod(jj,2000) == 0 && NUM_SUCCESS >= 1)
+    if (mod(jj,1000) == 0 && NUM_SUCCESS >= 1)
        [w ind] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
        if (w < baseUAV.weight.total)
            baseUAV = update_baseUAV(UAVsuccess(ind));
            calc_non_tunable_parameters;
            NUM_BASEUAVCHANGE = NUM_BASEUAVCHANGE + 1;
-       else
-           display('Converged!')
-           break
+%        else
+%            display('Converged!')
+%            break
        end
     end
     
@@ -424,7 +424,9 @@ if(NUM_SUCCESS > 0)
 
     [val, idx] = min(arrayfun(@(x) x.weight.total, UAVsuccess));
     UAVmin = UAVsuccess(idx);
-%     exportUAV_txt(UAVmin,'UAVmin.txt',airfoils,engines);
+    save('MinWeightUAV.mat','UAVmin');
+    save('UAVsuccess.mat','UAVsuccess');
+    exportUAV_txt(UAVmin,'UAVmin.txt',airfoils,engines);
     figure();
     plot_UAV(UAVsuccess(idx).wing, UAVsuccess(idx).htail, UAVsuccess(idx).vtail, UAVsuccess(idx).fuse, UAVsuccess(idx).prop);
     
@@ -507,4 +509,68 @@ if(NUM_SUCCESS > 0)
     subplot(2,5,9), plot_hist(arrayfun(@(x) x.sfcl.rudd.x_cg, UAVall),UAV_light_ind,UAV_heavy_ind,UAVfail_ind),ylabel('X_{CG} of Rudder (ft)')
     subplot(2,5,10), plot_hist(arrayfun(@(x) x.sfcl.elev.x_cg, UAVall),UAV_light_ind,UAV_heavy_ind,UAVfail_ind),ylabel('X_{CG} of Elevator (ft)')
     
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THIS IS JUST FOR SUCCESSFUL RUNS
+    figure()
+        % -- WEIGHT HISTOGRAM
+    subplot(4,6,[1:2 7:8 13:14 19:20]), 
+    plot_hist(arrayfun(@(x) x.weight.total, UAVsuccess),ind_light,ind_heavy), ylabel('Weight (lbs)');
+    % -- WING HISTOGRAMS
+    subplot(4,6,3), plot_hist(arrayfun(@(x) x.wing.S, UAVsuccess),ind_light,ind_heavy), ylabel('Wing Area (ft^2)');
+    subplot(4,6,4), plot_hist(arrayfun(@(x) x.wing.A, UAVsuccess),ind_light,ind_heavy), ylabel('Wing Aspect Ratio');
+    subplot(4,6,5), plot_hist(arrayfun(@(x) x.wing.b, UAVsuccess),ind_light,ind_heavy), ylabel('Wing Span (ft)');
+    subplot(4,6,6), plot_hist(arrayfun(@(x) x.wing.c, UAVsuccess),ind_light,ind_heavy), ylabel('Wing Chord (ft)');
+    % -- HORIZONTAL TAIL HISTOGRAMS
+    subplot(4,6,9), plot_hist(arrayfun(@(x) x.htail.S, UAVsuccess),ind_light,ind_heavy),ylabel('Horizontal Tail Area (ft^2)');
+    subplot(4,6,10), plot_hist(arrayfun(@(x) x.htail.A, UAVsuccess),ind_light,ind_heavy),ylabel('Horizontal Aspect Ratio');
+    subplot(4,6,11), plot_hist(arrayfun(@(x) x.htail.b, UAVsuccess),ind_light,ind_heavy),ylabel('Horizontal Tail Span (ft)');
+    subplot(4,6,12), plot_hist(arrayfun(@(x) x.htail.c, UAVsuccess),ind_light,ind_heavy),ylabel('Horizontal Tail Chord (ft)');
+    % -- VERTICAL TAIL HISTOGRAMS
+    subplot(4,6,15), plot_hist(arrayfun(@(x) x.vtail.S, UAVsuccess),ind_light,ind_heavy),ylabel('Vertical Tail Area (ft^2)');
+    subplot(4,6,16), plot_hist(arrayfun(@(x) x.vtail.A, UAVsuccess),ind_light,ind_heavy),ylabel('Vertical Aspect Ratio');
+    subplot(4,6,17), plot_hist(arrayfun(@(x) x.vtail.b, UAVsuccess),ind_light,ind_heavy),ylabel('Vertical Tail Span (ft)');
+    subplot(4,6,18), plot_hist(arrayfun(@(x) x.vtail.c, UAVsuccess),ind_light,ind_heavy),ylabel('Vertical Tail Chord (ft)');
+    % -- FUSELAGE HISTOGRAMS
+    subplot(4,6,21:24), plot_hist(arrayfun(@(x) x.fuse.L, UAVsuccess),ind_light,ind_heavy), ylabel('Fuselage Length (ft)');
+    
+    if VARY_SFCL
+        figure()
+        % -- AILERON HISTOGRAMS
+        subplot(3,3,1), plot_hist(arrayfun(@(x) x.sfcl.ail.S, UAVsuccess),ind_light,ind_heavy),ylabel('Aileron Area (ft^2)')
+        subplot(3,3,2), plot_hist(arrayfun(@(x) x.sfcl.ail.b, UAVsuccess),ind_light,ind_heavy),ylabel('Aileron Span (ft)')
+        subplot(3,3,3), plot_hist(arrayfun(@(x) x.sfcl.ail.c, UAVsuccess),ind_light,ind_heavy),ylabel('Aileron Chord (ft)')
+        % -- RUDDER HISTOGRAMS
+        subplot(3,3,4), plot_hist(arrayfun(@(x) x.sfcl.rudd.S, UAVsuccess),ind_light,ind_heavy),ylabel('Rudder Area (ft^2)')
+        subplot(3,3,5), plot_hist(arrayfun(@(x) x.sfcl.rudd.b, UAVsuccess),ind_light,ind_heavy),ylabel('Rudder Span (ft)')
+        subplot(3,3,6), plot_hist(arrayfun(@(x) x.sfcl.rudd.c, UAVsuccess),ind_light,ind_heavy),ylabel('Rudder Chord (ft)')
+        % -- ELEVATOR HISTOGRAMS
+        subplot(3,3,7), plot_hist(arrayfun(@(x) x.sfcl.elev.S, UAVsuccess),ind_light,ind_heavy),ylabel('Elevator Area (ft^2)')
+        subplot(3,3,8), plot_hist(arrayfun(@(x) x.sfcl.elev.b, UAVsuccess),ind_light,ind_heavy),ylabel('Elevator Span (ft)')
+        subplot(3,3,9), plot_hist(arrayfun(@(x) x.sfcl.elev.c, UAVsuccess),ind_light,ind_heavy),ylabel('Elevator Chord (ft)')
+    end
+    
+    if VARY_CG
+        figure()
+        % -- PAYLOAD CG HISTOGRAMS
+        subplot(2,3,1), plot_hist(arrayfun(@(x) x.payld.x_cg_EOIR, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of EOIR (ft)')
+        subplot(2,3,2), plot_hist(arrayfun(@(x) x.payld.x_cg_SAR, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of SAR (ft)')
+        subplot(2,3,3), plot_hist(arrayfun(@(x) x.payld.x_cg_LiDAR, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of LiDAR (ft)')
+        subplot(2,3,4), plot_hist(arrayfun(@(x) x.payld.x_cg_ANT, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of ANT (ft)')
+        subplot(2,3,5), plot_hist(arrayfun(@(x) x.payld.x_cg_IMU, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of IMU (ft)')
+        subplot(2,3,6), plot_hist(arrayfun(@(x) x.payld.x_cg_WR, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of WR (ft)')
+    end
+    
+    figure()
+    % -- COMPONENT CG HISTOGRAMS
+    subplot(2,5,1), plot_hist(arrayfun(@(x) x.wing.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Wing (ft)')
+    subplot(2,5,2), plot_hist(arrayfun(@(x) x.vtail.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Vertical Tail (ft)')
+    subplot(2,5,3), plot_hist(arrayfun(@(x) x.htail.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Horizontal Tail (ft)')
+    subplot(2,5,4), plot_hist(arrayfun(@(x) x.fuse.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Fuselage (ft)')
+    subplot(2,5,5), plot_hist(arrayfun(@(x) x.fsys.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Fuel System (ft)')
+    subplot(2,5,6), plot_hist(arrayfun(@(x) x.prop.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Propellar (ft)')
+    subplot(2,5,7), plot_hist(arrayfun(@(x) x.engn.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Engine (ft)')
+    subplot(2,5,8), plot_hist(arrayfun(@(x) x.sfcl.ail.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Aileron (ft)')
+    subplot(2,5,9), plot_hist(arrayfun(@(x) x.sfcl.rudd.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Rudder (ft)')
+    subplot(2,5,10), plot_hist(arrayfun(@(x) x.sfcl.elev.x_cg, UAVsuccess),ind_light,ind_heavy),ylabel('X_{CG} of Elevator (ft)')
+
 end
