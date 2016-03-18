@@ -113,8 +113,7 @@ SDERIV.CL_i    =    -a_t*htail.S/wing.S; % mae 154s lec 10
 SDERIV.CD0     =    DRAG.C_Dp;            
 SDERIV.CD_a    =    DRAG.C_Dairf; % guessed value              
 SDERIV.CD_de   =    -SDERIV.CL_a*((l_t*vtail.S)/(wing.S*wing.c))*...
-                    tau_e*eta_h*(vtail.b/htail.c);
-    % http://faculty.dwc.edu/sadraey/Elevator%20Design.pdf
+                    tau_e*eta_h*(vtail.b/htail.c); % http://faculty.dwc.edu/sadraey/Elevator%20Design.pdf
 
 % Force from Y-Direction-(CONFIRMED CORRECT)-------------------------------
 
@@ -130,22 +129,21 @@ SDERIV.Cl_p    =   -SDERIV.CL_a/12*(1+3*wing.lam)/(1+wing.lam); % mae 154s hw4
 SDERIV.Cl_beta =   0; % dihedral term, roll stability
 SDERIV.Cl_r    =   ((DRAG.C_L/6)*((1+(3*wing.lam))/(1+wing.lam)))+(SDERIV.CY_r*(vtail.z_cg-wing.z_cg)/wing.b);  % McCormick Eqn 9.128
 SDERIV.Cl_dr   =   SDERIV.CY_dr*((((vtail.z_cg-z_cg_total)*cos(alpha_0))/wing.b)-...
-                    (((vtail.x_cg-x_cg_total)*sin(alpha_0))/wing.b)); % lateral stability pdf
+                    (((vtail.x_cg-x_cg_total)*sin(alpha_0))/wing.b)); % Delft University Aerostudents:lateral stability pdf
 
 % Pitch Moment-------------------------------------------------------------
 
 SDERIV.Cm0     =   Cm_ac+(V_H*a_t*DRAG.i_t); % mae 154s lec 10             
 SDERIV.Cm_a    =   -SDERIV.CL_a*static_margin; % mae154s lec 10               
 SDERIV.Cm_adot =   -2*a_t*V_H*l_t*eps_a/wing.c; % mae154s lec 11
-SDERIV.Cm_q    =   -2*a_t*l_t*V_H/wing.c;
-SDERIV.Cm_de   =   -SDERIV.CL_de*l_t/wing.c;
-    % http://faculty.dwc.edu/sadraey/Elevator%20Design.pdf
+SDERIV.Cm_q    =   -2*a_t*l_t*V_H/wing.c; % from CL_q
+SDERIV.Cm_de   =   -SDERIV.CL_de*l_t/wing.c; % http://faculty.dwc.edu/sadraey/Elevator%20Design.pdf
 SDERIV.Cm_i    =   a_t*V_H; % MAE 154s lec 10
 
 % Yaw Moment---------------------------------------------------------------
 
 SDERIV.Cn_beta =    V_V*a_v*(1-eps_a);  % McCormick Eqn 9.114
-SDERIV.Cn_p    =   -0.110; 
-SDERIV.Cn_r    =   -SDERIV.CY_r*l_v/wing.b;              
+SDERIV.Cn_p    =   -0.110; % similar aircraft estimate
+SDERIV.Cn_r    =   -SDERIV.CY_r*l_v/wing.b; %          
 SDERIV.Cn_da   =   2*N_mom/(d_a*rho*v^2*wing.S*wing.b);             
 SDERIV.Cn_dr   =   -SDERIV.CY_dr*l_v/wing.b;
